@@ -58,6 +58,7 @@ group :test do
   gem 'poltergeist'
   gem 'simplecov'
   gem 'simplecov-rcov'
+  gem 'active_record_samplooper'
 
   gem 'sqlite3'
 

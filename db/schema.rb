@@ -25,11 +25,12 @@ ActiveRecord::Schema.define(version: 20151019201659) do
   add_index "qa_answer_options", ["question_id"], name: "index_qa_answer_options_on_question_id", using: :btree
 
   create_table "qa_correct_answers", force: :cascade do |t|
-    t.string  "text",                    null: false
-    t.integer "index",       default: 0, null: false
+    t.integer "index",            default: 0, null: false
     t.integer "question_id"
+    t.integer "answer_option_id"
   end
 
+  add_index "qa_correct_answers", ["answer_option_id"], name: "index_qa_correct_answers_on_answer_option_id", using: :btree
   add_index "qa_correct_answers", ["question_id"], name: "index_qa_correct_answers_on_question_id", using: :btree
 
   create_table "qa_questions", force: :cascade do |t|
