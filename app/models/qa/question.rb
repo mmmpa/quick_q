@@ -1,4 +1,28 @@
 module Qa
+
+  #
+  # 問題を統括するモデル
+  #
+  # # 解答方法の種類
+  #
+  # way 解答方法の種類をあらわすenum
+  #
+  # - free_text テキスト入力問題
+  # - boolean   ox問題
+  # - choice    一つだけ選択する問題
+  # - choices   すべて選択する問題
+  # - in_order  順番どおりに選択する問題
+  #
+  #
+  # # アソシエーション
+  #
+  # correct_answers この問題の正答をあらわすアソシエーション
+  # answer_options この問題の解答における選択肢をあらわすアソシエーション
+  #
+  # wayによって扱いが違うので、foo_attributesによる直接的な作成は行わず、
+  # answersとoptionsに一時プールして処理する
+  #
+
   class Question < ActiveRecord::Base
     BOOLEAN_O = 'o'
     BOOLEAN_X = 'x'
@@ -17,6 +41,27 @@ module Qa
 
     before_validation :arrange!
 
+
+    # 答え合わせ
+    def correct?(answer)
+      normalized = normalized_answer(answer)
+
+      case
+        when boolean?
+          matcher = normalized_boolean(answer) ? BOOLEAN_O : BOOLEAN_X
+          correct_answers.first.answer_option.text == matcher
+        when in_order?
+          # 順序まで完全に同じか
+          correct_answers.order { index }.pluck(:answer_option_id) == normalized
+        else
+          # 正答のみが含まれているか
+          corrects = correct_set
+          normalized.size == corrects.size && Set.new == (corrects - Set.new(normalized))
+      end
+    end
+
+    private
+
     #
     # フリーテキスト、ox問題の場合はcorrectsがcorrect_answersとanswer_optionsに
     # ダイレクトに反映される
@@ -34,7 +79,6 @@ module Qa
       true
     end
 
-    # 選択系すべて
     def arrange_for_choice_way!
       return if options.blank?
 
@@ -96,26 +140,6 @@ module Qa
 
       self
     end
-
-    # 答え合わせ
-    def correct?(answer)
-      normalized = normalized_answer(answer)
-
-      case
-        when boolean?
-          matcher = normalized_boolean(answer) ? BOOLEAN_O : BOOLEAN_X
-          correct_answers.first.answer_option.text == matcher
-        when in_order?
-          # 順序まで完全に同じか
-          correct_answers.order { index }.pluck(:answer_option_id) == normalized
-        else
-          # 正答のみが含まれているか
-          corrects = correct_set
-          normalized.size == corrects.size && Set.new == (corrects - Set.new(normalized))
-      end
-    end
-
-    private
 
     def correct_answers_included?
       corrects = correct_set
@@ -184,6 +208,5 @@ module Qa
         errors.add(:correct_answers, :length)
       end
     end
-
   end
 end

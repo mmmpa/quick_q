@@ -314,6 +314,10 @@ RSpec.describe Qa::Question, type: :model do
     end
   end
 
+  describe 'update!' do
+
+  end
+
   describe 'answer the question' do
     #
     # フリーテキスト、ox以外は選択肢が必要
