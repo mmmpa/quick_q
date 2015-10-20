@@ -165,6 +165,31 @@ RSpec.describe Qa::Question, type: :model do
 
       it_behaves_like 'free text way'
     end
+
+    context 'choice' do
+      before :all do
+        @answer = SecureRandom.hex(4)
+        @model = Qa::Question.create!(
+          text: 'q',
+          way: Qa::Question.ways[:choice],
+          options: [
+            {index: 0, text: SecureRandom.hex(4)},
+            {index: 1, text: SecureRandom.hex(4)},
+            {index: 2, text: SecureRandom.hex(4)},
+            {index: 3, text: SecureRandom.hex(4)},
+          ],
+          answers: [
+            {index: 1}
+          ]
+        )
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it_behaves_like 'choice way'
+    end
   end
 
   describe 'arrange method' do

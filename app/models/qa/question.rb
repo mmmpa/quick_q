@@ -3,7 +3,7 @@ module Qa
     BOOLEAN_O = 'o'
     BOOLEAN_X = 'x'
 
-    attr_accessor :answers
+    attr_accessor :answers, :options
 
     enum way: {free_text: 10, boolean: 20, choice: 30, choices: 40, in_order: 50}
 
@@ -15,35 +15,53 @@ module Qa
 
     validate :way_requirement_fulfilled, if: -> { correct_answers.present? }
 
+    #
+    # フリーテキスト、ox問題の場合はcorrectsがcorrect_answersとanswer_optionsに
+    # ダイレクトに反映される
+    #
+    def initialize(**args)
+      super
 
-    class << self
-      def create!(**args)
-        case
-          when args[:way] == ways[:free_text]
-            create_free_text!(**args)
-          when args[:way] == ways[:boolean]
-            create_boolean!(**args)
-          else
-            p :normal
-            super
-        end
-      end
-
-      def create_free_text!(**args)
-        new(**args).arrange_for_free_text!(correct_answer: stripped_answer(args[:answers]))
-      end
-
-      def create_boolean!(**args)
-        new(**args).arrange_for_boolean!(correct_answer: stripped_answer(args[:answers]))
-      end
-
-      def stripped_answer(answer)
-        return answer unless Array === answer
-
-        answer.first
+      case
+        when free_text? && stripped_answers.present?
+          arrange_for_free_text!(correct_answer: stripped_answers)
+        when boolean? && stripped_answers.present?
+          arrange_for_boolean!(correct_answer: stripped_answers)
+        else
+          arrange_for_choice_way!
       end
     end
 
+    # 選択系すべて
+    def arrange_for_choice_way!
+      return if options.blank?
+
+      # 現在の選択肢と比較してなくなっている分を削除
+      now = Set.new(answer_options.pluck(:id))
+      newer = options.map { |o| o[:id] }
+      (now - newer).each { |id| answer_options.destroy(id) }
+
+      # idがあるものはupdate、無いものはnew
+      options.each do |param|
+        if param[:id].present?
+          answer_options.find(param.delete(:id)).update!(params)
+        else
+          answer_options.build(param)
+        end
+      end
+
+      # 毎回更新
+      correct_answers.delete_all
+      answers.each do |param|
+        # 保存前にはSQLが絡むメソッドは使えない
+        option = answer_options.each do |answer|
+          break answer if answer.index == param[:index]
+        end
+        correct_answers.build(answer_option: option)
+      end
+
+      save!
+    end
 
     # フリーテキスト問題一発作成
     def arrange_for_free_text!(correct_answer:)
@@ -112,6 +130,12 @@ module Qa
       Set.new(correct_answers.pluck(:answer_option_id))
     end
 
+    def stripped_answers
+      return answers unless Array === answers
+
+      answers.first
+    end
+
     def normalized_answer(answer)
       if free_text?
         answer_options.where { text == answer }.pluck(:id)
@@ -135,6 +159,11 @@ module Qa
       Set.new(answer_options.pluck(:id))
     end
 
+    def sweep!
+      correct_answers.destroy_all
+      answer_options.destroy_all
+    end
+
     def way_requirement_fulfilled
       unless correct_answers_included?
         errors.add(:correct_answers, :inclusion)
@@ -145,9 +174,5 @@ module Qa
       end
     end
 
-    def sweep!
-      correct_answers.destroy_all
-      answer_options.destroy_all
-    end
   end
 end
