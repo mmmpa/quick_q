@@ -17,20 +17,20 @@ ActiveRecord::Schema.define(version: 20151019201659) do
   enable_extension "plpgsql"
 
   create_table "qa_answer_options", force: :cascade do |t|
-    t.string  "text",                       null: false
-    t.integer "index",          default: 0, null: false
-    t.integer "qa_question_id"
+    t.string  "text",                    null: false
+    t.integer "index",       default: 0, null: false
+    t.integer "question_id"
   end
 
-  add_index "qa_answer_options", ["qa_question_id"], name: "index_qa_answer_options_on_qa_question_id", using: :btree
+  add_index "qa_answer_options", ["question_id"], name: "index_qa_answer_options_on_question_id", using: :btree
 
   create_table "qa_correct_answers", force: :cascade do |t|
-    t.string  "text",                       null: false
-    t.integer "index",          default: 0, null: false
-    t.integer "qa_question_id"
+    t.string  "text",                    null: false
+    t.integer "index",       default: 0, null: false
+    t.integer "question_id"
   end
 
-  add_index "qa_correct_answers", ["qa_question_id"], name: "index_qa_correct_answers_on_qa_question_id", using: :btree
+  add_index "qa_correct_answers", ["question_id"], name: "index_qa_correct_answers_on_question_id", using: :btree
 
   create_table "qa_questions", force: :cascade do |t|
     t.string   "text",                   null: false

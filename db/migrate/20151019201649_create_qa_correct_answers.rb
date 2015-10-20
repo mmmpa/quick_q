@@ -5,6 +5,6 @@ class CreateQaCorrectAnswers < ActiveRecord::Migration
       t.integer :index, null: false, default: 0
     end
 
-    add_reference :qa_correct_answers, :qa_question, index: true
+    add_reference :qa_correct_answers, :question, index: true
   end
 end

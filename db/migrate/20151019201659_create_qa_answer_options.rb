@@ -5,6 +5,6 @@ class CreateQaAnswerOptions < ActiveRecord::Migration
       t.integer :index, null: false, default: 0
     end
 
-    add_reference :qa_answer_options, :qa_question, index: true
+    add_reference :qa_answer_options, :question, index: true
   end
 end
