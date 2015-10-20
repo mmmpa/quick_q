@@ -4,5 +4,9 @@ FactoryGirl.define do
       question { create(:qa_question, :valid) }
       answer_option { create(:qa_answer_option, :valid) }
     end
+
+    trait :valid_attr do
+      answer_option { create(:qa_answer_option, :valid) }
+    end
   end
 end

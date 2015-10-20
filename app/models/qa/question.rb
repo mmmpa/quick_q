@@ -15,21 +15,23 @@ module Qa
 
     validate :way_requirement_fulfilled, if: -> { correct_answers.present? }
 
+    before_validation :arrange!
+
     #
     # フリーテキスト、ox問題の場合はcorrectsがcorrect_answersとanswer_optionsに
     # ダイレクトに反映される
     #
-    def initialize(**args)
-      super
-
+    def arrange!
       case
-        when free_text? && stripped_answers.present?
-          arrange_for_free_text!(correct_answer: stripped_answers)
-        when boolean? && stripped_answers.present?
-          arrange_for_boolean!(correct_answer: stripped_answers)
+        when free_text?
+          arrange_for_free_text!
+        when boolean?
+          arrange_for_boolean!
         else
           arrange_for_choice_way!
       end
+
+      true
     end
 
     # 選択系すべて
@@ -52,36 +54,45 @@ module Qa
 
       # 毎回更新
       correct_answers.delete_all
-      answers.each do |param|
+      answers.each_with_index do |param, index|
         # 保存前にはSQLが絡むメソッドは使えない
+        # 見つからないと配列が返ってしまう
         option = answer_options.each do |answer|
           break answer if answer.index == param[:index]
         end
-        correct_answers.build(answer_option: option)
+        if Array === option
+          errors.add(:answers, :invalid)
+        else
+          correct_answers.build(answer_option: option, index: index)
+        end
       end
-
-      save!
-    end
-
-    # フリーテキスト問題一発作成
-    def arrange_for_free_text!(correct_answer:)
-      free_text!
-      sweep!
-      new_answer = answer_options.build(text: correct_answer)
-      correct_answers.build(answer_option: new_answer)
-      save!
 
       self
     end
 
-    # ox問題一発作成
-    def arrange_for_boolean!(correct_answer:)
-      boolean!
+    def arrange_for_free_text!
+      if answers.blank?
+        errors.add(:answers, :blank)
+        return
+      end
+
+      sweep!
+      new_answer = answer_options.build(text: stripped_answers)
+      correct_answers.build(answer_option: new_answer)
+
+      self
+    end
+
+    def arrange_for_boolean!
+      if answers.blank?
+        errors.add(:answers, :blank)
+        return
+      end
+
       sweep!
       o = answer_options.build(text: BOOLEAN_O)
       x = answer_options.build(text: BOOLEAN_X)
-      correct_answers.build(answer_option: correct_answer ? o : x)
-      save!
+      correct_answers.build(answer_option: normalized_boolean(stripped_answers) ? o : x)
 
       self
     end
@@ -96,7 +107,7 @@ module Qa
           correct_answers.first.answer_option.text == matcher
         when in_order?
           # 順序まで完全に同じか
-          correct_answers.pluck(:answer_option_id) == normalized
+          correct_answers.order { index }.pluck(:answer_option_id) == normalized
         else
           # 正答のみが含まれているか
           corrects = correct_set
@@ -119,10 +130,10 @@ module Qa
           correct_answers.size == 1
         when boolean?
           correct_answers.size == 1
-        when choices?, in_order?
+        when choices?
           correct_answers.size <= answer_options.size
         else
-          correct_answers.size > 1
+          correct_answers.size >= 1
       end
     end
 
