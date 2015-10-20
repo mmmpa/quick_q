@@ -3,6 +3,8 @@ module Qa
     BOOLEAN_O = 'o'
     BOOLEAN_X = 'x'
 
+    attr_accessor :answers
+
     enum way: {free_text: 10, boolean: 20, choice: 30, choices: 40, in_order: 50}
 
     has_many :correct_answers, dependent: :destroy
@@ -12,6 +14,59 @@ module Qa
               presence: true
 
     validate :way_requirement_fulfilled, if: -> { correct_answers.present? }
+
+
+    class << self
+      def create!(**args)
+        case
+          when args[:way] == ways[:free_text]
+            create_free_text!(**args)
+          when args[:way] == ways[:boolean]
+            create_boolean!(**args)
+          else
+            p :normal
+            super
+        end
+      end
+
+      def create_free_text!(**args)
+        new(**args).arrange_for_free_text!(correct_answer: stripped_answer(args[:answers]))
+      end
+
+      def create_boolean!(**args)
+        new(**args).arrange_for_boolean!(correct_answer: stripped_answer(args[:answers]))
+      end
+
+      def stripped_answer(answer)
+        return answer unless Array === answer
+
+        answer.first
+      end
+    end
+
+
+    # フリーテキスト問題一発作成
+    def arrange_for_free_text!(correct_answer:)
+      free_text!
+      sweep!
+      new_answer = answer_options.build(text: correct_answer)
+      correct_answers.build(answer_option: new_answer)
+      save!
+
+      self
+    end
+
+    # ox問題一発作成
+    def arrange_for_boolean!(correct_answer:)
+      boolean!
+      sweep!
+      o = answer_options.build(text: BOOLEAN_O)
+      x = answer_options.build(text: BOOLEAN_X)
+      correct_answers.build(answer_option: correct_answer ? o : x)
+      save!
+
+      self
+    end
 
     # 答え合わせ
     def correct?(answer)
@@ -29,27 +84,6 @@ module Qa
           corrects = correct_set
           normalized.size == corrects.size && Set.new == (corrects - Set.new(normalized))
       end
-    end
-
-    def arrange_for_free_text!(correct_answer:)
-      free_text!
-      sweep!
-      new_answer = answer_options.build(text: correct_answer)
-      correct_answers.build(answer_option: new_answer)
-      save!
-
-      self
-    end
-
-    def arrange_for_boolean!(correct_answer:)
-      boolean!
-      sweep!
-      o = answer_options.build(text: BOOLEAN_O)
-      x = answer_options.build(text: BOOLEAN_X)
-      correct_answers.build(answer_option: correct_answer ? o : x)
-      save!
-
-      self
     end
 
     private

@@ -9,6 +9,164 @@ RSpec.describe Qa::Question, type: :model do
     it { expect(create(:qa_question, :valid)).to be_a(klass) }
   end
 
+  #
+  # shared_examples
+  #
+
+  shared_examples 'boolean way' do
+    it { expect(model.boolean?).to be_truthy }
+    it { expect(model.correct_answers.size).to eq(1) }
+    it { expect(model.answer_options.size).to eq(2) }
+    it { expect(model.answer_options.pluck(:text)).to match_array(['o', 'x']) }
+
+    context 'with correct?' do
+      it { expect(model.correct?(true)).to be_truthy }
+      it { expect(model.correct?(false)).to be_falsey }
+    end
+  end
+
+  shared_examples 'free text way' do
+    it { expect(model.free_text?).to be_truthy }
+    it { expect(model.correct_answers.size).to eq(1) }
+    it { expect(model.answer_options.size).to eq(1) }
+    it { expect(model.answer_options.pluck(:text)).to match_array([answer]) }
+
+    context 'with correct?' do
+      it { expect(model.correct?(answer)).to be_truthy }
+      it { expect(model.correct?(``)).to be_falsey }
+      it { expect(model.correct?(`incorrect`)).to be_falsey }
+    end
+  end
+
+  shared_examples 'choice way' do
+    context 'with correct?' do
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        expect(model.correct?(ids)).to be_truthy
+      end
+
+      it do
+        ids = []
+        expect(model.correct?(ids)).to be_falsey
+      end
+
+      it do
+        ids = [-1]
+        expect(model.correct?(ids)).to be_falsey
+      end
+
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        ids.push(1)
+        expect(model.correct?(ids)).to be_falsey
+      end
+
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        ids.reverse!
+        expect(model.correct?(ids)).to be_truthy
+      end
+    end
+  end
+
+  shared_examples 'choices way' do
+    context 'with correct?' do
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        expect(model.correct?(ids)).to be_truthy
+      end
+
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        ids.reverse!
+        expect(model.correct?(ids)).to be_truthy
+      end
+
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        ids.shift
+        expect(model.correct?(ids)).to be_falsey
+      end
+
+      it do
+        ids = []
+        expect(model.correct?(ids)).to be_falsey
+      end
+
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        ids.push(1)
+        expect(model.correct?(ids)).to be_falsey
+      end
+    end
+  end
+
+  shared_examples 'in order way' do
+    context 'with correct?' do
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        expect(model.correct?(ids)).to be_truthy
+      end
+
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        ids.shift
+        expect(model.correct?(ids)).to be_falsey
+      end
+
+      it do
+        ids = []
+        expect(model.correct?(ids)).to be_falsey
+      end
+
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        ids.push(1)
+        expect(model.correct?(ids)).to be_falsey
+      end
+
+      it do
+        ids = model.correct_answers.pluck(:answer_option_id)
+        ids.reverse!
+        expect(model.correct?(ids)).to be_falsey
+      end
+    end
+  end
+
+  #
+  # examples
+  #
+
+  describe 'create!' do
+    let(:model) { @model }
+    let(:answer) { @answer }
+
+    context 'boolean' do
+      before :all do
+        @model = Qa::Question.create!(text: 'q', way: Qa::Question.ways[:boolean], answers: [true])
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it_behaves_like 'boolean way'
+    end
+
+    context 'free text' do
+      before :all do
+        @answer = SecureRandom.hex(4)
+        @model = Qa::Question.create!(text: 'q', way: Qa::Question.ways[:free_text], answers: [@answer])
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it_behaves_like 'free text way'
+    end
+  end
+
   describe 'arrange method' do
     describe 'arrange for "boolean"' do
       context 'when arrange default' do
@@ -16,12 +174,7 @@ RSpec.describe Qa::Question, type: :model do
           model.arrange_for_boolean!(correct_answer: true)
         end
 
-        it { expect(model.boolean?).to be_truthy }
-        it { expect(model.correct_answers.size).to eq(1) }
-        it { expect(model.answer_options.size).to eq(2) }
-        it { expect(model.answer_options.pluck(:text)).to match_array(['o', 'x']) }
-        it { expect(model.correct?(true)).to be_truthy }
-        it { expect(model.correct?(false)).to be_falsey }
+        it_behaves_like 'boolean way'
       end
 
       context 'when arrange other way' do
@@ -46,17 +199,13 @@ RSpec.describe Qa::Question, type: :model do
 
         let(:model) { @model }
 
-
-        it { expect(model.boolean?).to be_truthy }
-        it { expect(model.correct_answers.size).to eq(1) }
-        it { expect(model.answer_options.size).to eq(2) }
-        it { expect(model.answer_options.pluck(:text)).to match_array(['o', 'x']) }
-        it { expect(model.correct?(true)).to be_truthy }
-        it { expect(model.correct?(false)).to be_falsey }
+        it_behaves_like 'boolean way'
       end
     end
 
     describe 'arrange for "free text"' do
+      let(:model) { @model }
+      let(:answer) { @answer }
 
       context 'when arrange default' do
         before :all do
@@ -70,16 +219,7 @@ RSpec.describe Qa::Question, type: :model do
           @model.destroy
         end
 
-        let(:model) { @model }
-        let(:answer) { @answer }
-
-        it { expect(model.free_text?).to be_truthy }
-        it { expect(model.correct_answers.size).to eq(1) }
-        it { expect(model.answer_options.size).to eq(1) }
-        it { expect(model.answer_options.pluck(:text)).to match_array([answer]) }
-        it { expect(model.correct?(answer)).to be_truthy }
-        it { expect(model.correct?(``)).to be_falsey }
-        it { expect(model.correct?(`incorrect`)).to be_falsey }
+        it_behaves_like 'free text way'
       end
 
       context 'when arrange other way' do
@@ -101,48 +241,14 @@ RSpec.describe Qa::Question, type: :model do
           @model.destroy
         end
 
-        let(:model) { @model }
-        let(:answer) { @answer }
-
-        it { expect(model.free_text?).to be_truthy }
-        it { expect(model.correct_answers.size).to eq(1) }
-        it { expect(model.answer_options.size).to eq(1) }
-        it { expect(model.answer_options.pluck(:text)).to match_array([answer]) }
-        it { expect(model.correct?(answer)).to be_truthy }
-        it { expect(model.correct?('')).to be_falsey }
-        it { expect(model.correct?('incorrect')).to be_falsey }
+        it_behaves_like 'free text way'
       end
     end
   end
 
   describe 'answer the question' do
-    context 'with "free text" way' do
-      let(:answer) { SecureRandom.hex(4) }
-
-      before :each do
-        model.arrange_for_free_text!(correct_answer: answer)
-      end
-
-
-      context 'when correct answer' do
-        it do
-          expect(model.correct?(answer)).to be_truthy
-        end
-      end
-
-      context 'when incorrect answer' do
-        it do
-          expect(model.correct?('')).to be_falsey
-        end
-
-        it do
-          expect(model.correct?('incorrect')).to be_falsey
-        end
-      end
-    end
-
     #
-    # フリーテキスト以外は選択肢が必要
+    # フリーテキスト、ox以外は選択肢が必要
     #
 
     before :all do
@@ -162,7 +268,7 @@ RSpec.describe Qa::Question, type: :model do
       model.correct_answers.destroy_all
     end
 
-    context 'with "choice", "boolean" way' do
+    context 'with "choice" way' do
       before :each do
         model.choice!
         model.save
@@ -175,36 +281,7 @@ RSpec.describe Qa::Question, type: :model do
           ))
       end
 
-      context 'when correct answer' do
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          expect(model.correct?(ids)).to be_truthy
-        end
-      end
-
-      context 'when incorrect answer' do
-        it do
-          ids = []
-          expect(model.correct?(ids)).to be_falsey
-        end
-
-        it do
-          ids = [-1]
-          expect(model.correct?(ids)).to be_falsey
-        end
-
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          ids.push(1)
-          expect(model.correct?(ids)).to be_falsey
-        end
-
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          ids.reverse!
-          expect(model.correct?(ids)).to be_truthy
-        end
-      end
+      it_behaves_like 'choice way'
     end
 
     context 'with "choices" way' do
@@ -222,37 +299,7 @@ RSpec.describe Qa::Question, type: :model do
         end
       end
 
-      context 'when correct answer' do
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          expect(model.correct?(ids)).to be_truthy
-        end
-      end
-
-      context 'when incorrect answer' do
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          ids.shift
-          expect(model.correct?(ids)).to be_falsey
-        end
-
-        it do
-          ids = []
-          expect(model.correct?(ids)).to be_falsey
-        end
-
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          ids.push(1)
-          expect(model.correct?(ids)).to be_falsey
-        end
-
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          ids.reverse!
-          expect(model.correct?(ids)).to be_truthy
-        end
-      end
+      it_behaves_like 'choices way'
     end
 
     context 'with "in_order" way' do
@@ -270,37 +317,7 @@ RSpec.describe Qa::Question, type: :model do
         end
       end
 
-      context 'when correct answer' do
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          expect(model.correct?(ids)).to be_truthy
-        end
-      end
-
-      context 'when incorrect answer' do
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          ids.shift
-          expect(model.correct?(ids)).to be_falsey
-        end
-
-        it do
-          ids = []
-          expect(model.correct?(ids)).to be_falsey
-        end
-
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          ids.push(1)
-          expect(model.correct?(ids)).to be_falsey
-        end
-
-        it do
-          ids = model.correct_answers.pluck(:answer_option_id)
-          ids.reverse!
-          expect(model.correct?(ids)).to be_falsey
-        end
-      end
+      it_behaves_like 'in order way'
     end
   end
 
