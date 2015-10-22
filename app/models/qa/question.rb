@@ -61,9 +61,17 @@ module Qa
   #   order: [0, 3, 3, 2] # 正答のindexを順番どおりに
   # )
   #
-  # # 解答方法の種類
+  # # 属性の意味
   #
-  # way 解答方法の種類をあらわすenum
+  # ## name
+  #
+  # 人間によってつけられる識別子。
+  # jsonなどシステム外部から問題を何かにひもづけたい場合に使う。
+  # 指定されない場合はランダムに付与。
+  #
+  # ## way
+  #
+  # 解答方法の種類をあらわすenum
   #
   # - free_text テキスト入力問題
   # - boolean   ox問題
@@ -94,8 +102,14 @@ module Qa
     has_many :answer_options, dependent: :destroy
     has_one :explanation, dependent: :destroy
 
-    validates :text, :way,
+    validates :name, :text, :way,
               presence: true
+
+    validates :way,
+              inclusion: {in: Question.ways}
+
+    validates :name,
+              uniqueness: true
 
     validate :way_requirement_fulfilled
 
@@ -136,9 +150,14 @@ module Qa
           arrange_for_choice_way!
       end
 
+      arrange_added_name!
       arrange_explanation!
 
       true
+    end
+
+    def arrange_added_name!
+      self.name ||= SecureRandom.hex(8)
     end
 
     def arrange_explanation!

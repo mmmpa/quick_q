@@ -41,10 +41,13 @@ ActiveRecord::Schema.define(version: 20151022004426) do
   add_index "qa_explanations", ["question_id"], name: "index_qa_explanations_on_question_id", using: :btree
 
   create_table "qa_questions", force: :cascade do |t|
+    t.string   "name",                   null: false
     t.string   "text",                   null: false
     t.integer  "way",        default: 0, null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  add_index "qa_questions", ["name"], name: "index_qa_questions_on_name", unique: true, using: :btree
 
 end

@@ -1,0 +1,152 @@
+{
+  "title": "サンプル問題集",
+  "evaluation": "count",
+  "passing": 7,
+  "questions": [
+    {
+      "type": "text",
+      "question": {
+        "text": "テキスト入力問題です。答えは「正答」。"
+      },
+      "explanation": "",
+      "answer": "正答"
+    },
+    {
+      "type": "free text",
+      "question": {
+        "text": "テキスト入力問題です。答えは「はい」。"
+      },
+      "explanation": "はいじゃないが。",
+      "answer": "はい"
+    },
+    {
+      "type": "ox",
+      "question": {
+        "text": "ox問題です。答えはo。"
+      },
+      "explanation": "",
+      "answer": "o"
+    },
+    {
+      "type": "true or false",
+      "question": {
+        "text": "ox問題です。答えはo。"
+      },
+      "explanation": "表記のゆらぎ吸収テストです。",
+      "answer": "○"
+    },
+    {
+      "type": "true or false",
+      "question": {
+        "text": "ox問題です。答えはo。"
+      },
+      "explanation": "",
+      "answer": "true"
+    },
+    {
+      "type": "True or false",
+      "question": {
+        "text": "ox問題です。答えはx。"
+      },
+      "explanation": "",
+      "answer": "false"
+    },
+    {
+      "type": "single",
+      "question": {
+        "text": "ひとつだけ選ぶ問題です。"
+      },
+      "explanation": "",
+      "options": [
+        {
+          "text": "選択",
+          "correct": true
+        },
+        {
+          "text": "選択1",
+          "correct": false
+        },
+        {
+          "text": "選択1",
+          "correct": "false"
+        },
+        {
+          "text": "選択1"
+        }
+      ]
+    },
+    {
+      "type": "single choice",
+      "question": {
+        "text": "ひとつだけ選ぶ問題です。"
+      },
+      "explanation": "表記の揺らぎ",
+      "options": [
+        {
+          "text": "選択",
+          "correct": true
+        },
+        {
+          "text": "選択1",
+          "correct": false
+        },
+        {
+          "text": "選択1",
+          "correct": "false"
+        },
+        {
+          "text": "選択1"
+        }
+      ]
+    },
+    {
+      "type": "multiple",
+      "question": {
+        "text": "すべて選ぶ問題です"
+      },
+      "explanation": "",
+      "options": [
+        {
+          "text": "選択",
+          "correct": true
+        },
+        {
+          "text": "選択1",
+          "correct": false
+        },
+        {
+          "text": "選択1",
+          "correct": "true"
+        },
+        {
+          "text": "選択1"
+        }
+      ]
+    },
+    {
+      "type": "order",
+      "question": {
+        "text": "順番に選ぶ問題です。"
+      },
+      "explanation": "",
+      "options": [
+        {
+          "text": "選択",
+          "correct": true
+        },
+        {
+          "text": "選択1",
+          "correct": false
+        },
+        {
+          "text": "選択1",
+          "correct": "true"
+        },
+        {
+          "text": "選択1"
+        }
+      ],
+      "order": [0, 1, 3, 2, 1]
+    }
+  ]
+}

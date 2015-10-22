@@ -26,12 +26,19 @@ class CreateQuestion
 
     def normalize_json_hash(json_hash)
       json_hash[:questions].map! do |question|
+        normalize_answer!(question)
         normalize_text!(question)
         normalize_explanation!(question)
         normalize_type!(question)
         normalize_options!(question[:options])
         question
       end
+    end
+
+    def normalize_answer!(question)
+      return if question[:answers].present?
+
+      question.merge!(answers: question.delete(:answer))
     end
 
     def normalize_explanation!(question)
@@ -59,15 +66,17 @@ class CreateQuestion
     end
 
     def detect_way(type_text)
-      case type_text.to_s.gsub(' ', '_').to_sym
-        when :multiple
+      case type_text.to_s.downcase.gsub(' ', '_').to_sym
+        when :multiple, :multiple_choices
           Qa::Question.ways[:multiple_choices]
-        when :single
+        when :single, :single_choice
           Qa::Question.ways[:single_choice]
         when :ox, :true_or_false
           Qa::Question.ways[:ox]
         when :text, :free_text
           Qa::Question.ways[:free_text]
+        when :order, :in_order
+          Qa::Question.ways[:in_order]
         else
           raise InvalidType
       end
@@ -85,21 +94,21 @@ class CreateQuestion
           a[:models].push(Qa::Question.create!(params))
         rescue ActiveRecord::RecordInvalid => e
           a[:errors].push(e.record)
+        rescue => e
+          a[:errors].push(e)
         end
         a
       }
 
-      raise InvalidParameterIncluded.new(result) if result[:errors].present?
+      raise CreationFailed.new(result) if result[:errors].present?
     end
-  rescue InvalidParameterIncluded => e
-    pp e.result[:errors].map { |q| q.errors }
   end
 
   def execute
     create_from_array! if @questions
   end
 
-  class InvalidParameterIncluded < StandardError
+  class CreationFailed < StandardError
     def initialize(result)
       @result = result
     end
