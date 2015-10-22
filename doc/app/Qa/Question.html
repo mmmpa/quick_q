@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8">
+
+<title>class Qa::Question - Rails Application Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#class-Qa::Question-label-Attributes">Attributes</a>
+    <li><a href="#class-Qa::Question-label-name">name</a>
+    <li><a href="#class-Qa::Question-label-way">way</a>
+    <li><a href="#class-Qa::Question-label-Associations">Associations</a>
+    <li><a href="#class-Qa::Question-label-Examples">Examples</a>
+    <li><a href="#class-Qa::Question-label-Qa-3A-3AQuestion.create-21">Qa::Question.create!</a>
+    <li><a href="#class-Qa::Question-label-E3-83-86-E3-82-AD-E3-82-B9-E3-83-88-E5-85-A5-E5-8A-9B">テキスト入力</a>
+    <li><a href="#class-Qa::Question-label-ox-E5-95-8F-E9-A1-8C">ox問題</a>
+    <li><a href="#class-Qa::Question-label-E4-B8-80-E3-81-A4-E3-81-A0-E3-81-91-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">一つだけ選択する問題</a>
+    <li><a href="#class-Qa::Question-label-E3-81-99-E3-81-B9-E3-81-A6-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">すべて選択する問題</a>
+    <li><a href="#class-Qa::Question-label-E9-A0-86-E7-95-AA-E3-81-A9-E3-81-8A-E3-82-8A-E3-81-AB-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">順番どおりに選択する問題</a>
+    <li><a href="#class-Qa::Question-label-Qa-3A-3AQuestion-23correct-3F">Qa::Question#correct?</a>
+    <li><a href="#class-Qa::Question-label-E3-83-86-E3-82-AD-E3-82-B9-E3-83-88-E5-85-A5-E5-8A-9B">テキスト入力</a>
+    <li><a href="#class-Qa::Question-label-ox-E5-95-8F-E9-A1-8C">ox問題</a>
+    <li><a href="#class-Qa::Question-label-E4-B8-80-E3-81-A4-E3-81-A0-E3-81-91-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">一つだけ選択する問題</a>
+    <li><a href="#class-Qa::Question-label-E3-81-99-E3-81-B9-E3-81-A6-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">すべて選択する問題</a>
+    <li><a href="#class-Qa::Question-label-E9-A0-86-E7-95-AA-E3-81-A9-E3-81-8A-E3-82-8A-E3-81-AB-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">順番どおりに選択する問題</a>
+  </ul>
+</div>
+
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link">ActiveRecord::Base
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-i-correct-3F">#correct?</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Qa::Question">
+  <h1 id="class-Qa::Question" class="class">
+    class Qa::Question
+  </h1>
+
+  <section class="description">
+    
+<p>問題を統括するモデル</p>
+
+<h1 id="class-Qa::Question-label-Attributes">Attributes<span><a href="#class-Qa::Question-label-Attributes">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>アソシエーション用の値を一時保持する。</p>
+<ul><li>
+<p>answers</p>
+</li><li>
+<p>options</p>
+</li><li>
+<p>explanation_text</p>
+</li><li>
+<p>order</p>
+</li></ul>
+
+<h3 id="class-Qa::Question-label-name">name<span><a href="#class-Qa::Question-label-name">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>人間によってつけられる識別子。 jsonなどシステム外部から問題を何かにひもづけたい場合に使う。 指定されない場合はランダムに付与。</p>
+
+<h3 id="class-Qa::Question-label-way">way<span><a href="#class-Qa::Question-label-way">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>解答方法の種類をあらわすenum</p>
+<ul><li>
+<p>free_text テキスト入力問題</p>
+</li><li>
+<p>boolean   ox問題</p>
+</li><li>
+<p>choice    一つだけ選択する問題</p>
+</li><li>
+<p>multiple_choices   すべて選択する問題</p>
+</li><li>
+<p>in_order  順番どおりに選択する問題</p>
+</li></ul>
+
+<h1 id="class-Qa::Question-label-Associations">Associations<span><a href="#class-Qa::Question-label-Associations">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>correct_answers この問題の正答をあらわすアソシエーション</p>
+</li><li>
+<p>answer_options この問題の解答における選択肢をあらわすアソシエーション</p>
+</li><li>
+<p>explanation 問題の解説。無い場合もある。</p>
+</li></ul>
+
+<p>wayによって扱いが違うので、foo_attributesによる直接的な作成は行わず、 answersとoptionsに一時プールして処理する</p>
+
+<h1 id="class-Qa::Question-label-Examples">Examples<span><a href="#class-Qa::Question-label-Examples">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<h2 id="class-Qa::Question-label-Qa-3A-3AQuestion.create-21">Qa::Question.create!<span><a href="#class-Qa::Question-label-Qa-3A-3AQuestion.create-21">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<h3 id="class-Qa::Question-label-E3-83-86-E3-82-AD-E3-82-B9-E3-83-88-E5-85-A5-E5-8A-9B">テキスト入力<span><a href="#class-Qa::Question-label-E3-83-86-E3-82-AD-E3-82-B9-E3-83-88-E5-85-A5-E5-8A-9B">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-constant">Qa</span><span class="ruby-operator">::</span><span class="ruby-constant">Question</span>.<span class="ruby-identifier">create!</span>(
+  <span class="ruby-identifier">way</span><span class="ruby-operator">:</span> <span class="ruby-constant">Qa</span><span class="ruby-operator">::</span><span class="ruby-constant">Question</span>.<span class="ruby-identifier">ways</span>[:<span class="ruby-identifier">free_text</span>],
+  <span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;問題文&#39;</span>,
+  <span class="ruby-identifier">answers</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;正答&#39;</span>
+)
+</pre>
+
+<h3 id="class-Qa::Question-label-ox-E5-95-8F-E9-A1-8C">ox問題<span><a href="#class-Qa::Question-label-ox-E5-95-8F-E9-A1-8C">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-constant">Qa</span><span class="ruby-operator">::</span><span class="ruby-constant">Question</span>.<span class="ruby-identifier">create!</span>(
+  <span class="ruby-identifier">way</span><span class="ruby-operator">:</span> <span class="ruby-constant">Qa</span><span class="ruby-operator">::</span><span class="ruby-constant">Question</span>.<span class="ruby-identifier">ways</span>[:<span class="ruby-identifier">ox</span>],
+  <span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;問題文&#39;</span>,
+  <span class="ruby-identifier">answers</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span> <span class="ruby-comment"># or false</span>
+)
+</pre>
+
+<h3 id="class-Qa::Question-label-E4-B8-80-E3-81-A4-E3-81-A0-E3-81-91-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">一つだけ選択する問題<span><a href="#class-Qa::Question-label-E4-B8-80-E3-81-A4-E3-81-A0-E3-81-91-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-constant">Qa</span><span class="ruby-operator">::</span><span class="ruby-constant">Question</span>.<span class="ruby-identifier">create!</span>(
+  <span class="ruby-identifier">way</span><span class="ruby-operator">:</span> <span class="ruby-constant">Qa</span><span class="ruby-operator">::</span><span class="ruby-constant">Question</span>.<span class="ruby-identifier">ways</span>[:<span class="ruby-identifier">single_choice</span>],
+  <span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;問題文&#39;</span>,
+  <span class="ruby-identifier">options</span><span class="ruby-operator">:</span> [
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢1&#39;</span>, <span class="ruby-identifier">correct_answer</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>},
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢2&#39;</span>},
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢3&#39;</span>},
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢4&#39;</span>},
+  ]
+)
+</pre>
+
+<h3 id="class-Qa::Question-label-E3-81-99-E3-81-B9-E3-81-A6-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">すべて選択する問題<span><a href="#class-Qa::Question-label-E3-81-99-E3-81-B9-E3-81-A6-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-constant">Qa</span><span class="ruby-operator">::</span><span class="ruby-constant">Question</span>.<span class="ruby-identifier">create!</span>(
+  <span class="ruby-identifier">way</span><span class="ruby-operator">:</span> <span class="ruby-constant">Qa</span><span class="ruby-operator">::</span><span class="ruby-constant">Question</span>.<span class="ruby-identifier">ways</span>[:<span class="ruby-identifier">multiple_choices</span>],
+  <span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;問題文&#39;</span>,
+  <span class="ruby-identifier">options</span><span class="ruby-operator">:</span> [
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢1&#39;</span>, <span class="ruby-identifier">correct_answer</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>},
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢2&#39;</span>},
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢3&#39;</span>, <span class="ruby-identifier">correct_answer</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>},
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢4&#39;</span>},
+  ]
+)
+</pre>
+
+<h3 id="class-Qa::Question-label-E9-A0-86-E7-95-AA-E3-81-A9-E3-81-8A-E3-82-8A-E3-81-AB-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">順番どおりに選択する問題<span><a href="#class-Qa::Question-label-E9-A0-86-E7-95-AA-E3-81-A9-E3-81-8A-E3-82-8A-E3-81-AB-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-constant">Qa</span><span class="ruby-operator">::</span><span class="ruby-constant">Question</span>.<span class="ruby-identifier">create!</span>(
+  <span class="ruby-identifier">way</span><span class="ruby-operator">:</span> <span class="ruby-constant">Qa</span><span class="ruby-operator">::</span><span class="ruby-constant">Question</span>.<span class="ruby-identifier">ways</span>[:<span class="ruby-identifier">in_order</span>],
+  <span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;問題文&#39;</span>,
+  <span class="ruby-identifier">options</span><span class="ruby-operator">:</span> [
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢1&#39;</span>},
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢2&#39;</span>},
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢3&#39;</span>},
+    {<span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;選択肢4&#39;</span>},
+  ],
+  <span class="ruby-identifier">order</span><span class="ruby-operator">:</span> [<span class="ruby-value">0</span>, <span class="ruby-value">3</span>, <span class="ruby-value">3</span>, <span class="ruby-value">2</span>] <span class="ruby-comment"># 正答のindexを順番どおりに</span>
+)
+</pre>
+
+<h2 id="class-Qa::Question-label-Qa-3A-3AQuestion-23correct-3F"><a href="Question.html#method-i-correct-3F">#correct?</a><span><a href="#class-Qa::Question-label-Qa-3A-3AQuestion-23correct-3F">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<h3 id="class-Qa::Question-label-E3-83-86-E3-82-AD-E3-82-B9-E3-83-88-E5-85-A5-E5-8A-9B">テキスト入力<span><a href="#class-Qa::Question-label-E3-83-86-E3-82-AD-E3-82-B9-E3-83-88-E5-85-A5-E5-8A-9B">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-identifier">question</span>.<span class="ruby-identifier">correct?</span>(<span class="ruby-string">&#39;答え&#39;</span>)
+</pre>
+
+<h3 id="class-Qa::Question-label-ox-E5-95-8F-E9-A1-8C">ox問題<span><a href="#class-Qa::Question-label-ox-E5-95-8F-E9-A1-8C">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-identifier">question</span>.<span class="ruby-identifier">correct?</span>(<span class="ruby-keyword">true</span>) <span class="ruby-comment"># or false</span>
+</pre>
+
+<h3 id="class-Qa::Question-label-E4-B8-80-E3-81-A4-E3-81-A0-E3-81-91-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">一つだけ選択する問題<span><a href="#class-Qa::Question-label-E4-B8-80-E3-81-A4-E3-81-A0-E3-81-91-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-identifier">question</span>.<span class="ruby-identifier">correct?</span>(<span class="ruby-value">1</span>) <span class="ruby-comment"># AnswerOption#id</span>
+</pre>
+
+<h3 id="class-Qa::Question-label-E3-81-99-E3-81-B9-E3-81-A6-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">すべて選択する問題<span><a href="#class-Qa::Question-label-E3-81-99-E3-81-B9-E3-81-A6-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-identifier">question</span>.<span class="ruby-identifier">correct?</span>([<span class="ruby-value">1</span>, <span class="ruby-value">3</span>, <span class="ruby-value">2</span>]) <span class="ruby-comment"># AnswerOption#id</span>
+</pre>
+
+<h3 id="class-Qa::Question-label-E9-A0-86-E7-95-AA-E3-81-A9-E3-81-8A-E3-82-8A-E3-81-AB-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">順番どおりに選択する問題<span><a href="#class-Qa::Question-label-E9-A0-86-E7-95-AA-E3-81-A9-E3-81-8A-E3-82-8A-E3-81-AB-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-identifier">question</span>.<span class="ruby-identifier">correct?</span>([<span class="ruby-value">1</span>, <span class="ruby-value">3</span>, <span class="ruby-value">3</span>, <span class="ruby-value">2</span>]) <span class="ruby-comment"># AnswerOption#id</span>
+</pre>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-correct-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">correct?</span><span
+            class="method-args">(answer)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>答え合わせ</p>
+          
+          
+
+          
+          <div class="method-source-code" id="correct-3F-source">
+            <pre><span class="ruby-comment"># File app/models/qa/question.rb, line 150</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">correct?</span>(<span class="ruby-identifier">answer</span>)
+  <span class="ruby-identifier">normalized</span> = <span class="ruby-identifier">normalized_answer</span>(<span class="ruby-identifier">answer</span>)
+
+  <span class="ruby-keyword">case</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-identifier">ox?</span>
+      <span class="ruby-identifier">matcher</span> = <span class="ruby-identifier">normalized_boolean</span>(<span class="ruby-identifier">answer</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">BOOLEAN_O</span> <span class="ruby-operator">:</span> <span class="ruby-constant">BOOLEAN_X</span>
+      <span class="ruby-identifier">correct_answers</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">answer_option</span>.<span class="ruby-identifier">text</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">matcher</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-identifier">in_order?</span>
+      <span class="ruby-comment"># 順序まで完全に同じか</span>
+      <span class="ruby-identifier">correct_answers</span>.<span class="ruby-identifier">order</span> { <span class="ruby-identifier">index</span> }.<span class="ruby-identifier">pluck</span>(<span class="ruby-value">:answer_option_id</span>) <span class="ruby-operator">==</span> <span class="ruby-identifier">normalized</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-comment"># 正答のみが含まれているか</span>
+      <span class="ruby-identifier">corrects</span> = <span class="ruby-identifier">correct_set</span>
+      <span class="ruby-identifier">normalized</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">corrects</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">Set</span>.<span class="ruby-identifier">new</span> <span class="ruby-operator">==</span> (<span class="ruby-identifier">corrects</span> <span class="ruby-operator">-</span> <span class="ruby-constant">Set</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">normalized</span>))
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

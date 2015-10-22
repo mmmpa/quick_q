@@ -3,73 +3,22 @@ module Qa
   #
   # 問題を統括するモデル
   #
-  # # create!
+  # = Attributes
   #
-  # ## テキスト入力
+  # アソシエーション用の値を一時保持する。
   #
-  # Qa::Question.create!(
-  #   way: Qa::Question.ways[:free_text],
-  #   text: '問題文',
-  #   answers: '正答'
-  # )
+  # - answers
+  # - options
+  # - explanation_text
+  # - order
   #
-  # ## ox問題
-  #
-  # Qa::Question.create!(
-  #   way: Qa::Question.ways[:ox],
-  #   text: '問題文',
-  #   answers: true # or false
-  # )
-  #
-  # ## 一つだけ選択する問題
-  #
-  # Qa::Question.create!(
-  #   way: Qa::Question.ways[:single_choice],
-  #   text: '問題文',
-  #   options: [
-  #     {text: '選択肢1', correct_answer: true},
-  #     {text: '選択肢2'},
-  #     {text: '選択肢3'},
-  #     {text: '選択肢4'},
-  #   ]
-  # )
-  #
-  # ## すべて選択する問題
-  #
-  # Qa::Question.create!(
-  #   way: Qa::Question.ways[:multiple_choices],
-  #   text: '問題文',
-  #   options: [
-  #     {text: '選択肢1', correct_answer: true},
-  #     {text: '選択肢2'},
-  #     {text: '選択肢3', correct_answer: true},
-  #     {text: '選択肢4'},
-  #   ]
-  # )
-  #
-  # ## 順番どおりに選択する問題
-  #
-  # Qa::Question.create!(
-  #   way: Qa::Question.ways[:in_order],
-  #   text: '問題文',
-  #   options: [
-  #     {text: '選択肢1'},
-  #     {text: '選択肢2'},
-  #     {text: '選択肢3'},
-  #     {text: '選択肢4'},
-  #   ],
-  #   order: [0, 3, 3, 2] # 正答のindexを順番どおりに
-  # )
-  #
-  # # 属性の意味
-  #
-  # ## name
+  # === name
   #
   # 人間によってつけられる識別子。
   # jsonなどシステム外部から問題を何かにひもづけたい場合に使う。
   # 指定されない場合はランダムに付与。
   #
-  # ## way
+  # === way
   #
   # 解答方法の種類をあらわすenum
   #
@@ -80,21 +29,105 @@ module Qa
   # - in_order  順番どおりに選択する問題
   #
   #
-  # # アソシエーション
+  # = Associations
   #
-  # correct_answers この問題の正答をあらわすアソシエーション
-  # answer_options この問題の解答における選択肢をあらわすアソシエーション
-  # explanation 問題の解説。無い場合もある。
+  # - correct_answers この問題の正答をあらわすアソシエーション
+  # - answer_options この問題の解答における選択肢をあらわすアソシエーション
+  # - explanation 問題の解説。無い場合もある。
   #
   # wayによって扱いが違うので、foo_attributesによる直接的な作成は行わず、
   # answersとoptionsに一時プールして処理する
   #
-
+  # = Examples
+  #
+  # == Qa::Question.create!
+  #
+  # === テキスト入力
+  #
+  #   Qa::Question.create!(
+  #     way: Qa::Question.ways[:free_text],
+  #     text: '問題文',
+  #     answers: '正答'
+  #   )
+  #
+  # === ox問題
+  #
+  #   Qa::Question.create!(
+  #     way: Qa::Question.ways[:ox],
+  #     text: '問題文',
+  #     answers: true # or false
+  #   )
+  #
+  # === 一つだけ選択する問題
+  #
+  #   Qa::Question.create!(
+  #     way: Qa::Question.ways[:single_choice],
+  #     text: '問題文',
+  #     options: [
+  #       {text: '選択肢1', correct_answer: true},
+  #       {text: '選択肢2'},
+  #       {text: '選択肢3'},
+  #       {text: '選択肢4'},
+  #     ]
+  #   )
+  #
+  # === すべて選択する問題
+  #
+  #   Qa::Question.create!(
+  #     way: Qa::Question.ways[:multiple_choices],
+  #     text: '問題文',
+  #     options: [
+  #       {text: '選択肢1', correct_answer: true},
+  #       {text: '選択肢2'},
+  #       {text: '選択肢3', correct_answer: true},
+  #       {text: '選択肢4'},
+  #     ]
+  #   )
+  #
+  # === 順番どおりに選択する問題
+  #
+  #   Qa::Question.create!(
+  #     way: Qa::Question.ways[:in_order],
+  #     text: '問題文',
+  #     options: [
+  #       {text: '選択肢1'},
+  #       {text: '選択肢2'},
+  #       {text: '選択肢3'},
+  #       {text: '選択肢4'},
+  #     ],
+  #     order: [0, 3, 3, 2] # 正答のindexを順番どおりに
+  #   )
+  #
+  # == Qa::Question#correct?
+  #
+  # === テキスト入力
+  #
+  #   question.correct?('答え')
+  #
+  # === ox問題
+  #
+  #   question.correct?(true)
+  #   question.correct?('true')
+  #   question.correct?(false)
+  #   question.correct?('false')
+  #
+  # === 一つだけ選択する問題
+  #
+  #   question.correct?(1) # AnswerOption#id
+  #
+  # === すべて選択する問題
+  #
+  #   question.correct?([1, 3, 2]) # AnswerOption#id
+  #
+  # === 順番どおりに選択する問題
+  #
+  #   question.correct?([1, 3, 3, 2]) # AnswerOption#id
+  #
   class Question < ActiveRecord::Base
-    BOOLEAN_O = 'o'
-    BOOLEAN_X = 'x'
+    BOOLEAN_O = 'o' #:nodoc:
+    BOOLEAN_X = 'x' #:nodoc:
 
-    attr_accessor :answers, :options, :explanation_text, :order
+    attr_accessor :answers, :options, :explanation_text, :order #:nodoc:
 
     enum way: {free_text: 10, ox: 20, single_choice: 30, multiple_choices: 40, in_order: 50}
 
