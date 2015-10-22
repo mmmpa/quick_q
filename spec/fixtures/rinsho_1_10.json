@@ -5,221 +5,221 @@
 	"questions": [{
 		"type": "multiple",
 		"question": {
-			"content": "心電図にて、心室頻拍がみられた。まず、すべきことなにか。"
+			"text": "心電図にて、心室頻拍がみられた。まず、すべきことなにか。"
 		},
 		"explanation": "",
-		"selectors": [{
-			"content": "除細動",
+		"options": [{
+			"text": "除細動",
 			"correct": false
 		}, {
-			"content": "意識確認",
+			"text": "意識確認",
 			"correct": true
 		}, {
-			"content": "胸骨圧迫",
+			"text": "胸骨圧迫",
 			"correct": false
 		}, {
-			"content": "脈拍確認",
+			"text": "脈拍確認",
 			"correct": true
 		}, {
-			"content": "リドカイン投与",
+			"text": "リドカイン投与",
 			"correct": false
 		}]
 	}, {
 		"type": "single",
 		"question": {
-			"content": "心電図にて、心室頻拍がみられた。脈を触れた場合の対応で正しいのはどれか。１つ選べ。"
+			"text": "心電図にて、心室頻拍がみられた。脈を触れた場合の対応で正しいのはどれか。１つ選べ。"
 		},
 		"explanation": "",
-		"selectors": [{
-			"content": "除細動",
+		"options": [{
+			"text": "除細動",
 			"correct": false
 		}, {
-			"content": "意識確認",
-			"correct": true
-		}, {
-			"content": "胸骨圧迫",
+			"text": "意識確認",
 			"correct": false
 		}, {
-			"content": "脈拍確認",
-			"correct": true
+			"text": "胸骨圧迫",
+			"correct": false
 		}, {
-			"content": "リドカイン投与",
+			"text": "脈拍確認",
+			"correct": false
+		}, {
+			"text": "リドカイン投与",
 			"correct": true
 		}]
 	}, {
 		"type": "multiple",
 		"question": {
-			"content": "5歳の女児。主訴は口唇の痛み。昨日、浸潤麻酔下にてコンポジットレジン修復をした。口唇には傷痕があった。適切な対応はどれか。"
+			"text": "5歳の女児。主訴は口唇の痛み。昨日、浸潤麻酔下にてコンポジットレジン修復をした。口唇には傷痕があった。適切な対応はどれか。"
 		},
 		"explanation": "",
-		"selectors": [{
-			"content": "レジンの除去",
+		"options": [{
+			"text": "レジンの除去",
 			"correct": false
 		}, {
-			"content": "抗菌薬軟膏の塗布",
+			"text": "抗菌薬軟膏の塗布",
 			"correct": true
 		}, {
-			"content": "He-Neレーザー照射",
+			"text": "He-Neレーザー照射",
 			"correct": true
 		}, {
-			"content": "抗ヒスタミン薬の投与",
+			"text": "抗ヒスタミン薬の投与",
 			"correct": false
 		}, {
-			"content": "スケーリング•ルートプレーニング",
+			"text": "スケーリング•ルートプレーニング",
 			"correct": false
 		}]
 	}, {
 		"type": "single",
 		"question": {
-			"content": "生活歯髄切断法の手順で、4番目に行うのはどれか。1つ選べ。"
+			"text": "生活歯髄切断法の手順で、4番目に行うのはどれか。1つ選べ。"
 		},
 		"explanation": "天蓋除去⇒髄角除去⇒冠部歯髄除去⇒歯髄切断⇒ケミカルサージェリー⇒断髄薬貼付",
-		"selectors": [{
-			"content": "天蓋除去",
+		"options": [{
+			"text": "天蓋除去",
 			"correct": false
 		}, {
-			"content": "歯髄切断",
+			"text": "歯髄切断",
 			"correct": false
 		}, {
-			"content": "断髄薬貼付",
+			"text": "断髄薬貼付",
 			"correct": false
 		}, {
-			"content": "冠部歯髄の除去",
+			"text": "冠部歯髄の除去",
 			"correct": false
 		}, {
-			"content": "ケミカルサージェリー",
+			"text": "ケミカルサージェリー",
 			"correct": true
 		}]
 	}, {
 		"type": "multiple",
 		"question": {
-			"content": "顎下部の唾石を口腔内から摘出することで生じるリスクはどれか。"
+			"text": "顎下部の唾石を口腔内から摘出することで生じるリスクはどれか。"
 		},
 		"explanation": "",
-		"selectors": [{
-			"content": "味覚障害",
+		"options": [{
+			"text": "味覚障害",
 			"correct": true
 		}, {
-			"content": "鼻唇溝消失",
+			"text": "鼻唇溝消失",
 			"correct": false
 		}, {
-			"content": "舌知覚異常",
+			"text": "舌知覚異常",
 			"correct": true
 		}, {
-			"content": "舌運動障害",
+			"text": "舌運動障害",
 			"correct": true
 		}, {
-			"content": "下唇運動障害",
+			"text": "下唇運動障害",
 			"correct": false
 		}]
 	}, {
 		"type": "multiple",
 		"question": {
-			"content": "COPD患者に指導することで正しいことはどれか。"
+			"text": "COPD患者に指導することで正しいことはどれか。"
 		},
 		"explanation": "",
-		"selectors": [{
-			"content": "禁煙",
+		"options": [{
+			"text": "禁煙",
 			"correct": true
 		}, {
-			"content": "減量",
+			"text": "減量",
 			"correct": false
 		}, {
-			"content": "運動制限",
+			"text": "運動制限",
 			"correct": true
 		}, {
-			"content": "風邪の予防",
+			"text": "風邪の予防",
 			"correct": true
 		}, {
-			"content": "インフルエンザの予防接種",
+			"text": "インフルエンザの予防接種",
 			"correct": true
 		}]
 	}, {
 		"type": "multiple",
 		"question": {
-			"content": "顎義歯について、正しいのはどれか。"
+			"text": "顎義歯について、正しいのはどれか。"
 		},
 		"explanation": "人工歯は排列するが、接触させない。また、加圧印象してはならない。印象はアルジネート。",
-		"selectors": [{
-			"content": "嚥下障害が改善される",
+		"options": [{
+			"text": "嚥下障害が改善される",
 			"correct": true
 		}, {
-			"content": "顎欠損部は機能印象する",
+			"text": "顎欠損部は機能印象する",
 			"correct": false
 		}, {
-			"content": "顎欠損部は加圧印象する",
+			"text": "顎欠損部は加圧印象する",
 			"correct": false
 		}, {
-			"content": "顎欠損部に咬合を付与する",
+			"text": "顎欠損部に咬合を付与する",
 			"correct": false
 		}, {
-			"content": "顎欠損部に人工歯を排列する",
+			"text": "顎欠損部に人工歯を排列する",
 			"correct": true
 		}]
 	}, {
 		"type": "multiple",
 		"question": {
-			"content": "インプラントオーバーデンチャーについて、正しいのはどれか。"
+			"text": "インプラントオーバーデンチャーについて、正しいのはどれか。"
 		},
 		"explanation": "オーバーデンチャーは、違和感少なく、良く噛むことができ、義歯の大きさを小さくすることが可能。",
-		"selectors": [{
-			"content": "支持力の向上",
+		"options": [{
+			"text": "支持力の向上",
 			"correct": true
 		}, {
-			"content": "維持力の向上",
+			"text": "維持力の向上",
 			"correct": true
 		}, {
-			"content": "把持力の向上",
+			"text": "把持力の向上",
 			"correct": true
 		}, {
-			"content": "粘膜負担の軽減",
+			"text": "粘膜負担の軽減",
 			"correct": true
 		}, {
-			"content": "義歯を小さくできる",
+			"text": "義歯を小さくできる",
 			"correct": true
 		}]
 	}, {
 		"type": "multiple",
 		"question": {
-			"content": "使用中の義歯を染め出ししたところ、デンチャープラークが顕著だった。生じる可能性があるものはどれか。"
+			"text": "使用中の義歯を染め出ししたところ、デンチャープラークが顕著だった。生じる可能性があるものはどれか。"
 		},
 		"explanation": "デンチャープラークとう蝕に関連性はない。",
-		"selectors": [{
-			"content": "口臭",
+		"options": [{
+			"text": "口臭",
 			"correct": true
 		}, {
-			"content": "う蝕",
+			"text": "う蝕",
 			"correct": false
 		}, {
-			"content": "口角炎",
+			"text": "口角炎",
 			"correct": true
 		}, {
-			"content": "誤嚥性肺炎",
+			"text": "誤嚥性肺炎",
 			"correct": true
 		}, {
-			"content": "義歯性口内炎",
+			"text": "義歯性口内炎",
 			"correct": true
 		}]
 	}, {
 		"type": "multiple",
 		"question": {
-			"content": "上下歯列の前後的な位置関係を把握できるものはどれか。"
+			"text": "上下歯列の前後的な位置関係を把握できるものはどれか。"
 		},
 		"explanation": "顔面角、SNPは、下顎のみの前後的な位置関係を把握できる。上顎突出度は上顎だけではなく、上下の歯列を把握できます。だからこそ、出題される可能性が高いのです。",
-		"selectors": [{
-			"content": "ANB",
+		"options": [{
+			"text": "ANB",
 			"correct": true
 		}, {
-			"content": "SNP",
+			"text": "SNP",
 			"correct": false
 		}, {
-			"content": "顔面角",
+			"text": "顔面角",
 			"correct": false
 		}, {
-			"content": "A-B平面",
+			"text": "A-B平面",
 			"correct": true
 		}, {
-			"content": "上顎突出度",
+			"text": "上顎突出度",
 			"correct": true
 		}]
 	}]

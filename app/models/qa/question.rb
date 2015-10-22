@@ -150,7 +150,7 @@ module Qa
       if explanation
         explanation.update!(text: explanation_text)
       else
-        explanation.build(text: explanation_text)
+        build_explanation(text: explanation_text)
       end
     end
 
