@@ -267,7 +267,7 @@ module Qa
     end
 
     def arrange_for_boolean!
-      if answers.blank?
+      if answers.nil? || answers == ''
         errors.add(:answers, :blank)
         return
       end

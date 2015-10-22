@@ -19,8 +19,51 @@ class CreateQuestion
           json_hash = JSON.parse(options[:json]).deep_symbolize_keys!
           normalized = normalize_json_hash(json_hash)
           call(questions: normalized)
+        when !!options[:csv] && !!options[:way]
+          csv_lines = CSV.parse(options[:csv])
+          normalized = normalize_csv_to(options[:way], csv_lines)
+          call(questions: normalized)
         else
           raise NoParameter
+      end
+    end
+
+    def normalize_csv_to(way, csv_lines)
+      case way
+        when :multiple_choices
+          csv_lines.map(&method(:to_multiple_choices))
+        when :single_choice
+          csv_lines.map(&method(:to_single_choice))
+        when :ox
+          csv_lines.map(&method(:to_ox))
+        when :free_text
+          csv_lines.map(&method(:to_free_text))
+        when :in_order
+          csv_lines.map(&method(:to_in_order))
+        else
+          raise InvalidType
+      end
+    end
+
+    def to_ox(line)
+      name, text, explanation, answer = *line
+      {
+        name: name,
+        way: Qa::Question.ways[:ox],
+        text: text,
+        explanation_text: explanation,
+        answers: detect_ox(answer)
+      }
+    end
+
+    def detect_ox(ox)
+      return ox if TrueClass === ox || FalseClass === ox
+
+      case ox.to_s.downcase
+        when 'o', '○', 'true'
+          true
+        else
+          false
       end
     end
 
@@ -111,6 +154,7 @@ class CreateQuestion
   class CreationFailed < StandardError
     def initialize(result)
       @result = result
+      pp @result[:errors].map { |model| model.try(:errors) || model }
     end
 
     def result
