@@ -14,7 +14,7 @@ RSpec.describe Qa::Question, type: :model do
   #
 
   shared_examples 'boolean way' do
-    it { expect(model.boolean?).to be_truthy }
+    it { expect(model.ox?).to be_truthy }
     it { expect(model.correct_answers.size).to eq(1) }
     it { expect(model.answer_options.size).to eq(2) }
     it { expect(model.answer_options.pluck(:text)).to match_array(['o', 'x']) }
@@ -45,7 +45,7 @@ RSpec.describe Qa::Question, type: :model do
         expect(model.correct?(ids)).to be_truthy
       end
 
-      it do
+      it 'no answer' do
         ids = []
         expect(model.correct?(ids)).to be_falsey
       end
@@ -69,7 +69,7 @@ RSpec.describe Qa::Question, type: :model do
     end
   end
 
-  shared_examples 'choices way' do
+  shared_examples 'multiple choices way' do
     context 'with correct?' do
       it do
         ids = model.correct_answers.pluck(:answer_option_id)
@@ -144,7 +144,7 @@ RSpec.describe Qa::Question, type: :model do
         before :all do
           @model = Qa::Question.create!(
             text: 'q',
-            way: Qa::Question.ways[:boolean],
+            way: Qa::Question.ways[:ox],
             answers: true
           )
         end
@@ -161,7 +161,7 @@ RSpec.describe Qa::Question, type: :model do
           expect {
             Qa::Question.create!(
               text: 'q',
-              way: Qa::Question.ways[:boolean],
+              way: Qa::Question.ways[:ox],
               answers: ''
             )
           }.to raise_error(ActiveRecord::RecordInvalid)
@@ -220,7 +220,7 @@ RSpec.describe Qa::Question, type: :model do
     context 'choice' do
       context 'with valid' do
         before :all do
-          params = choice_param(:choice)
+          params = choice_param(:single_choice)
           params[:options][1][:correct_answer] = true
 
           @model = Qa::Question.create!(**params)
@@ -236,17 +236,17 @@ RSpec.describe Qa::Question, type: :model do
       context 'with invalid' do
         it 'no correct answer' do
           expect {
-            params = choice_param(:choice)
+            params = choice_param(:single_choice)
             Qa::Question.create!(**params)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
       end
     end
 
-    context 'choices' do
+    context 'multiple_choices' do
       context 'with valid' do
         before :all do
-          params = choice_param(:choices)
+          params = choice_param(:multiple_choices)
           params[:options][1][:correct_answer] = true
           params[:options][3][:correct_answer] = true
 
@@ -257,7 +257,7 @@ RSpec.describe Qa::Question, type: :model do
           @model.destroy
         end
 
-        it_behaves_like 'choices way'
+        it_behaves_like 'multiple choices way'
       end
     end
 
@@ -294,35 +294,24 @@ RSpec.describe Qa::Question, type: :model do
     # フリーテキスト、ox以外は選択肢が必要
     #
 
-    before :all do
-      @model = create(:qa_question, :valid, way: Qa::Question.ways[:choices])
-      10.times do
-        @model.answer_options.create(attributes_for(:qa_answer_option, :valid))
-      end
-    end
-
-    after :all do
-      @model.destroy
-    end
-
-    let(:model) { @model }
-
-    before :each do
-      model.correct_answers.destroy_all
-    end
-
-    context 'with "choice" way' do
+    context 'with "single choice" way' do
       before :each do
-        model.way = Qa::Question.ways[:choice]
+        model.way = Qa::Question.ways[:single_choice]
+        model.options = [
+          {text: SecureRandom.hex(4), correct_answer: true},
+          {text: SecureRandom.hex(4)},
+          {text: SecureRandom.hex(4)},
+          {text: SecureRandom.hex(4)},
+        ]
         model.save
       end
 
       it_behaves_like 'choice way'
     end
 
-    context 'with "choices" way' do
+    context 'with "multiple choices" way' do
       before :each do
-        model.way = Qa::Question.ways[:choices]
+        model.way = Qa::Question.ways[:multiple_choices]
         model.options = [
           {text: SecureRandom.hex(4), correct_answer: true},
           {text: SecureRandom.hex(4)},
@@ -332,7 +321,7 @@ RSpec.describe Qa::Question, type: :model do
         model.save
       end
 
-      it_behaves_like 'choices way'
+      it_behaves_like 'multiple choices way'
     end
 
     context 'with "in_order" way' do

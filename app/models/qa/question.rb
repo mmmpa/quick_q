@@ -16,15 +16,15 @@ module Qa
   # ## ox問題
   #
   # Qa::Question.create!(
-  #   way: Qa::Question.ways[:boolean],
+  #   way: Qa::Question.ways[:ox],
   #   text: '問題文',
-  #   answers: true
+  #   answers: true # or false
   # )
   #
   # ## 一つだけ選択する問題
   #
   # Qa::Question.create!(
-  #   way: Qa::Question.ways[:choice],
+  #   way: Qa::Question.ways[:single_choice],
   #   text: '問題文',
   #   options: [
   #     {text: '選択肢1', correct_answer: true},
@@ -37,7 +37,7 @@ module Qa
   # ## すべて選択する問題
   #
   # Qa::Question.create!(
-  #   way: Qa::Question.ways[:choices],
+  #   way: Qa::Question.ways[:multiple_choices],
   #   text: '問題文',
   #   options: [
   #     {text: '選択肢1', correct_answer: true},
@@ -68,7 +68,7 @@ module Qa
   # - free_text テキスト入力問題
   # - boolean   ox問題
   # - choice    一つだけ選択する問題
-  # - choices   すべて選択する問題
+  # - multiple_choices   すべて選択する問題
   # - in_order  順番どおりに選択する問題
   #
   #
@@ -88,7 +88,7 @@ module Qa
 
     attr_accessor :answers, :options, :explanation_text, :order
 
-    enum way: {free_text: 10, boolean: 20, choice: 30, choices: 40, in_order: 50}
+    enum way: {free_text: 10, ox: 20, single_choice: 30, multiple_choices: 40, in_order: 50}
 
     has_many :correct_answers, dependent: :destroy
     has_many :answer_options, dependent: :destroy
@@ -107,7 +107,7 @@ module Qa
       normalized = normalized_answer(answer)
 
       case
-        when boolean?
+        when ox?
           matcher = normalized_boolean(answer) ? BOOLEAN_O : BOOLEAN_X
           correct_answers.first.answer_option.text == matcher
         when in_order?
@@ -130,7 +130,7 @@ module Qa
       case
         when free_text?
           arrange_for_free_text!
-        when boolean?
+        when ox?
           arrange_for_boolean!
         else
           arrange_for_choice_way!
@@ -159,32 +159,35 @@ module Qa
 
       # 毎回更新
       correct_answers.delete_all
+      # 削除分破棄のためリロード
       correct_answers(true)
 
       # 現在の選択肢と比較してなくなっている分を削除
       now = Set.new(answer_options.pluck(:id))
       newer = options.map { |o| o[:id] }
       (now - newer).each { |id| answer_options.destroy(id) }
-      # 削除分破棄のためアソシエーションをリロード
+      # 削除分破棄のためリロード
       answer_options(true)
-
 
       # idがあるものはupdate、無いものはnew
       options.each_with_index do |param, index|
         correct_option = normalized_boolean(param.delete(:correct_answer))
         option_id = param.delete(:id)
+
         param.merge!(index: index)
 
-        option = if option_id.present?
-                   option = answer_options.find(option_id)
-                   option.update!(params)
-                   option
-                 else
-                   answer_options.build(param)
-                 end
+        now = begin
+          if option_id.present?
+            option = answer_options.find(option_id)
+            option.update!(params)
+            option
+          else
+            answer_options.build(param)
+          end
+        end
 
-        if correct_option.present? &&
-          correct_answers.build(answer_option: option, index: index)
+        if correct_option.present?
+          correct_answers.build(answer_option: now, index: index)
         end
       end
 
@@ -236,7 +239,7 @@ module Qa
       case
         when free_text?
           answer_options.size == 1
-        when boolean?
+        when ox?
           answer_options.size == 2
         else
           answer_options.size >= 1
@@ -245,9 +248,9 @@ module Qa
 
     def correct_answers_length_valid?
       case
-        when free_text?, choice?, boolean?
+        when free_text?, single_choice?, ox?
           correct_answers.size == 1
-        when choices?
+        when multiple_choices?
           correct_answers.size <= answer_options.size
         else
           correct_answers.size >= 1
