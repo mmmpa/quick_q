@@ -1,0 +1,146 @@
+{
+	"title": "まるばつクイズ2",
+	"evaluation": "count",
+	"passing": 7,
+	"questions": [{
+		"type": "ox",
+		"question": {
+			"content": "テレホンサービス１１７の時報。かけっぱなしなら、２４時間連続で聞くことができる。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": false
+		}, {
+			"content": "×",
+			"correct": true
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "解毒作用のあるパセリは、食事をする前に食べるのがより効果的である。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": false
+		}, {
+			"content": "×",
+			"correct": true
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "日本の歴代内閣総理大臣の中で、最も若く就任したのは初代伊藤博文である。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "ジェットコースターを管轄するのは、モノレールと同じ国土交通省である。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "星座の中には作図に必要なコンパス座があり、そのすぐそばにはじょうぎ座もある。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "どんなに活躍している日本人でも、生きている間は広辞苑に名前は載らない。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "世界一硬いダイヤモンド。ハンマーで叩いても割れない。　"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": false
+		}, {
+			"content": "×",
+			"correct": true
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "犬のドーベルマンは、ドーベルマンさんが改良した犬である。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "レオナルド・ダ・ヴィンチの「最後の晩餐」のテーブルに並んでいる食べ物は、パンとぶどう酒だけである。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": false
+		}, {
+			"content": "×",
+			"correct": true
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "一度岩場に張り付いた牡蠣は、自分の力では一生その場から離れられない。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}]
+}

@@ -204,26 +204,26 @@ RSpec.describe Qa::Question, type: :model do
     # 選択肢系問題のparamsセット
     #
 
-    def choice_param
-      {text: 'q',
-       way: Qa::Question.ways[:choice],
-       options: [
-         {index: 0, text: SecureRandom.hex(4)},
-         {index: 1, text: SecureRandom.hex(4)},
-         {index: 2, text: SecureRandom.hex(4)},
-         {index: 3, text: SecureRandom.hex(4)},
-       ],
-       answers: [
-         {index: 1}
-       ]
+    def choice_param(way_name)
+      {
+        way: Qa::Question.ways[way_name],
+        text: 'q',
+        options: [
+          {text: SecureRandom.hex(4)},
+          {text: SecureRandom.hex(4)},
+          {text: SecureRandom.hex(4)},
+          {text: SecureRandom.hex(4)},
+        ]
       }
     end
 
     context 'choice' do
       context 'with valid' do
         before :all do
-          @answer = SecureRandom.hex(4)
-          @model = Qa::Question.create!(**choice_param)
+          params = choice_param(:choice)
+          params[:options][1][:correct_answer] = true
+
+          @model = Qa::Question.create!(**params)
         end
 
         after :all do
@@ -234,15 +234,10 @@ RSpec.describe Qa::Question, type: :model do
       end
 
       context 'with invalid' do
-        it 'invalid index' do
+        it 'no correct answer' do
           expect {
-            Qa::Question.create!(**choice_param.merge(answers: [{index: 5}]))
-          }.to raise_error(ActiveRecord::RecordInvalid)
-        end
-
-        it 'too many answers' do
-          expect {
-            Qa::Question.create!(**choice_param.merge(answers: [{index: 1}, {index: 2}]))
+            params = choice_param(:choice)
+            Qa::Question.create!(**params)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
       end
@@ -251,11 +246,11 @@ RSpec.describe Qa::Question, type: :model do
     context 'choices' do
       context 'with valid' do
         before :all do
-          @answer = SecureRandom.hex(4)
-          @model = Qa::Question.create!(**choice_param.merge(
-                                          way: Qa::Question.ways[:choices],
-                                          answers: [{index: 1}, {index: 2}]
-                                        ))
+          params = choice_param(:choices)
+          params[:options][1][:correct_answer] = true
+          params[:options][3][:correct_answer] = true
+
+          @model = Qa::Question.create!(**params)
         end
 
         after :all do
@@ -264,35 +259,13 @@ RSpec.describe Qa::Question, type: :model do
 
         it_behaves_like 'choices way'
       end
-
-      context 'with invalid' do
-        it 'invalid index' do
-          expect {
-            Qa::Question.create!(**choice_param.merge(
-                                   way: Qa::Question.ways[:choices],
-                                   answers: [{index: 5}]
-                                 ))
-          }.to raise_error(ActiveRecord::RecordInvalid)
-        end
-
-        it 'too many answers' do
-          expect {
-            Qa::Question.create!(**choice_param.merge(
-                                   way: Qa::Question.ways[:choices],
-                                   answers: [{index: 1}, {index: 1}, {index: 1}, {index: 1}, {index: 1}]
-                                 ))
-          }.to raise_error(ActiveRecord::RecordInvalid)
-        end
-      end
     end
 
     context 'in order' do
       before :all do
-        @answer = SecureRandom.hex(4)
-        @model = Qa::Question.create!(**choice_param.merge(
-                                        way: Qa::Question.ways[:in_order],
-                                        answers: [{index: 1}, {index: 3}, {index: 1}, {index: 3}]
-                                      ))
+        params = choice_param(:in_order)
+        params[:order] = [0, 3, 3, 2]
+        @model = Qa::Question.create!(params)
       end
 
       after :all do
@@ -302,12 +275,10 @@ RSpec.describe Qa::Question, type: :model do
       it_behaves_like 'in order way'
 
       context 'with invalid' do
-        it 'invalid index' do
+        it 'no correct answer' do
           expect {
-            Qa::Question.create!(**choice_param.merge(
-                                   way: Qa::Question.ways[:in_order],
-                                   answers: [{index: 5}]
-                                 ))
+            params = choice_param(:in_order)
+            Qa::Question.create!(**params)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
       end
@@ -342,15 +313,8 @@ RSpec.describe Qa::Question, type: :model do
 
     context 'with "choice" way' do
       before :each do
-        model.choice!
+        model.way = Qa::Question.ways[:choice]
         model.save
-
-        sampler = model.answer_options.sampler
-        model.correct_answers.create(
-          attributes_for(
-            :qa_correct_answer, :valid,
-            answer_option: sampler.pick
-          ))
       end
 
       it_behaves_like 'choice way'
@@ -358,17 +322,14 @@ RSpec.describe Qa::Question, type: :model do
 
     context 'with "choices" way' do
       before :each do
-        model.choices!
+        model.way = Qa::Question.ways[:choices]
+        model.options = [
+          {text: SecureRandom.hex(4), correct_answer: true},
+          {text: SecureRandom.hex(4)},
+          {text: SecureRandom.hex(4), correct_answer: true},
+          {text: SecureRandom.hex(4)},
+        ]
         model.save
-
-        sampler = model.answer_options.sampler
-        (rand(2)+2).times do
-          model.correct_answers.create(
-            attributes_for(
-              :qa_correct_answer, :valid,
-              answer_option: sampler.pick
-            ))
-        end
       end
 
       it_behaves_like 'choices way'
@@ -376,17 +337,9 @@ RSpec.describe Qa::Question, type: :model do
 
     context 'with "in_order" way' do
       before :each do
-        model.in_order!
+        model.way = Qa::Question.ways[:in_order]
+        model.order = [0, 3, 3, 1]
         model.save
-
-        sampler = model.answer_options.sampler
-        (rand(2)+2).times do
-          model.correct_answers.create(
-            attributes_for(
-              :qa_correct_answer, :valid,
-              answer_option: sampler.pick
-            ))
-        end
       end
 
       it_behaves_like 'in order way'
@@ -421,15 +374,9 @@ RSpec.describe Qa::Question, type: :model do
     end
 
     context 'when correct answers detected' do
-      before :each do
-        model.save!
-        5.times do
-          model.answer_options.create(attributes_for(:qa_answer_option, :valid_attr))
-        end
-      end
-
       context 'when not included answer options' do
         before :each do
+          model.save
           model.correct_answers.create(attributes_for(:qa_correct_answer, :valid_attr))
         end
 
@@ -439,13 +386,6 @@ RSpec.describe Qa::Question, type: :model do
       end
 
       context 'when included answer options' do
-        before :each do
-          model.correct_answers.create(
-            attributes_for(
-              :qa_correct_answer, :valid_attr,
-              answer_option: model.answer_options.sample
-            ))
-        end
         it { expect(model.valid?).to be_truthy }
         it { expect(model.save).to be_truthy }
         it { expect(model.save!).to be_truthy }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151019201659) do
+ActiveRecord::Schema.define(version: 20151022004426) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,13 @@ ActiveRecord::Schema.define(version: 20151019201659) do
 
   add_index "qa_correct_answers", ["answer_option_id"], name: "index_qa_correct_answers_on_answer_option_id", using: :btree
   add_index "qa_correct_answers", ["question_id"], name: "index_qa_correct_answers_on_question_id", using: :btree
+
+  create_table "qa_explanations", force: :cascade do |t|
+    t.text    "text"
+    t.integer "question_id"
+  end
+
+  add_index "qa_explanations", ["question_id"], name: "index_qa_explanations_on_question_id", using: :btree
 
   create_table "qa_questions", force: :cascade do |t|
     t.string   "text",                   null: false

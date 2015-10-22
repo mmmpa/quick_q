@@ -1,0 +1,191 @@
+{
+	"title": "すべて選ぶ問題4",
+	"evaluation": "point",
+	"passing": 70,
+	"questions": [{
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、サントリーフーズの製品を全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "なっちゃん",
+			"correct": true
+		}, {
+			"content": "Gokuri",
+			"correct": true
+		}, {
+			"content": "お～いお茶",
+			"correct": false
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、ジンがベースのカクテルを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "トムコリンズ",
+			"correct": true
+		}, {
+			"content": "モスコミュール",
+			"correct": false
+		}, {
+			"content": "シンガポールスリング",
+			"correct": true
+		}, {
+			"content": "ブラッディマリー",
+			"correct": false
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、スイスの時計ブランド「オメガ」のモデルを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "シーマスター",
+			"correct": true
+		}, {
+			"content": "サブマリーナー",
+			"correct": false
+		}, {
+			"content": "コンステレーション",
+			"correct": true
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、スポーツドリンクを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "ソーピード",
+			"correct": true
+		}, {
+			"content": "カナダドライ",
+			"correct": false
+		}, {
+			"content": "マムシゲン",
+			"correct": false
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、スポーツドリンクを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "ゲータレード",
+			"correct": true
+		}, {
+			"content": "ローヤルスター",
+			"correct": false
+		}, {
+			"content": "ポカリスエット",
+			"correct": true
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、タケダの風邪薬「ベンザブロック」のパッケージの色にあるものを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "赤のベンザ",
+			"correct": false
+		}, {
+			"content": "黄色のベンザ",
+			"correct": true
+		}, {
+			"content": "銀のベンザ",
+			"correct": true
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、タンパク質の量に基づく小麦粉の分類にあるものを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "中力粉",
+			"correct": true
+		}, {
+			"content": "薄力粉",
+			"correct": true
+		}, {
+			"content": "強力粉",
+			"correct": true
+		}, {
+			"content": "弱力粉",
+			"correct": false
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、テキーラがベースのカクテルを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "メキシカン",
+			"correct": true
+		}, {
+			"content": "モッキンバード",
+			"correct": true
+		}, {
+			"content": "チチ",
+			"correct": false
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、データを書き込むことが可能なメディアを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "CD-ROM",
+			"correct": false
+		}, {
+			"content": "CD-R",
+			"correct": true
+		}, {
+			"content": "CD-RW",
+			"correct": true
+		}, {
+			"content": "フロッピーディスク",
+			"correct": true
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、トヨタ自動車のディーラーに、実際にあるものを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "ネッツ店",
+			"correct": true
+		}, {
+			"content": "アルテマ店",
+			"correct": false
+		}, {
+			"content": "トヨタ店",
+			"correct": true
+		}, {
+			"content": "クリオ店",
+			"correct": false
+		}, {
+			"content": "トヨタカローラ店",
+			"correct": true
+		}]
+	}]
+}

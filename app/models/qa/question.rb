@@ -3,6 +3,64 @@ module Qa
   #
   # 問題を統括するモデル
   #
+  # # create!
+  #
+  # ## テキスト入力
+  #
+  # Qa::Question.create!(
+  #   way: Qa::Question.ways[:free_text],
+  #   text: '問題文',
+  #   answers: '正答'
+  # )
+  #
+  # ## ox問題
+  #
+  # Qa::Question.create!(
+  #   way: Qa::Question.ways[:boolean],
+  #   text: '問題文',
+  #   answers: true
+  # )
+  #
+  # ## 一つだけ選択する問題
+  #
+  # Qa::Question.create!(
+  #   way: Qa::Question.ways[:choice],
+  #   text: '問題文',
+  #   options: [
+  #     {text: '選択肢1', correct_answer: true},
+  #     {text: '選択肢2'},
+  #     {text: '選択肢3'},
+  #     {text: '選択肢4'},
+  #   ]
+  # )
+  #
+  # ## すべて選択する問題
+  #
+  # Qa::Question.create!(
+  #   way: Qa::Question.ways[:choices],
+  #   text: '問題文',
+  #   options: [
+  #     {text: '選択肢1', correct_answer: true},
+  #     {text: '選択肢2'},
+  #     {text: '選択肢3', correct_answer: true},
+  #     {text: '選択肢4'},
+  #   ]
+  # )
+  #
+  # ## 順番どおりに選択する問題
+  #
+  # Qa::Question.create!(
+  #   way: Qa::Question.ways[:in_order],
+  #   text: '問題文',
+  #   options: [
+  #     {text: '選択肢1'},
+  #     {text: '選択肢2'},
+  #     {text: '選択肢3'},
+  #     {text: '選択肢4'},
+  #   ],
+  #   order: [0, 3, 3, 2] # 正答のindexを順番どおりに
+  # )
+  #
   # # 解答方法の種類
   #
   # way 解答方法の種類をあらわすenum
@@ -18,6 +76,7 @@ module Qa
   #
   # correct_answers この問題の正答をあらわすアソシエーション
   # answer_options この問題の解答における選択肢をあらわすアソシエーション
+  # explanation 問題の解説。無い場合もある。
   #
   # wayによって扱いが違うので、foo_attributesによる直接的な作成は行わず、
   # answersとoptionsに一時プールして処理する
@@ -27,17 +86,18 @@ module Qa
     BOOLEAN_O = 'o'
     BOOLEAN_X = 'x'
 
-    attr_accessor :answers, :options
+    attr_accessor :answers, :options, :explanation_text, :order
 
     enum way: {free_text: 10, boolean: 20, choice: 30, choices: 40, in_order: 50}
 
     has_many :correct_answers, dependent: :destroy
     has_many :answer_options, dependent: :destroy
+    has_one :explanation, dependent: :destroy
 
     validates :text, :way,
               presence: true
 
-    validate :way_requirement_fulfilled, if: -> { correct_answers.present? }
+    validate :way_requirement_fulfilled
 
     before_validation :arrange!
 
@@ -76,38 +136,62 @@ module Qa
           arrange_for_choice_way!
       end
 
+      arrange_explanation!
+
       true
+    end
+
+    def arrange_explanation!
+      if explanation_text.blank?
+        explanation.try(:destroy)
+        return
+      end
+
+      if explanation
+        explanation.update!(text: explanation_text)
+      else
+        explanation.build(text: explanation_text)
+      end
     end
 
     def arrange_for_choice_way!
       return if options.blank?
 
+      # 毎回更新
+      correct_answers.delete_all
+      correct_answers(true)
+
       # 現在の選択肢と比較してなくなっている分を削除
       now = Set.new(answer_options.pluck(:id))
       newer = options.map { |o| o[:id] }
       (now - newer).each { |id| answer_options.destroy(id) }
+      # 削除分破棄のためアソシエーションをリロード
+      answer_options(true)
+
 
       # idがあるものはupdate、無いものはnew
-      options.each do |param|
-        if param[:id].present?
-          answer_options.find(param.delete(:id)).update!(params)
-        else
-          answer_options.build(param)
+      options.each_with_index do |param, index|
+        correct_option = normalized_boolean(param.delete(:correct_answer))
+        option_id = param.delete(:id)
+        param.merge!(index: index)
+
+        option = if option_id.present?
+                   option = answer_options.find(option_id)
+                   option.update!(params)
+                   option
+                 else
+                   answer_options.build(param)
+                 end
+
+        if correct_option.present? &&
+          correct_answers.build(answer_option: option, index: index)
         end
       end
 
-      # 毎回更新
-      correct_answers.delete_all
-      answers.each_with_index do |param, index|
-        # 保存前にはSQLが絡むメソッドは使えない
-        # 見つからないと配列が返ってしまう
-        option = answer_options.each do |answer|
-          break answer if answer.index == param[:index]
-        end
-        if Array === option
-          errors.add(:answers, :invalid)
-        else
-          correct_answers.build(answer_option: option, index: index)
+      if order.present?
+        sorted_options = answer_options.sort_by { |option| option.index }
+        order.each_with_index do |option_index, index|
+          correct_answers.build(answer_option: sorted_options[option_index], index: index)
         end
       end
 
@@ -148,11 +232,20 @@ module Qa
       corrects == (corrects & options)
     end
 
+    def answer_options_length_valid?
+      case
+        when free_text?
+          answer_options.size == 1
+        when boolean?
+          answer_options.size == 2
+        else
+          answer_options.size >= 1
+      end
+    end
+
     def correct_answers_length_valid?
       case
-        when free_text?, choice?
-          correct_answers.size == 1
-        when boolean?
+        when free_text?, choice?, boolean?
           correct_answers.size == 1
         when choices?
           correct_answers.size <= answer_options.size
@@ -200,6 +293,10 @@ module Qa
     end
 
     def way_requirement_fulfilled
+      unless answer_options_length_valid?
+        errors.add(:answer_options, :length)
+      end
+
       unless correct_answers_included?
         errors.add(:correct_answers, :inclusion)
       end

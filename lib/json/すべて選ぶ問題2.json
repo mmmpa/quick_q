@@ -1,0 +1,191 @@
+{
+	"title": "すべて選ぶ問題2",
+	"evaluation": "none",
+	"passing": 1,
+	"questions": [{
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、「一本、二本…」と数えるものを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "輪ゴム",
+			"correct": true
+		}, {
+			"content": "ブドウ",
+			"correct": false
+		}, {
+			"content": "椅子",
+			"correct": false
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、「一本、二本…」と数えるものを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "ドラム缶",
+			"correct": true
+		}, {
+			"content": "三味線",
+			"correct": false
+		}, {
+			"content": "電柱",
+			"correct": true
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、「一筆書き」で書くことができるひらがなを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "ろ",
+			"correct": true
+		}, {
+			"content": "う",
+			"correct": false
+		}, {
+			"content": "る",
+			"correct": true
+		}, {
+			"content": "ら",
+			"correct": false
+		}, {
+			"content": "の",
+			"correct": true
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、「世界5大モーターショー」に数えられる見本市が開催される都市を全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "フランクフルト",
+			"correct": true
+		}, {
+			"content": "ロサンゼルス",
+			"correct": false
+		}, {
+			"content": "ジュネーブ",
+			"correct": true
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、「六曜」の1つに数えられるものを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "大安",
+			"correct": true
+		}, {
+			"content": "先勝",
+			"correct": true
+		}, {
+			"content": "先敗",
+			"correct": false
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、「雑節」の1つとされるものを全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "社日",
+			"correct": true
+		}, {
+			"content": "入梅",
+			"correct": true
+		}, {
+			"content": "節分",
+			"correct": true
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、お米を使った料理を全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "ロコモコ",
+			"correct": true
+		}, {
+			"content": "オジンオフェ",
+			"correct": false
+		}, {
+			"content": "サルティンボッカ",
+			"correct": false
+		}, {
+			"content": "ビリヤニ",
+			"correct": true
+		}, {
+			"content": "タコス",
+			"correct": false
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、お菓子などに用いられる甘味料を全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "エンチーム",
+			"correct": false
+		}, {
+			"content": "パラチノース",
+			"correct": true
+		}, {
+			"content": "アスパルテーム",
+			"correct": true
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、しりとりで使用すると負けになる言葉を全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "盗っ人",
+			"correct": false
+		}, {
+			"content": "有り金",
+			"correct": false
+		}, {
+			"content": "成金",
+			"correct": true
+		}, {
+			"content": "変人",
+			"correct": true
+		}]
+	}, {
+		"type": "multiple",
+		"question": {
+			"content": "次のうち、やおきんが販売しているお菓子・うまい棒の味の種類を全て選びなさい"
+		},
+		"explanation": "",
+		"point": 10,
+		"selectors": [{
+			"content": "エビマヨネーズ味",
+			"correct": true
+		}, {
+			"content": "チョコレート味",
+			"correct": true
+		}, {
+			"content": "チキン南蛮味",
+			"correct": false
+		}]
+	}]
+}

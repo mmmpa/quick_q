@@ -1,0 +1,146 @@
+{
+	"title": "まるばつクイズ3",
+	"evaluation": "count",
+	"passing": 7,
+	"questions": [{
+		"type": "ox",
+		"question": {
+			"content": "漢字の「凸」と「凹」。どちらも、子どもの名前に使うことはできない。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": false
+		}, {
+			"content": "×",
+			"correct": true
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "日本が現在までに獲得したオリンピックのメダル数が最も多い競技は柔道である。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": false
+		}, {
+			"content": "×",
+			"correct": true
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "日本の国際宇宙ステーション「きぼう」の中では、日本の法律が適用される。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "JRの特急料金。冷房が故障した場合でも、料金は払い戻しの対象になる。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "2000円札は現在製造されていない。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "天然のダイヤモンドは、日本で１度も発見されたことがない。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": false
+		}, {
+			"content": "×",
+			"correct": true
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "家の柱には大黒柱をはじめ、七福神全ての名前がついた柱がある。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": false
+		}, {
+			"content": "×",
+			"correct": true
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "葛飾北斎の富嶽三十六景。４６枚全ての絵に富士山が描かれている。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "島康介が世界新記録のペースで西武ドームから北京オリンピックの開会式会場までの距離を泳ぐと、北京オリンピックの開会式までにたどり着くことができる。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}, {
+		"type": "ox",
+		"question": {
+			"content": "ハンマー投げの鉄球と砲丸投げの砲丸。重さは同じである。"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "○",
+			"correct": true
+		}, {
+			"content": "×",
+			"correct": false
+		}]
+	}]
+}

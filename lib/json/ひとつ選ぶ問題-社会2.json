@@ -1,0 +1,206 @@
+{
+	"title": "ひとつ選ぶ問題:社会2",
+	"evaluation": "point",
+	"passing": 70,
+	"questions": [{
+		"type": "single",
+		"question": {
+			"content": "1年間でグアム島へ飛行機で到着する乗客全体の、約7割を占めるのはどこの国の人？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "中国",
+			"correct": false
+		}, {
+			"content": "日本",
+			"correct": true
+		}, {
+			"content": "インド",
+			"correct": false
+		}, {
+			"content": "アメリカ",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2005年に、郵政民営化に反対の立場をとる亀井静香、綿貫民輔らが中心となって結成した政党は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "自由新党",
+			"correct": false
+		}, {
+			"content": "国家新党",
+			"correct": false
+		}, {
+			"content": "郵便新党",
+			"correct": false
+		}, {
+			"content": "国民新党",
+			"correct": true
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2006年に京都市右京区に完成した「時雨殿」は何を題材とした博物館？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "映画",
+			"correct": false
+		}, {
+			"content": "西陣織",
+			"correct": false
+		}, {
+			"content": "歌舞伎",
+			"correct": false
+		}, {
+			"content": "小倉百人一首",
+			"correct": true
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2008年は毎日新聞の高尾具成ら2人の新聞記者に贈られた国際報道で優れた業績を挙げたジャーナリストに贈られる賞は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "ボーン・原田賞",
+			"correct": false
+		}, {
+			"content": "ボーン・山田賞",
+			"correct": false
+		}, {
+			"content": "ボーン・岡田賞",
+			"correct": false
+		}, {
+			"content": "ボーン・上田賞",
+			"correct": true
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2009年に、全国の政令指定都市で初めて女性市長が誕生したのは？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "千葉市",
+			"correct": false
+		}, {
+			"content": "仙台市",
+			"correct": true
+		}, {
+			"content": "新潟市",
+			"correct": false
+		}, {
+			"content": "川崎市",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2010年4月に与謝野馨、平沼赳夫らが結成した政党は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "たちあがれ日本",
+			"correct": true
+		}, {
+			"content": "かけぬけろ日本",
+			"correct": false
+		}, {
+			"content": "いきのこれ日本",
+			"correct": false
+		}, {
+			"content": "よみあがれ日本",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2010年から2012年までハンガリーの大統領を務めたパール・シュミットが、五輪で金メダルを獲得したことがある競技は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "馬術",
+			"correct": false
+		}, {
+			"content": "フェンシング",
+			"correct": true
+		}, {
+			"content": "ヨット",
+			"correct": false
+		}, {
+			"content": "クレー射撃",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2010年に万博が開催された中国の都市はどこ？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "上海",
+			"correct": true
+		}, {
+			"content": "香港",
+			"correct": false
+		}, {
+			"content": "天津",
+			"correct": false
+		}, {
+			"content": "南京",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2010年に東京・錦糸町にオープンしたシティホテル「ロッテシティホテル錦糸町」に実際にある部屋は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "ビックリマンチョコルーム",
+			"correct": false
+		}, {
+			"content": "コアラのマーチルーム",
+			"correct": true
+		}, {
+			"content": "雪見だいふくルーム",
+			"correct": false
+		}, {
+			"content": "クールミントガムルーム",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2010年の「新語・流行語大賞」の候補となった「壊し屋」「豪腕」「一兵卒」といえば政治家の誰に関係が深い言葉？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "鳩山由紀夫",
+			"correct": false
+		}, {
+			"content": "菅直人",
+			"correct": false
+		}, {
+			"content": "小沢一郎",
+			"correct": true
+		}, {
+			"content": "仙石由人",
+			"correct": false
+		}]
+	}]
+}

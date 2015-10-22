@@ -1,0 +1,206 @@
+{
+	"title": "ひとつ選ぶ問題:ライフスタイル2",
+	"evaluation": "point",
+	"passing": 70,
+	"questions": [{
+		"type": "single",
+		"question": {
+			"content": "2009年10月に東京・赤坂に1号店がオープンした多くの芸能人が考案したメニューがウリの飲食店は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "芸能人スイーツ部",
+			"correct": false
+		}, {
+			"content": "芸能人ラーメン部",
+			"correct": false
+		}, {
+			"content": "芸能人カレー部",
+			"correct": true
+		}, {
+			"content": "芸能人焼肉部",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2009年に「本格ミステリ作家クラブ」の第3代会長に就任した作家は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "法月綸太郎",
+			"correct": false
+		}, {
+			"content": "有栖川有栖",
+			"correct": false
+		}, {
+			"content": "北村薫",
+			"correct": false
+		}, {
+			"content": "辻真先",
+			"correct": true
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2010年に小説『KAGEROU』でポプラ社小説大賞を受賞した俳優は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "水嶋ヒロ",
+			"correct": true
+		}, {
+			"content": "向井理",
+			"correct": false
+		}, {
+			"content": "佐藤健",
+			"correct": false
+		}, {
+			"content": "小栗旬",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2011年に井上真央主演で映画化された角田光代の小説は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "『八日目の蝶』",
+			"correct": false
+		}, {
+			"content": "『八日目の蜂』",
+			"correct": false
+		}, {
+			"content": "『八日目の蟻』",
+			"correct": false
+		}, {
+			"content": "『八日目の蝉』",
+			"correct": true
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2011年に刊行した著書の中で「公立図書館は貸し出しを半年間猶予するように」と求める文章を掲載し話題となった作家は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "樋口毅宏",
+			"correct": true
+		}, {
+			"content": "馳星周",
+			"correct": false
+		}, {
+			"content": "夏川草介",
+			"correct": false
+		}, {
+			"content": "海堂尊",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2011年の「ユーキャン新語・流行語大賞」で年間大賞に選ばれた言葉は？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "絆",
+			"correct": false
+		}, {
+			"content": "どじょう内閣",
+			"correct": false
+		}, {
+			"content": "スマホ",
+			"correct": false
+		}, {
+			"content": "なでしこジャパン",
+			"correct": true
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2011年８月には書籍化もされたゲームデザイナー・井上純弌と異国から来た妻との日常を描いた人気ブログは？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "『韓国嫁日記』",
+			"correct": false
+		}, {
+			"content": "『中国嫁日記』",
+			"correct": true
+		}, {
+			"content": "『台湾嫁日記』",
+			"correct": false
+		}, {
+			"content": "『香港嫁日記』",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2012年4月から導入された食品に含まれる放射性物質の新基準値における4つの食品分類は一般食料・飲料水・牛乳と何？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "乳児用食品",
+			"correct": true
+		}, {
+			"content": "保存食",
+			"correct": false
+		}, {
+			"content": "アルコール類",
+			"correct": false
+		}, {
+			"content": "調味料",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2012年7月に大阪のアメリカ村に日本1号店がオープンした100円ショップ「Tiger」はどこの国の企業？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "デンマーク",
+			"correct": true
+		}, {
+			"content": "ノルウェー",
+			"correct": false
+		}, {
+			"content": "スウェーデン",
+			"correct": false
+		}, {
+			"content": "フィンランド",
+			"correct": false
+		}]
+	}, {
+		"type": "single",
+		"question": {
+			"content": "2012年8月に漫画『ジョジョの奇妙な冒険』とコラボした「ジョジョスマホ」を発売した携帯キャリアは？"
+		},
+		"explanation": "",
+		"point": 1,
+		"selectors": [{
+			"content": "NTTドコモ",
+			"correct": true
+		}, {
+			"content": "ソフトバンクモバイル",
+			"correct": false
+		}, {
+			"content": "WILLCOME",
+			"correct": false
+		}, {
+			"content": "au",
+			"correct": false
+		}]
+	}]
+}
