@@ -27,6 +27,11 @@ group :default do
   gem 'jquery-rails'
   gem 'sweet-alert-confirm'
   gem 'rails_config'
+  gem 'redis'
+  gem 'redis-rails'
+  gem 'redis-objects'
+  gem 'redis-namespace'
+  gem 'aasm'
 end
 
 group :development, :test do
