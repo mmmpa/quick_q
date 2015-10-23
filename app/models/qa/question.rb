@@ -186,7 +186,18 @@ module Qa
       arrange_added_name!
       arrange_explanation!
 
+      sweep_sub_attributes!
+
       true
+    end
+
+    #
+    # ステートを維持したままでupdateをかけるとcreateなどの内容が引き継がれるため
+    #
+    def sweep_sub_attributes!
+      [:answers, :options, :explanation_text, :order].each do |name|
+        send("#{name}=", nil)
+      end
     end
 
     def arrange_added_name!
@@ -231,7 +242,7 @@ module Qa
         now = begin
           if option_id.present?
             option = answer_options.find(option_id)
-            option.update!(params)
+            option.update!(param)
             option
           else
             answer_options.build(param)

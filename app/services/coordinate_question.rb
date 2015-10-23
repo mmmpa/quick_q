@@ -3,30 +3,31 @@
 #
 # = Example
 #
-#   CreateQuestion.(hash)
-#   CreateQuestion.from(json: json)
-#   CreateQuestion.from(csv: json, way: :in_order)
+#   CoordinateQuestion.from(json: json)
+#   CoordinateQuestion.from(csv: json, way: :in_order)
 #
 
-class CreateQuestion
+class CoordinateQuestion
   class << self
-    def call(options = {})
-      new(options).execute
-    end
-
     def from(options = {})
       case
         when !!options[:json]
           json_hash = JSON.parse(options[:json]).deep_symbolize_keys!
           normalized = normalize_json_hash(json_hash)
-          call(questions: normalized)
+          execute(questions: normalized, **options)
         when !!options[:csv] && !!options[:way]
           csv_lines = CSV.parse(options[:csv])
           normalized = normalize_csv_to(options[:way], csv_lines)
-          call(questions: normalized)
+          execute(questions: normalized, **options)
         else
           raise NoParameter
       end
+    end
+
+    private
+
+    def execute(options = {})
+      new(options).execute
     end
 
     def normalize_csv_to(way, csv_lines)
@@ -175,15 +176,26 @@ class CreateQuestion
     end
   end
 
-  def initialize(options = {})
+  def initialize(options = {}) #:nodoc:
+    @update = options[:update]
     @questions = options[:questions]
   end
 
-  def create_from_array!
+  def execute #:nodoc:
+    update_from_array! if @questions
+  end
+
+  private
+
+  def update_from_array!
     Qa::Question.transaction do
       result = @questions.inject({models: [], errors: []}) { |a, params|
         begin
-          a[:models].push(Qa::Question.create!(params))
+          if update?
+            a[:models].push(Qa::Question.find_by(name: params[:name]).update!(params))
+          else
+            a[:models].push(Qa::Question.create!(params))
+          end
         rescue ActiveRecord::RecordInvalid => e
           a[:errors].push(e.record)
         rescue => e
@@ -192,15 +204,15 @@ class CreateQuestion
         a
       }
 
-      raise CreationFailed.new(result) if result[:errors].present?
+      raise UpdateFailed.new(result) if result[:errors].present?
     end
   end
 
-  def execute
-    create_from_array! if @questions
+  def update?
+    !!@update
   end
 
-  class CreationFailed < StandardError
+  class UpdateFailed < StandardError
     def initialize(result)
       @result = result
       #pp @result[:errors].map { |model| model.try(:errors) || model }

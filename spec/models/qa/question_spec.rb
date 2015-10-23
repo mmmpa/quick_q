@@ -13,7 +13,7 @@ RSpec.describe Qa::Question, type: :model do
   # shared_examples
   #
 
-  shared_examples 'boolean way' do
+  shared_examples 'ox question' do
     it { expect(model.ox?).to be_truthy }
     it { expect(model.correct_answers.size).to eq(1) }
     it { expect(model.answer_options.size).to eq(2) }
@@ -25,7 +25,7 @@ RSpec.describe Qa::Question, type: :model do
     end
   end
 
-  shared_examples 'free text way' do
+  shared_examples 'free text question' do
     it { expect(model.free_text?).to be_truthy }
     it { expect(model.correct_answers.size).to eq(1) }
     it { expect(model.answer_options.size).to eq(1) }
@@ -38,7 +38,11 @@ RSpec.describe Qa::Question, type: :model do
     end
   end
 
-  shared_examples 'choice way' do
+  shared_examples 'single choide question' do
+    it { expect(model.single_choice?).to be_truthy }
+    it { expect(model.correct_answers.size).to eq(1) }
+    it { expect(model.answer_options.size).to eq(4) }
+
     context 'with correct?' do
       it do
         ids = model.correct_answers.pluck(:answer_option_id)
@@ -69,7 +73,10 @@ RSpec.describe Qa::Question, type: :model do
     end
   end
 
-  shared_examples 'multiple choices way' do
+  shared_examples 'multiple choices question' do
+    it { expect(model.multiple_choices?).to be_truthy }
+    it { expect(model.answer_options.size).to eq(4) }
+
     context 'with correct?' do
       it do
         ids = model.correct_answers.pluck(:answer_option_id)
@@ -101,7 +108,10 @@ RSpec.describe Qa::Question, type: :model do
     end
   end
 
-  shared_examples 'in order way' do
+  shared_examples 'in order question' do
+    it { expect(model.in_order?).to be_truthy }
+    it { expect(model.answer_options.size).to eq(4) }
+
     context 'with correct?' do
       let(:ids) { model.correct_answers.order { index }.pluck(:answer_option_id) }
 
@@ -132,6 +142,23 @@ RSpec.describe Qa::Question, type: :model do
   end
 
   #
+  # 選択肢系問題のparamsセット
+  #
+
+  def choice_param(way_name)
+    {
+      way: Qa::Question.ways[way_name],
+      text: 'q',
+      options: [
+        {text: SecureRandom.hex(4)},
+        {text: SecureRandom.hex(4)},
+        {text: SecureRandom.hex(4)},
+        {text: SecureRandom.hex(4)},
+      ]
+    }
+  end
+
+  #
   # examples
   #
 
@@ -153,7 +180,7 @@ RSpec.describe Qa::Question, type: :model do
           @model.destroy
         end
 
-        it_behaves_like 'boolean way'
+        it_behaves_like 'ox question'
       end
 
       context 'with invalid' do
@@ -184,7 +211,7 @@ RSpec.describe Qa::Question, type: :model do
           @model.destroy
         end
 
-        it_behaves_like 'free text way'
+        it_behaves_like 'free text question'
       end
 
       context 'with invalid' do
@@ -200,23 +227,6 @@ RSpec.describe Qa::Question, type: :model do
       end
     end
 
-    #
-    # 選択肢系問題のparamsセット
-    #
-
-    def choice_param(way_name)
-      {
-        way: Qa::Question.ways[way_name],
-        text: 'q',
-        options: [
-          {text: SecureRandom.hex(4)},
-          {text: SecureRandom.hex(4)},
-          {text: SecureRandom.hex(4)},
-          {text: SecureRandom.hex(4)},
-        ]
-      }
-    end
-
     context 'choice' do
       context 'with valid' do
         before :all do
@@ -230,7 +240,7 @@ RSpec.describe Qa::Question, type: :model do
           @model.destroy
         end
 
-        it_behaves_like 'choice way'
+        it_behaves_like 'single choide question'
       end
 
       context 'with invalid' do
@@ -257,7 +267,7 @@ RSpec.describe Qa::Question, type: :model do
           @model.destroy
         end
 
-        it_behaves_like 'multiple choices way'
+        it_behaves_like 'multiple choices question'
       end
     end
 
@@ -272,7 +282,7 @@ RSpec.describe Qa::Question, type: :model do
         @model.destroy
       end
 
-      it_behaves_like 'in order way'
+      it_behaves_like 'in order question'
 
       context 'with invalid' do
         it 'no correct answer' do
@@ -286,7 +296,134 @@ RSpec.describe Qa::Question, type: :model do
   end
 
   describe 'update!' do
+    let(:model) { @model }
+    let(:answer) { @answer }
 
+    context 'not update' do
+      before :all do
+        @model = create(:qa_question, :valid)
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it_behaves_like 'single choide question'
+    end
+
+    context 'to free text' do
+      before :all do
+        @answer = SecureRandom.hex(4)
+        @model = create(:qa_question, :valid)
+        @model.update!(
+          text: 'q',
+          way: Qa::Question.ways[:free_text],
+          answers: @answer
+        )
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it_behaves_like 'free text question'
+    end
+
+    context 'to ox' do
+      before :all do
+        @answer = SecureRandom.hex(4)
+        @model = create(:qa_question, :valid)
+        @model.update!(
+          text: 'q',
+          way: Qa::Question.ways[:ox],
+          answers: true
+        )
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it_behaves_like 'ox question'
+    end
+
+    context 'to multiple choices' do
+      before :all do
+        params = choice_param(:multiple_choices)
+        params[:options][1][:correct_answer] = true
+        params[:options][3][:correct_answer] = true
+
+        @model = create(:qa_question, :valid)
+        params[:options][1][:id] = @model.answer_options[0].id
+        params[:options][3][:id] = @model.answer_options[1].id
+        params[:options][2][:id] = @model.answer_options[2].id
+        params[:options][0][:id] = @model.answer_options[3].id
+        @params = params.deep_dup
+        @model.update!(**params)
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it_behaves_like 'multiple choices question'
+
+      it { expect(Qa::AnswerOption.find(@params[:options][0][:id])).to be_a(Qa::AnswerOption) }
+      it { expect(Qa::AnswerOption.find(@params[:options][1][:id])).to be_a(Qa::AnswerOption) }
+      it { expect(Qa::AnswerOption.find(@params[:options][2][:id])).to be_a(Qa::AnswerOption) }
+      it { expect(Qa::AnswerOption.find(@params[:options][3][:id])).to be_a(Qa::AnswerOption) }
+    end
+
+    context 'to in order' do
+      before :all do
+        params = choice_param(:in_order)
+        params[:order] = [0, 3, 3, 2]
+
+        @model = create(:qa_question, :valid)
+        params[:options][0][:id] = @model.answer_options[0].id
+        params[:options][2][:id] = @model.answer_options[2].id
+        @params = params.deep_dup
+        @model.update!(**params)
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it_behaves_like 'in order question'
+
+      it { expect(Qa::AnswerOption.find(@params[:options][0][:id])).to be_a(Qa::AnswerOption) }
+      it { expect(Qa::AnswerOption.find(@params[:options][2][:id])).to be_a(Qa::AnswerOption) }
+    end
+
+    context 'to choice' do
+      before :all do
+        params = choice_param(:in_order)
+        params[:order] = [0, 3, 3, 2]
+
+        @model = create(:qa_question, :valid)
+        @model.update!(**params)
+        @model.answer_options(true)
+
+        params2 = choice_param(:single_choice)
+        params2[:options][0][:correct_answer] = true
+        params2[:options][1][:id] = @model.answer_options[1].id
+        params2[:options][2][:id] = @model.answer_options[2].id
+        @params2 = params2.deep_dup
+
+        @model.update!(params2)
+
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it_behaves_like 'single choide question'
+
+      it { expect(Qa::AnswerOption.find(@params2[:options][1][:id])).to be_a(Qa::AnswerOption) }
+      it { expect(Qa::AnswerOption.find(@params2[:options][2][:id])).to be_a(Qa::AnswerOption) }
+    end
   end
 
   describe 'answer the question' do
@@ -306,7 +443,7 @@ RSpec.describe Qa::Question, type: :model do
         model.save
       end
 
-      it_behaves_like 'choice way'
+      it_behaves_like 'single choide question'
     end
 
     context 'with "multiple choices" way' do
@@ -321,7 +458,7 @@ RSpec.describe Qa::Question, type: :model do
         model.save
       end
 
-      it_behaves_like 'multiple choices way'
+      it_behaves_like 'multiple choices question'
     end
 
     context 'with "in_order" way' do
@@ -331,7 +468,7 @@ RSpec.describe Qa::Question, type: :model do
         model.save
       end
 
-      it_behaves_like 'in order way'
+      it_behaves_like 'in order question'
     end
   end
 

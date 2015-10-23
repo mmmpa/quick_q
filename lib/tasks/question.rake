@@ -10,7 +10,7 @@ namespace :q do
       # テンプレートは除外
       next if file_path.include?('template')
 
-      CreateQuestion.from(json: File.read(file_path))
+      CoordinateQuestion.from(json: File.read(file_path))
     end
   end
 end
