@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 
-<title>class CreateQuestion - Rails Application Documentation</title>
+<title>class CoordinateQuestion - Rails Application Documentation</title>
 
 <script type="text/javascript">
   var rdoc_rel_prefix = "./";
@@ -78,20 +78,19 @@
   </div>
 </nav>
 
-<main role="main" aria-labelledby="class-CreateQuestion">
-  <h1 id="class-CreateQuestion" class="class">
-    class CreateQuestion
+<main role="main" aria-labelledby="class-CoordinateQuestion">
+  <h1 id="class-CoordinateQuestion" class="class">
+    class CoordinateQuestion
   </h1>
 
   <section class="description">
     
 <p>webからの入力以外からQa::Questionを作成する</p>
 
-<h1 id="class-CreateQuestion-label-Example">Example<span><a href="#class-CreateQuestion-label-Example">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="class-CoordinateQuestion-label-Example">Example<span><a href="#class-CoordinateQuestion-label-Example">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<pre class="ruby"><span class="ruby-constant">CreateQuestion</span>.(<span class="ruby-identifier">hash</span>)
-<span class="ruby-constant">CreateQuestion</span>.<span class="ruby-identifier">from</span>(<span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-identifier">json</span>)
-<span class="ruby-constant">CreateQuestion</span>.<span class="ruby-identifier">from</span>(<span class="ruby-identifier">csv</span><span class="ruby-operator">:</span> <span class="ruby-identifier">json</span>, <span class="ruby-identifier">way</span><span class="ruby-operator">:</span> :<span class="ruby-identifier">in_order</span>)
+<pre class="ruby"><span class="ruby-constant">CoordinateQuestion</span>.<span class="ruby-identifier">from</span>(<span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-identifier">json</span>)
+<span class="ruby-constant">CoordinateQuestion</span>.<span class="ruby-identifier">from</span>(<span class="ruby-identifier">csv</span><span class="ruby-operator">:</span> <span class="ruby-identifier">json</span>, <span class="ruby-identifier">way</span><span class="ruby-operator">:</span> :<span class="ruby-identifier">in_order</span>)
 </pre>
 
   </section>
@@ -134,17 +133,17 @@
 
           
           <div class="method-source-code" id="from-source">
-            <pre><span class="ruby-comment"># File app/services/create_question.rb, line 13</span>
+            <pre><span class="ruby-comment"># File app/services/coordinate_question.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">from</span>(<span class="ruby-identifier">options</span> = {})
   <span class="ruby-keyword">case</span>
     <span class="ruby-keyword">when</span> <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-value">:json</span>]
       <span class="ruby-identifier">json_hash</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:json</span>]).<span class="ruby-identifier">deep_symbolize_keys!</span>
       <span class="ruby-identifier">normalized</span> = <span class="ruby-identifier">normalize_json_hash</span>(<span class="ruby-identifier">json_hash</span>)
-      <span class="ruby-identifier">call</span>(<span class="ruby-identifier">questions</span><span class="ruby-operator">:</span> <span class="ruby-identifier">normalized</span>)
+      <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">questions</span><span class="ruby-operator">:</span> <span class="ruby-identifier">normalized</span>, <span class="ruby-operator">**</span><span class="ruby-identifier">options</span>)
     <span class="ruby-keyword">when</span> <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-value">:csv</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-value">:way</span>]
       <span class="ruby-identifier">csv_lines</span> = <span class="ruby-constant">CSV</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:csv</span>])
       <span class="ruby-identifier">normalized</span> = <span class="ruby-identifier">normalize_csv_to</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:way</span>], <span class="ruby-identifier">csv_lines</span>)
-      <span class="ruby-identifier">call</span>(<span class="ruby-identifier">questions</span><span class="ruby-operator">:</span> <span class="ruby-identifier">normalized</span>)
+      <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">questions</span><span class="ruby-operator">:</span> <span class="ruby-identifier">normalized</span>, <span class="ruby-operator">**</span><span class="ruby-identifier">options</span>)
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">raise</span> <span class="ruby-constant">NoParameter</span>
   <span class="ruby-keyword">end</span>

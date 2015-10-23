@@ -38,9 +38,17 @@ module Qa
   # wayによって扱いが違うので、foo_attributesによる直接的な作成は行わず、
   # answersとoptionsに一時プールして処理する
   #
-  # = Examples
+  # = Qa::Question.create!
   #
-  # == Qa::Question.create!
+  # == Options
+  #
+  # - way 解答方法。必須。Qa::Question.waysを使う
+  # - text 問題文。必須。
+  # - answers free_text, ox問題の場合の正答。
+  # - options 解答選択肢のhash。{text: '選択肢1', correct_answer: true} # or false
+  # - order in_orderの正答順。optionsの*index*で指定する
+  #
+  # == Examples
   #
   # === テキスト入力
   #
@@ -98,31 +106,7 @@ module Qa
   #     order: [0, 3, 3, 2] # 正答のindexを順番どおりに
   #   )
   #
-  # == Qa::Question#correct?
-  #
-  # === テキスト入力
-  #
-  #   question.correct?('答え')
-  #
-  # === ox問題
-  #
-  #   question.correct?(true)
-  #   question.correct?('true')
-  #   question.correct?(false)
-  #   question.correct?('false')
-  #
-  # === 一つだけ選択する問題
-  #
-  #   question.correct?(1) # AnswerOption#id
-  #
-  # === すべて選択する問題
-  #
-  #   question.correct?([1, 3, 2]) # AnswerOption#id
-  #
-  # === 順番どおりに選択する問題
-  #
-  #   question.correct?([1, 3, 3, 2]) # AnswerOption#id
-  #
+
   class Question < ActiveRecord::Base
     BOOLEAN_O = 'o' #:nodoc:
     BOOLEAN_X = 'x' #:nodoc:
@@ -148,8 +132,38 @@ module Qa
 
     before_validation :arrange!
 
-
+    #
     # 答え合わせ
+    #
+    # == Options
+    #
+    # - answer 解答。解答方法によって値がちがう。
+    #
+    # == Example
+    #
+    # === テキスト入力
+    #
+    #   question.correct?('答え')
+    #
+    # === ox問題
+    #
+    #   question.correct?(true)
+    #   question.correct?('true')
+    #   question.correct?(false)
+    #   question.correct?('false')
+    #
+    # === 一つだけ選択する問題
+    #
+    #   question.correct?(1) # AnswerOption#id
+    #
+    # === すべて選択する問題
+    #
+    #   question.correct?([1, 3, 2]) # AnswerOption#id
+    #
+    # === 順番どおりに選択する問題
+    #
+    #   question.correct?([1, 3, 3, 2]) # AnswerOption#id
+    #
     def correct?(answer)
       normalized = normalized_answer(answer)
 
