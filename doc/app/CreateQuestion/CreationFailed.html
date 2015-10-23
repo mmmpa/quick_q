@@ -127,9 +127,10 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/services/create_question.rb, line 112</span>
+            <pre><span class="ruby-comment"># File app/services/create_question.rb, line 168</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">result</span>)
   <span class="ruby-ivar">@result</span> = <span class="ruby-identifier">result</span>
+  <span class="ruby-identifier">pp</span> <span class="ruby-ivar">@result</span>[<span class="ruby-value">:errors</span>].<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">model</span><span class="ruby-operator">|</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:errors</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">model</span> }
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -168,7 +169,7 @@
 
           
           <div class="method-source-code" id="result-source">
-            <pre><span class="ruby-comment"># File app/services/create_question.rb, line 116</span>
+            <pre><span class="ruby-comment"># File app/services/create_question.rb, line 173</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">result</span>
   <span class="ruby-ivar">@result</span>
 <span class="ruby-keyword">end</span></pre>

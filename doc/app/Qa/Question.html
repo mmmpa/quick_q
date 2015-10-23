@@ -228,7 +228,10 @@
 
 <h3 id="class-Qa::Question-label-ox-E5-95-8F-E9-A1-8C">ox問題<span><a href="#class-Qa::Question-label-ox-E5-95-8F-E9-A1-8C">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<pre class="ruby"><span class="ruby-identifier">question</span>.<span class="ruby-identifier">correct?</span>(<span class="ruby-keyword">true</span>) <span class="ruby-comment"># or false</span>
+<pre class="ruby"><span class="ruby-identifier">question</span>.<span class="ruby-identifier">correct?</span>(<span class="ruby-keyword">true</span>)
+<span class="ruby-identifier">question</span>.<span class="ruby-identifier">correct?</span>(<span class="ruby-string">&#39;true&#39;</span>)
+<span class="ruby-identifier">question</span>.<span class="ruby-identifier">correct?</span>(<span class="ruby-keyword">false</span>)
+<span class="ruby-identifier">question</span>.<span class="ruby-identifier">correct?</span>(<span class="ruby-string">&#39;false&#39;</span>)
 </pre>
 
 <h3 id="class-Qa::Question-label-E4-B8-80-E3-81-A4-E3-81-A0-E3-81-91-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">一つだけ選択する問題<span><a href="#class-Qa::Question-label-E4-B8-80-E3-81-A4-E3-81-A0-E3-81-91-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B-E5-95-8F-E9-A1-8C">&para;</a> <a href="#top">&uarr;</a></span></h3>
@@ -286,7 +289,7 @@
 
           
           <div class="method-source-code" id="correct-3F-source">
-            <pre><span class="ruby-comment"># File app/models/qa/question.rb, line 150</span>
+            <pre><span class="ruby-comment"># File app/models/qa/question.rb, line 153</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">correct?</span>(<span class="ruby-identifier">answer</span>)
   <span class="ruby-identifier">normalized</span> = <span class="ruby-identifier">normalized_answer</span>(<span class="ruby-identifier">answer</span>)
 

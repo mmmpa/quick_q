@@ -1,10 +1,11 @@
 #
 # webからの入力以外からQa::Questionを作成する
 #
-# # Usage
+# = Example
 #
-# CreateQuestion.(hash)
-# CreateQuestion.from(json: json)
+#   CreateQuestion.(hash)
+#   CreateQuestion.from(json: json)
+#   CreateQuestion.from(csv: json, way: :in_order)
 #
 
 class CreateQuestion
@@ -33,7 +34,7 @@ class CreateQuestion
         when :multiple_choices
           csv_lines.map(&method(:to_multiple_choices))
         when :single_choice
-          csv_lines.map(&method(:to_single_choice))
+          csv_lines.map(&method(:to_single_choices))
         when :ox
           csv_lines.map(&method(:to_ox))
         when :free_text
@@ -45,6 +46,17 @@ class CreateQuestion
       end
     end
 
+    def to_free_text(line)
+      name, text, explanation, answer = *line
+      {
+        name: name,
+        way: Qa::Question.ways[:free_text],
+        text: text,
+        explanation_text: explanation,
+        answers: answer
+      }
+    end
+
     def to_ox(line)
       name, text, explanation, answer = *line
       {
@@ -53,6 +65,43 @@ class CreateQuestion
         text: text,
         explanation_text: explanation,
         answers: detect_ox(answer)
+      }
+    end
+
+    def to_in_order(line)
+      name, text, explanation, order, *options = *line
+      {
+        name: name,
+        way: Qa::Question.ways[:in_order],
+        text: text,
+        explanation_text: explanation,
+        options: options.map { |t| {text: t} },
+        order: order.split(':').map(&:to_i)
+      }
+    end
+
+    def to_multiple_choices(line)
+      to_choice(line, :multiple_choices)
+    end
+
+    def to_single_choices(line)
+      to_choice(line, :single_choice)
+    end
+
+    def to_choice(line, way)
+      name, text, explanation, *options = *line
+      options_size = options.size / 2
+      {
+        name: name,
+        way: Qa::Question.ways[way],
+        text: text,
+        explanation_text: explanation,
+        options: (0..(options_size - 1)).to_a.map { |n|
+          {
+            text: options[n],
+            correct_answer: detect_ox(options[n + options_size])
+          }
+        }
       }
     end
 
@@ -154,7 +203,7 @@ class CreateQuestion
   class CreationFailed < StandardError
     def initialize(result)
       @result = result
-      pp @result[:errors].map { |model| model.try(:errors) || model }
+      #pp @result[:errors].map { |model| model.try(:errors) || model }
     end
 
     def result

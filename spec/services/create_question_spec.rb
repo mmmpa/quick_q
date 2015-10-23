@@ -17,6 +17,7 @@ RSpec.describe CreateQuestion, type: :model do
         it { expect(Qa::Question.count).to eq(5) }
         it { expect(Qa::Explanation.count).to eq(2) }
         it { expect(Qa::AnswerOption.count).to eq(5) }
+        it { expect(Qa::CorrectAnswer.count).to eq(5) }
       end
 
       context 'for ox' do
@@ -33,6 +34,7 @@ RSpec.describe CreateQuestion, type: :model do
         it { expect(Qa::Question.count).to eq(5) }
         it { expect(Qa::Explanation.count).to eq(2) }
         it { expect(Qa::AnswerOption.count).to eq(10) }
+        it { expect(Qa::CorrectAnswer.count).to eq(5) }
       end
 
       context 'for single' do
@@ -48,7 +50,8 @@ RSpec.describe CreateQuestion, type: :model do
 
         it { expect(Qa::Question.count).to eq(5) }
         it { expect(Qa::Explanation.count).to eq(2) }
-        it { expect(Qa::AnswerOption.count).to eq(10) }
+        it { expect(Qa::AnswerOption.count).to eq(20) }
+        it { expect(Qa::CorrectAnswer.count).to eq(5) }
       end
 
       context 'for multiple' do
@@ -64,7 +67,8 @@ RSpec.describe CreateQuestion, type: :model do
 
         it { expect(Qa::Question.count).to eq(5) }
         it { expect(Qa::Explanation.count).to eq(2) }
-        it { expect(Qa::AnswerOption.count).to eq(10) }
+        it { expect(Qa::AnswerOption.count).to eq(16) }
+        it { expect(Qa::CorrectAnswer.count).to eq(9) }
       end
 
       context 'for in order' do
@@ -80,7 +84,8 @@ RSpec.describe CreateQuestion, type: :model do
 
         it { expect(Qa::Question.count).to eq(5) }
         it { expect(Qa::Explanation.count).to eq(2) }
-        it { expect(Qa::AnswerOption.count).to eq(10) }
+        it { expect(Qa::AnswerOption.count).to eq(25) }
+        it { expect(Qa::CorrectAnswer.count).to eq(18) }
       end
     end
   end
