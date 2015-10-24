@@ -17,18 +17,45 @@ RSpec.describe Challenge::Base, type: :model do
       let!(:model2) { klass.new }
 
       before :each do
-        model1.answers << 1
+        model1.game_state[:mode] = 'test'
       end
 
       it do
         read_model = klass.find(model1.id)
-        expect(read_model.answers).not_to be_nil
+        expect(read_model.game_state[:mode]).to eq('test')
       end
 
       it do
         read_model = klass.find(model2.id)
-        expect(read_model.answers).to be_blank
+        expect(read_model.game_state[:mode]).not_to eq('test')
       end
+    end
+  end
+
+  describe 'sweep' do
+    let(:restored) { klass.find(model.id) }
+
+    before :each do
+      model.game_state[:mode] = 'game'
+      model.challenge_state[:mode] = 'challenge'
+    end
+
+    context 'before sweep' do
+      it { expect(model.game_state[:mode]).to eq('game') }
+      it { expect(model.challenge_state[:mode]).to eq('challenge') }
+      it { expect(restored.game_state[:mode]).to eq('game') }
+      it { expect(restored.challenge_state[:mode]).to eq('challenge') }
+    end
+
+    context 'after sweep' do
+      before :each do
+        model.sweep!
+      end
+
+      it { expect(model.game_state[:mode]).to be_nil }
+      it { expect(model.challenge_state[:mode]).to be_nil }
+      it { expect(restored.game_state[:mode]).to be_nil }
+      it { expect(restored.challenge_state[:mode]).to be_nil }
     end
   end
 end

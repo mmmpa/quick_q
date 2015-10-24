@@ -3,14 +3,25 @@ module Challenge
   # 問題への挑戦を管理するモデル
   # redis-objectsを使用するので、idが必要。
   # guestではanonymous_idを仕様、アカウントではuser_idを使用
+  #
+  # = Attributes
+  #
+  # - aasm_state ステートマシンのステート永続化。
+  # - game_state チャレンジの種類、日時などを保持
+  # - challenge_state チャレンジ中の結果などを保持。
+  #
+  # hash_keyに関してはサブクラスにより内容がちがう。
 
   class Base
     include AASM
     include Redis::Objects
 
     value :aasm_state
-    list :question_ids
-    list :answers
+    hash_key :game_state
+    hash_key :challenge_state
+    value :test
+    value :test1
+    value :test2
 
     # ステートマシンはこのクラスを継承したサブクラスで設定する。
 
@@ -34,10 +45,18 @@ module Challenge
       end
     end
 
-    def initialize(options={})
+    def initialize(options = {})
       @id = detect_id(options)
     end
 
+    def initialize_challenge!
+      challenge_state.clear
+    end
+
+    def sweep!
+      game_state.clear
+      challenge_state.clear
+    end
 
     ### required
 
@@ -58,7 +77,7 @@ module Challenge
 
     private
 
-    def detect_id(options={})
+    def detect_id(options = {})
       case
         when options[:id].present?
           options[:id]
