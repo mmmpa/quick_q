@@ -17,17 +17,17 @@ RSpec.describe Challenge::Base, type: :model do
       let!(:model2) { klass.new }
 
       before :each do
-        model1.game_state[:mode] = 'test'
+        model1.aasm_state = 'test'
       end
 
       it do
         read_model = klass.find(model1.id)
-        expect(read_model.game_state[:mode]).to eq('test')
+        expect(read_model.aasm_state).to eq('test')
       end
 
       it do
         read_model = klass.find(model2.id)
-        expect(read_model.game_state[:mode]).not_to eq('test')
+        expect(read_model.aasm_state).not_to eq('test')
       end
     end
   end

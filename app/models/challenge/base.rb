@@ -15,19 +15,15 @@ module Challenge
   class Base
     include AASM
     include Redis::Objects
+    include BrutalRecord
 
-    value :aasm_state
-    hash_key :game_state
-    hash_key :challenge_state
-    value :test
-    value :test1
-    value :test2
-
+    value :brutal_store
+    brutal_attributes :brutal_store, :aasm_state
     # ステートマシンはこのクラスを継承したサブクラスで設定する。
 
     class << self
       def find(id)
-        new(id: id)
+        new(id: id).retrieve
       end
 
       def account_id(id)
@@ -49,15 +45,6 @@ module Challenge
       @id = detect_id(options)
     end
 
-    def initialize_challenge!
-      challenge_state.clear
-    end
-
-    def sweep!
-      game_state.clear
-      challenge_state.clear
-    end
-
     ### required
 
     # for redis persistence
@@ -68,11 +55,12 @@ module Challenge
     # for aasm persistence
     def aasm_write_state(state)
       self.aasm_state = state
+      save
     end
 
     # for aasm persistence
     def aasm_read_state
-      aasm_state.value.try(:to_sym) || super
+      aasm_state.try(:to_sym) || super
     end
 
     private

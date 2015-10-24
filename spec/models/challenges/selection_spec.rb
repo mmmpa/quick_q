@@ -27,6 +27,7 @@ RSpec.describe Challenge::Selection, type: :model do
       before :each do
         model.index
         model.index = 1
+        model.save
       end
 
       it { expect(model.index).to eq(1) }
@@ -37,6 +38,7 @@ RSpec.describe Challenge::Selection, type: :model do
       before :each do
         model.total
         model.total = 1
+        model.save
       end
 
       it { expect(model.total).to eq(1) }
@@ -47,6 +49,7 @@ RSpec.describe Challenge::Selection, type: :model do
       before :each do
         model.answers
         model.answers = [1, 2, 'a', [1, true]]
+        model.save
       end
 
       it { expect(model.answers).to eq([1, 2, 'a', [1, true]]) }
@@ -59,6 +62,7 @@ RSpec.describe Challenge::Selection, type: :model do
         model.index = 1
         model.answers = [1, 2, 'a', [1, true]]
         model.answer = 22
+        model.save
       end
 
       it { expect(model.answer).to eq(22) }
@@ -71,6 +75,7 @@ RSpec.describe Challenge::Selection, type: :model do
       before :each do
         model.name
         model.name = 'name'
+        model.save
       end
 
       it { expect(model.name).to eq('name') }
@@ -82,6 +87,7 @@ RSpec.describe Challenge::Selection, type: :model do
         model.questions
         model.index = 1
         model.questions = [1, 2, 'a', [1, true]]
+        model.save
       end
 
       it { expect(model.question).to eq(2) }
