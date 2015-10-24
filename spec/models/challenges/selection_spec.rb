@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe Challenge::Game, type: :model do
-  let(:klass) { Challenge::Game }
+RSpec.describe Challenge::Selection, type: :model do
+  let(:klass) { Challenge::Selection }
   let(:model) { klass.new }
 
   it { expect(model).to be_a(klass) }
@@ -16,13 +16,8 @@ RSpec.describe Challenge::Game, type: :model do
 
     it do
       model.start!
-      pp model.aasm_state
-    end
-  end
-
-  describe 'wheel state machine' do
-    context 'when is asking' do
-
+      read_model = klass.find(model.id)
+      expect(read_model.asking_first?).to be_truthy
     end
   end
 end
