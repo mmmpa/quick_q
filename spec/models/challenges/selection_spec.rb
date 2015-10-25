@@ -7,6 +7,120 @@ RSpec.describe Challenge::Selection, type: :model do
 
   it { expect(model).to be_a(klass) }
 
+  describe 'game' do
+    before :each do
+      model.start!
+    end
+
+    context 'when first' do
+      before :each do
+        model.answer_and_forward!(1)
+      end
+
+      it { expect(restored.answers).to eq([1]) }
+      it { expect(restored.question).to eq(3) }
+      it { expect(restored.index).to eq(1) }
+      it { expect(restored.asking?).to be_truthy }
+    end
+
+    context 'when second' do
+      before :each do
+        model.answer_and_forward!(1)
+      end
+
+      context 'then forward' do
+        before :each do
+          model.answer_and_forward!(2)
+        end
+
+        it { expect(restored.answers).to eq([1, 2]) }
+        it { expect(restored.question).to eq(2) }
+        it { expect(restored.index).to eq(2) }
+        it { expect(restored.asking?).to be_truthy }
+      end
+
+      context 'then backward' do
+        before :each do
+          model.backward!
+        end
+
+        it { expect(restored.answers).to eq([1]) }
+        it { expect(restored.question).to eq(1) }
+        it { expect(restored.index).to eq(0) }
+        it { expect(restored.asking_first?).to be_truthy }
+
+        context 'then forward' do
+          before :each do
+            model.answer_and_forward!(50)
+          end
+
+          it { expect(restored.answers).to eq([50]) }
+          it { expect(restored.question).to eq(3) }
+          it { expect(restored.index).to eq(1) }
+          it { expect(restored.asking?).to be_truthy }
+        end
+      end
+    end
+
+    context 'when third' do
+      before :each do
+        model.answer_and_forward!(1)
+        model.answer_and_forward!(2)
+        model.answer_and_forward!(3)
+      end
+
+      it { expect(restored.answers).to eq([1, 2, 3]) }
+      it { expect(restored.question).to eq(4) }
+      it { expect(restored.index).to eq(3) }
+      it { expect(restored.asking_last?).to be_truthy }
+    end
+
+    context 'when last' do
+      before :each do
+        model.answer_and_forward!(1)
+        model.answer_and_forward!(2)
+        model.answer_and_forward!(3)
+        model.answer_and_forward!(4)
+      end
+
+      it { expect(restored.answers).to eq([1, 2, 3, 4]) }
+      it { expect { restored.question }.to raise_error(Challenge::Selection::AllQuestionsAsked) }
+      it { expect(restored.index).to eq(3) }
+      it { expect(restored.asked?).to be_truthy }
+    end
+
+    context 'when asked' do
+      before :each do
+        model.answer_and_forward!(1)
+        model.answer_and_forward!(2)
+        model.answer_and_forward!(3)
+        model.answer_and_forward!(4)
+      end
+
+      context 'then submit' do
+        before :each do
+          model.submit!
+        end
+
+        it { expect(restored.answers).to eq([1, 2, 3, 4]) }
+        it { expect { restored.question }.to raise_error(Challenge::Selection::AllQuestionsAsked) }
+        it { expect(restored.index).to eq(3) }
+        it { expect(restored.marked?).to be_truthy }
+      end
+
+      context 'then undo' do
+        before :each do
+          model.undo!
+        end
+
+        it { expect(restored.answers).to eq([1, 2, 3, 4]) }
+        it { expect(restored.question).to eq(4) }
+        it { expect(restored.index).to eq(3) }
+        it { expect(restored.asking_last?).to be_truthy }
+      end
+    end
+  end
+
   describe 'state machine transition' do
     it { expect(model.ready?).to be_truthy }
 

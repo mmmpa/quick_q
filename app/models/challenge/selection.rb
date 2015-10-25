@@ -2,26 +2,49 @@ module Challenge
   #
   # ある傾向によって選ばれた問題にチャレンジする。
   # 問題はワークブックやカテゴリーからのランダム、完全ランダムなどで選ばれる。
+  # 現段階では問題が1問のみの状態には対応していない。
   #
-  # = game_state
+  # = State Machine State
   #
-  # == Keys
+  # - ready このモデル作成直後の状態。問題などは揃っている。
+  # - asking_first 最初の問題の出題
+  # - asking 中途の問題の出題
+  # - asking_last 最後の問題の出題
+  # - asked 全て解答を終えた状態
+  # - marked 採点を終えた状態
+  #
+  # = Attributes
   #
   # - name ワークブックの名前や、カテゴリなどのテキスト
   # - questions Qa::Questionのidが配列で保持
-  #
-  # = challenge_state
-  #
-  # == Keys
-  #
   # - total questionsのsize
   # - index 現在取り組んでいる問題のindex
   # - answers 各問題の解答を配列で保持
+  # - workbook_id Workbookモードの場合は指定
+  # - selection_id Selectionモードの場合は指定
+  #
+  # = Challenge::Selection#new
+  #
+  # = Options
+  #
+  # - name ワークブックの名前や、カテゴリなどのテキスト
+  # - questions Qa::Questionのidが配列で保持
+  # - workbook_id Workbookモードの場合は指定
+  # - selection_id Selectionモードの場合は指定
+  #
+  # == Example
+  #
+  #   # Workbookモード
+  #   Selection.new(name: 'サンプル問題集', questions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 19], workbook_id: 1)
+  #
+  #   # Selectionモード
+  #   Selection.new(name: 'ランダム5問', questions: [3, 7, 5, 2, 1], selection_id: 2)
   #
 
-
   class Selection < Base
-    brutal_attributes :brutal_store, :name, :questions, :total, :index, :answers
+    brutal_attributes :brutal_store,
+                      :name, :questions, :total, :index, :answers,
+                      :selection_id, :workbook_id
 
     aasm do
       state :ready, initial: true
@@ -30,7 +53,6 @@ module Challenge
       state :asking_last
       state :asked
       state :marked
-      state :finished
 
       event :start do
         transitions from: :ready, to: :asking_first
@@ -41,7 +63,7 @@ module Challenge
         end
       end
 
-      event :forward, if: :fowardable? do
+      event :forward do
         transitions from: :asking_first, to: :asking
         transitions from: :asking, to: :asking_last, if: :next_index_last?
         transitions from: :asking, to: :asking
@@ -66,32 +88,28 @@ module Challenge
       event :undo do
         transitions from: :asked, to: :asking_last
 
-        after do
-          save
-        end
+        after { save }
       end
 
       event :finish do
         transitions from: :asking_last, to: :asked
 
-        after do
-          save
-        end
+        after { save }
       end
 
       event :submit do
         transitions from: :asked, to: :marked
 
-        after do
-          save
-        end
+        after { save }
       end
     end
 
-    def initialize(name: nil, questions: nil, **rest)
+    def initialize(name: nil, questions: nil, selection_id: nil, workbook_id: nil, **rest)
       super
 
       self.name = name
+      self.selection_id = selection_id
+      self.workbook_id = workbook_id
       self.questions = questions || []
       self.total = self.questions.size
     end
@@ -101,8 +119,9 @@ module Challenge
       self.answers = []
     end
 
-    def fowardable?
-      asking_first? || asking?
+    def answer_and_forward!(answer)
+      self.answer = answer
+      asking_last? ? finish! : forward!
     end
 
     def increment_index!
@@ -129,18 +148,6 @@ module Challenge
       index + 1 == total
     end
 
-    def not_first?
-      !first?
-    end
-
-    def not_last?
-      !last?
-    end
-
-    ### accessor
-
-    # challenge_state
-
     def answer
       answers[index]
     end
@@ -150,7 +157,12 @@ module Challenge
     end
 
     def question
+      raise AllQuestionsAsked if asked? || marked?
       questions[index]
+    end
+
+    class AllQuestionsAsked < StandardError
+
     end
   end
 end

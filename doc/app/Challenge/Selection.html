@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8">
+
+<title>class Challenge::Selection - Rails Application Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#class-Challenge::Selection-label-State+Machine+State">State Machine State</a>
+    <li><a href="#class-Challenge::Selection-label-Attributes">Attributes</a>
+    <li><a href="#class-Challenge::Selection-label-Challenge-3A-3ASelection-23new">Challenge::Selection#new</a>
+    <li><a href="#class-Challenge::Selection-label-Options">Options</a>
+    <li><a href="#class-Challenge::Selection-label-Example">Example</a>
+  </ul>
+</div>
+
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="Base.html">Challenge::Base</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li class="calls-super" ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-i-answer">#answer</a>
+    
+    <li ><a href="#method-i-answer-3D">#answer=</a>
+    
+    <li ><a href="#method-i-decrement_index-21">#decrement_index!</a>
+    
+    <li ><a href="#method-i-first-3F">#first?</a>
+    
+    <li ><a href="#method-i-fowardable-3F">#fowardable?</a>
+    
+    <li ><a href="#method-i-increment_index-21">#increment_index!</a>
+    
+    <li ><a href="#method-i-initialize_challenge-21">#initialize_challenge!</a>
+    
+    <li ><a href="#method-i-last-3F">#last?</a>
+    
+    <li ><a href="#method-i-next_index_last-3F">#next_index_last?</a>
+    
+    <li ><a href="#method-i-not_first-3F">#not_first?</a>
+    
+    <li ><a href="#method-i-not_last-3F">#not_last?</a>
+    
+    <li ><a href="#method-i-prev_index_first-3F">#prev_index_first?</a>
+    
+    <li ><a href="#method-i-question">#question</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Challenge::Selection">
+  <h1 id="class-Challenge::Selection" class="class">
+    class Challenge::Selection
+  </h1>
+
+  <section class="description">
+    
+<p>ある傾向によって選ばれた問題にチャレンジする。 問題はワークブックやカテゴリーからのランダム、完全ランダムなどで選ばれる。
+現段階では問題が1問のみの状態には対応していない。</p>
+
+<h1 id="class-Challenge::Selection-label-State+Machine+State">State Machine State<span><a href="#class-Challenge::Selection-label-State+Machine+State">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>ready このモデル作成直後の状態。問題などは揃っている。</p>
+</li><li>
+<p>asking_first 最初の問題の出題</p>
+</li><li>
+<p>asking 中途の問題の出題</p>
+</li><li>
+<p>asking_last 最後の問題の出題</p>
+</li><li>
+<p>asked 全て解答を終えた状態</p>
+</li><li>
+<p>marked 採点を終えた状態</p>
+</li></ul>
+
+<h1 id="class-Challenge::Selection-label-Attributes">Attributes<span><a href="#class-Challenge::Selection-label-Attributes">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>name ワークブックの名前や、カテゴリなどのテキスト</p>
+</li><li>
+<p>questions Qa::Questionのidが配列で保持</p>
+</li><li>
+<p>total questionsのsize</p>
+</li><li>
+<p>index 現在取り組んでいる問題のindex</p>
+</li><li>
+<p>answers 各問題の解答を配列で保持</p>
+</li><li>
+<p>workbook_id Workbookモードの場合は指定</p>
+</li><li>
+<p>selection_id Selectionモードの場合は指定</p>
+</li></ul>
+
+<h1 id="class-Challenge::Selection-label-Challenge-3A-3ASelection-23new">Challenge::Selection#new<span><a href="#class-Challenge::Selection-label-Challenge-3A-3ASelection-23new">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<h1 id="class-Challenge::Selection-label-Options">Options<span><a href="#class-Challenge::Selection-label-Options">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>name ワークブックの名前や、カテゴリなどのテキスト</p>
+</li><li>
+<p>questions Qa::Questionのidが配列で保持</p>
+</li><li>
+<p>workbook_id Workbookモードの場合は指定</p>
+</li><li>
+<p>selection_id Selectionモードの場合は指定</p>
+</li></ul>
+
+<h2 id="class-Challenge::Selection-label-Example">Example<span><a href="#class-Challenge::Selection-label-Example">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<pre class="ruby"><span class="ruby-comment"># Workbookモード</span>
+<span class="ruby-constant">Selection</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;サンプル問題集&#39;</span>, <span class="ruby-identifier">questions</span><span class="ruby-operator">:</span> [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">6</span>, <span class="ruby-value">7</span>, <span class="ruby-value">8</span>, <span class="ruby-value">9</span>, <span class="ruby-value">19</span>], <span class="ruby-identifier">workbook_id</span><span class="ruby-operator">:</span> <span class="ruby-value">1</span>)
+
+<span class="ruby-comment"># Selectionモード</span>
+<span class="ruby-constant">Selection</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;ランダム5問&#39;</span>, <span class="ruby-identifier">questions</span><span class="ruby-operator">:</span> [<span class="ruby-value">3</span>, <span class="ruby-value">7</span>, <span class="ruby-value">5</span>, <span class="ruby-value">2</span>, <span class="ruby-value">1</span>], <span class="ruby-identifier">selection_id</span><span class="ruby-operator">:</span> <span class="ruby-value">2</span>)
+</pre>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(name: nil, questions: nil, selection_id: nil, workbook_id: nil, **rest)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+            <div class="method-calls-super">
+              Calls superclass method
+              <a href="Base.html#method-c-new">Challenge::Base.new</a>
+            </div>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 110</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">questions</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">selection_id</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">workbook_id</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-operator">**</span><span class="ruby-identifier">rest</span>)
+  <span class="ruby-keyword">super</span>
+
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">selection_id</span> = <span class="ruby-identifier">selection_id</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">workbook_id</span> = <span class="ruby-identifier">workbook_id</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">questions</span> = <span class="ruby-identifier">questions</span> <span class="ruby-operator">||</span> []
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">total</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">questions</span>.<span class="ruby-identifier">size</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-answer" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">answer</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>challenge_state</p>
+          
+          
+
+          
+          <div class="method-source-code" id="answer-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 165</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">answer</span>
+  <span class="ruby-identifier">answers</span>[<span class="ruby-identifier">index</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-answer-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">answer=</span><span
+            class="method-args">(value)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="answer-3D-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 169</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">answer=</span>(<span class="ruby-identifier">value</span>)
+  <span class="ruby-identifier">answers</span>[<span class="ruby-identifier">index</span>] = <span class="ruby-identifier">value</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-decrement_index-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">decrement_index!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="decrement_index-21-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 133</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">decrement_index!</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">index</span> <span class="ruby-operator">-=</span> <span class="ruby-value">1</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-first-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">first?</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="first-3F-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 137</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">first?</span>
+  <span class="ruby-identifier">index</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-fowardable-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">fowardable?</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="fowardable-3F-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 125</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">fowardable?</span>
+  <span class="ruby-identifier">asking_first?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">asking?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-increment_index-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">increment_index!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="increment_index-21-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 129</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">increment_index!</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">index</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-initialize_challenge-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">initialize_challenge!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="initialize_challenge-21-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 120</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize_challenge!</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">index</span> = <span class="ruby-value">0</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">answers</span> = []
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-last-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">last?</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="last-3F-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 149</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">last?</span>
+  <span class="ruby-identifier">index</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">total</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-next_index_last-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">next_index_last?</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="next_index_last-3F-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 145</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">next_index_last?</span>
+  <span class="ruby-identifier">index</span> <span class="ruby-operator">+</span> <span class="ruby-value">2</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">total</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-not_first-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">not_first?</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="not_first-3F-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 153</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">not_first?</span>
+  <span class="ruby-operator">!</span><span class="ruby-identifier">first?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-not_last-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">not_last?</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="not_last-3F-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 157</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">not_last?</span>
+  <span class="ruby-operator">!</span><span class="ruby-identifier">last?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-prev_index_first-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">prev_index_first?</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="prev_index_first-3F-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 141</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">prev_index_first?</span>
+  <span class="ruby-identifier">index</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-question" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">question</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="question-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 173</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">question</span>
+  <span class="ruby-identifier">questions</span>[<span class="ruby-identifier">index</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
