@@ -18,6 +18,8 @@ RSpec.describe Challenge::Base, type: :model do
 
       before :each do
         model1.aasm_state = 'test'
+        model1.save
+        model2.save
       end
 
       it do
@@ -29,33 +31,6 @@ RSpec.describe Challenge::Base, type: :model do
         read_model = klass.find(model2.id)
         expect(read_model.aasm_state).not_to eq('test')
       end
-    end
-  end
-
-  describe 'sweep' do
-    let(:restored) { klass.find(model.id) }
-
-    before :each do
-      model.game_state[:mode] = 'game'
-      model.challenge_state[:mode] = 'challenge'
-    end
-
-    context 'before sweep' do
-      it { expect(model.game_state[:mode]).to eq('game') }
-      it { expect(model.challenge_state[:mode]).to eq('challenge') }
-      it { expect(restored.game_state[:mode]).to eq('game') }
-      it { expect(restored.challenge_state[:mode]).to eq('challenge') }
-    end
-
-    context 'after sweep' do
-      before :each do
-        model.sweep!
-      end
-
-      it { expect(model.game_state[:mode]).to be_nil }
-      it { expect(model.challenge_state[:mode]).to be_nil }
-      it { expect(restored.game_state[:mode]).to be_nil }
-      it { expect(restored.challenge_state[:mode]).to be_nil }
     end
   end
 end

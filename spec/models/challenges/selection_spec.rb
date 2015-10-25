@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Challenge::Selection, type: :model do
   let(:klass) { Challenge::Selection }
-  let(:model) { klass.new }
+  let(:model) { klass.new(name: 'dummy', questions: [1, 3, 2, 4]) }
   let(:restored) { klass.find(model.id) }
 
   it { expect(model).to be_a(klass) }
 
-  describe 'state machine' do
+  describe 'state machine transition' do
     it { expect(model.ready?).to be_truthy }
 
     it do
@@ -19,6 +19,160 @@ RSpec.describe Challenge::Selection, type: :model do
       model.start!
       read_model = klass.find(model.id)
       expect(read_model.asking_first?).to be_truthy
+    end
+
+    context 'when ready' do
+      before :each do
+        model.save
+      end
+
+      it { expect(restored.ready?).to be_truthy }
+
+      it { expect(restored.start!).to be_truthy }
+
+      it { expect { restored.forward! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.backward! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.finish! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }
+
+      it do
+        model.start!
+        expect(restored.asking_first?).to be_truthy
+      end
+    end
+
+    context 'when asking_first' do
+      before :each do
+        model.start!
+      end
+
+      it { expect(restored.asking_first?).to be_truthy }
+
+      it { expect(restored.forward!).to be_truthy }
+
+      it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.backward! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.finish! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }
+
+      it do
+        model.forward!
+        expect(restored.asking?).to be_truthy
+      end
+    end
+
+    context 'when asking' do
+      before :each do
+        model.start!
+        model.forward!
+      end
+
+      it { expect(restored.asking?).to be_truthy }
+
+      it { expect(restored.forward!).to be_truthy }
+      it { expect(restored.backward!).to be_truthy }
+
+      it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.finish! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }
+
+      it do
+        model.forward!
+        expect(restored.asking?).to be_truthy
+      end
+
+      it do
+        model.forward!
+        model.forward!
+        expect(restored.asking_last?).to be_truthy
+      end
+
+      it do
+        model.backward!
+        expect(restored.asking_first?).to be_truthy
+      end
+    end
+
+    context 'when asking_last' do
+      before :each do
+        model.start!
+        model.forward!
+        model.forward!
+        model.forward!
+      end
+
+      it { expect(restored.asking_last?).to be_truthy }
+
+      it { expect(restored.backward!).to be_truthy }
+      it { expect(restored.finish!).to be_truthy }
+
+      it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.forward! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }
+
+      it do
+        model.backward!
+        expect(restored.asking?).to be_truthy
+      end
+
+      it do
+        model.finish!
+        expect(restored.asked?).to be_truthy
+      end
+    end
+
+    context 'when asked' do
+      before :each do
+        model.start!
+        model.forward!
+        model.forward!
+        model.forward!
+        model.finish!
+      end
+
+      it { expect(restored.asked?).to be_truthy }
+
+      it { expect(restored.undo!).to be_truthy }
+      it { expect(restored.submit!).to be_truthy }
+
+      it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.forward! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.backward! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.finish! }.to raise_error(AASM::InvalidTransition) }
+
+      it do
+        model.undo!
+        expect(restored.asking_last?).to be_truthy
+      end
+
+      it do
+        model.submit!
+        expect(restored.marked?).to be_truthy
+      end
+    end
+
+    context 'when asked' do
+      before :each do
+        model.start!
+        model.forward!
+        model.forward!
+        model.forward!
+        model.finish!
+        model.submit!
+      end
+
+      it { expect(restored.marked?).to be_truthy }
+
+      it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.forward! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.backward! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.finish! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
+      it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }
     end
   end
 

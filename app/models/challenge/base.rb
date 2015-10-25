@@ -19,6 +19,7 @@ module Challenge
 
     value :brutal_store
     brutal_attributes :brutal_store, :aasm_state
+
     # ステートマシンはこのクラスを継承したサブクラスで設定する。
 
     class << self
@@ -53,13 +54,12 @@ module Challenge
     end
 
     # for aasm persistence
-    def aasm_write_state(state)
+    def aasm_write_state(state, *)
       self.aasm_state = state
-      save
     end
 
     # for aasm persistence
-    def aasm_read_state
+    def aasm_read_state(*)
       aasm_state.try(:to_sym) || super
     end
 
