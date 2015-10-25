@@ -47,7 +47,7 @@ module Challenge
                       :selection_id, :workbook_id
 
     aasm do
-      state :ready, initial: true
+      state :ready, initial: true, exit: :verify_required
       state :asking_first
       state :asking
       state :asking_last
@@ -58,7 +58,6 @@ module Challenge
         transitions from: :ready, to: :asking_first
 
         after do
-          initialize_challenge!
           save
         end
       end
@@ -104,19 +103,27 @@ module Challenge
       end
     end
 
-    def initialize(name: nil, questions: nil, selection_id: nil, workbook_id: nil, **rest)
-      super
+    def initialize_challenge!
+      self.index = 0
+      self.answers = []
+    end
 
+    def start_with!(name: nil, questions: nil, selection_id: nil, workbook_id: nil)
       self.name = name
       self.selection_id = selection_id
       self.workbook_id = workbook_id
       self.questions = questions || []
       self.total = self.questions.size
+
+      initialize_challenge!
+
+      start!
     end
 
-    def initialize_challenge!
-      self.index = 0
-      self.answers = []
+    def verify_required
+      unless name.present? && (selection_id.present? || workbook_id.present?) && questions.present? && total.present?
+        raise MissingRequiredParameters
+      end
     end
 
     def answer_and_forward!(answer)
@@ -153,12 +160,27 @@ module Challenge
     end
 
     def answer=(value)
+      raise NotYetStarted if ready?
+      raise AllQuestionsAnswered if asked? || marked?
       answers[index] = value
     end
 
     def question
+      raise NotYetStarted if ready?
       raise AllQuestionsAsked if asked? || marked?
       questions[index]
+    end
+
+    class MissingRequiredParameters < StandardError
+
+    end
+
+    class NotYetStarted < StandardError
+
+    end
+
+    class AllQuestionsAnswered < StandardError
+
     end
 
     class AllQuestionsAsked < StandardError

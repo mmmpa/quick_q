@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151022004426) do
+ActiveRecord::Schema.define(version: 20151025043811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,5 +49,37 @@ ActiveRecord::Schema.define(version: 20151022004426) do
   end
 
   add_index "qa_questions", ["name"], name: "index_qa_questions_on_name", unique: true, using: :btree
+
+  create_table "selection_questions", force: :cascade do |t|
+    t.integer "selection_id"
+    t.integer "question_id"
+  end
+
+  add_index "selection_questions", ["question_id"], name: "index_selection_questions_on_question_id", using: :btree
+  add_index "selection_questions", ["selection_id"], name: "index_selection_questions_on_selection_id", using: :btree
+
+  create_table "selection_selections", force: :cascade do |t|
+    t.string   "name",        null: false
+    t.integer  "choice_type", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "workbook_books", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.integer  "eval_type",  null: false
+    t.integer  "passing",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "workbook_questions", force: :cascade do |t|
+    t.integer "score",       default: 1, null: false
+    t.integer "book_id"
+    t.integer "question_id"
+  end
+
+  add_index "workbook_questions", ["book_id"], name: "index_workbook_questions_on_book_id", using: :btree
+  add_index "workbook_questions", ["question_id"], name: "index_workbook_questions_on_question_id", using: :btree
 
 end

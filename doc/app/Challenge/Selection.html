@@ -88,11 +88,11 @@
     
     <li ><a href="#method-i-answer-3D">#answer=</a>
     
+    <li ><a href="#method-i-answer_and_forward-21">#answer_and_forward!</a>
+    
     <li ><a href="#method-i-decrement_index-21">#decrement_index!</a>
     
     <li ><a href="#method-i-first-3F">#first?</a>
-    
-    <li ><a href="#method-i-fowardable-3F">#fowardable?</a>
     
     <li ><a href="#method-i-increment_index-21">#increment_index!</a>
     
@@ -101,10 +101,6 @@
     <li ><a href="#method-i-last-3F">#last?</a>
     
     <li ><a href="#method-i-next_index_last-3F">#next_index_last?</a>
-    
-    <li ><a href="#method-i-not_first-3F">#not_first?</a>
-    
-    <li ><a href="#method-i-not_last-3F">#not_last?</a>
     
     <li ><a href="#method-i-prev_index_first-3F">#prev_index_first?</a>
     
@@ -225,7 +221,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 110</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 107</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">questions</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">selection_id</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">workbook_id</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-operator">**</span><span class="ruby-identifier">rest</span>)
   <span class="ruby-keyword">super</span>
 
@@ -266,13 +262,13 @@
 
         <div class="method-description">
           
-          <p>challenge_state</p>
+          
           
           
 
           
           <div class="method-source-code" id="answer-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 165</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 151</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">answer</span>
   <span class="ruby-identifier">answers</span>[<span class="ruby-identifier">index</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -305,9 +301,43 @@
 
           
           <div class="method-source-code" id="answer-3D-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 169</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 155</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">answer=</span>(<span class="ruby-identifier">value</span>)
   <span class="ruby-identifier">answers</span>[<span class="ruby-identifier">index</span>] = <span class="ruby-identifier">value</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-answer_and_forward-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">answer_and_forward!</span><span
+            class="method-args">(answer)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="answer_and_forward-21-source">
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 122</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">answer_and_forward!</span>(<span class="ruby-identifier">answer</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">answer</span> = <span class="ruby-identifier">answer</span>
+  <span class="ruby-identifier">asking_last?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">finish!</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">forward!</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -338,7 +368,7 @@
 
           
           <div class="method-source-code" id="decrement_index-21-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 133</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 131</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">decrement_index!</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">index</span> <span class="ruby-operator">-=</span> <span class="ruby-value">1</span>
 <span class="ruby-keyword">end</span></pre>
@@ -371,42 +401,9 @@
 
           
           <div class="method-source-code" id="first-3F-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 137</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 135</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">first?</span>
   <span class="ruby-identifier">index</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-fowardable-3F" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">fowardable?</span><span
-            class="method-args">()</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-          
-
-          
-          <div class="method-source-code" id="fowardable-3F-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 125</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">fowardable?</span>
-  <span class="ruby-identifier">asking_first?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">asking?</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -437,7 +434,7 @@
 
           
           <div class="method-source-code" id="increment_index-21-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 129</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 127</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">increment_index!</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">index</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
 <span class="ruby-keyword">end</span></pre>
@@ -470,7 +467,7 @@
 
           
           <div class="method-source-code" id="initialize_challenge-21-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 120</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 117</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize_challenge!</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">index</span> = <span class="ruby-value">0</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">answers</span> = []
@@ -504,7 +501,7 @@
 
           
           <div class="method-source-code" id="last-3F-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 149</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 147</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">last?</span>
   <span class="ruby-identifier">index</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">total</span>
 <span class="ruby-keyword">end</span></pre>
@@ -537,75 +534,9 @@
 
           
           <div class="method-source-code" id="next_index_last-3F-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 145</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 143</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">next_index_last?</span>
   <span class="ruby-identifier">index</span> <span class="ruby-operator">+</span> <span class="ruby-value">2</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">total</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-not_first-3F" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">not_first?</span><span
-            class="method-args">()</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-          
-
-          
-          <div class="method-source-code" id="not_first-3F-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 153</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">not_first?</span>
-  <span class="ruby-operator">!</span><span class="ruby-identifier">first?</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-not_last-3F" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">not_last?</span><span
-            class="method-args">()</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-          
-
-          
-          <div class="method-source-code" id="not_last-3F-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 157</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">not_last?</span>
-  <span class="ruby-operator">!</span><span class="ruby-identifier">last?</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -636,7 +567,7 @@
 
           
           <div class="method-source-code" id="prev_index_first-3F-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 141</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 139</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">prev_index_first?</span>
   <span class="ruby-identifier">index</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
 <span class="ruby-keyword">end</span></pre>
@@ -669,8 +600,9 @@
 
           
           <div class="method-source-code" id="question-source">
-            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 173</span>
+            <pre><span class="ruby-comment"># File app/models/challenge/selection.rb, line 159</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">question</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">AllQuestionsAsked</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">asked?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">marked?</span>
   <span class="ruby-identifier">questions</span>[<span class="ruby-identifier">index</span>]
 <span class="ruby-keyword">end</span></pre>
           </div>

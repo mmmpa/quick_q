@@ -2,18 +2,23 @@ require 'rails_helper'
 
 RSpec.describe Challenge::Selection, type: :model do
   let(:klass) { Challenge::Selection }
-  let(:model) { klass.new(name: 'dummy', questions: [1, 3, 2, 4]) }
+  let(:model) { klass.new }
   let(:restored) { klass.find(model.id) }
 
   it { expect(model).to be_a(klass) }
 
+  def dummy_starter
+    {name: 'dummy', questions: [1, 3, 2, 4], selection_id: 1}
+  end
+
   describe 'game' do
-    before :each do
-      model.start!
+    context 'when ready' do
+      it { expect{restored.start!}.to raise_error(Challenge::Selection::MissingRequiredParameters) }
     end
 
     context 'when first' do
       before :each do
+        model.start_with!(dummy_starter)
         model.answer_and_forward!(1)
       end
 
@@ -25,6 +30,7 @@ RSpec.describe Challenge::Selection, type: :model do
 
     context 'when second' do
       before :each do
+        model.start_with!(dummy_starter)
         model.answer_and_forward!(1)
       end
 
@@ -64,6 +70,7 @@ RSpec.describe Challenge::Selection, type: :model do
 
     context 'when third' do
       before :each do
+        model.start_with!(dummy_starter)
         model.answer_and_forward!(1)
         model.answer_and_forward!(2)
         model.answer_and_forward!(3)
@@ -77,6 +84,7 @@ RSpec.describe Challenge::Selection, type: :model do
 
     context 'when last' do
       before :each do
+        model.start_with!(dummy_starter)
         model.answer_and_forward!(1)
         model.answer_and_forward!(2)
         model.answer_and_forward!(3)
@@ -91,6 +99,7 @@ RSpec.describe Challenge::Selection, type: :model do
 
     context 'when asked' do
       before :each do
+        model.start_with!(dummy_starter)
         model.answer_and_forward!(1)
         model.answer_and_forward!(2)
         model.answer_and_forward!(3)
@@ -125,12 +134,12 @@ RSpec.describe Challenge::Selection, type: :model do
     it { expect(model.ready?).to be_truthy }
 
     it do
-      model.start!
+      model.start_with!(dummy_starter)
       expect(model.asking_first?).to be_truthy
     end
 
     it do
-      model.start!
+      model.start_with!(dummy_starter)
       read_model = klass.find(model.id)
       expect(read_model.asking_first?).to be_truthy
     end
@@ -142,7 +151,7 @@ RSpec.describe Challenge::Selection, type: :model do
 
       it { expect(restored.ready?).to be_truthy }
 
-      it { expect(restored.start!).to be_truthy }
+      it { expect(restored.start_with!(dummy_starter)).to be_truthy }
 
       it { expect { restored.forward! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.backward! }.to raise_error(AASM::InvalidTransition) }
@@ -151,14 +160,14 @@ RSpec.describe Challenge::Selection, type: :model do
       it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }
 
       it do
-        model.start!
+        model.start_with!(dummy_starter)
         expect(restored.asking_first?).to be_truthy
       end
     end
 
     context 'when asking_first' do
       before :each do
-        model.start!
+        model.start_with!(dummy_starter)
       end
 
       it { expect(restored.asking_first?).to be_truthy }
@@ -179,7 +188,7 @@ RSpec.describe Challenge::Selection, type: :model do
 
     context 'when asking' do
       before :each do
-        model.start!
+        model.start_with!(dummy_starter)
         model.forward!
       end
 
@@ -212,7 +221,7 @@ RSpec.describe Challenge::Selection, type: :model do
 
     context 'when asking_last' do
       before :each do
-        model.start!
+        model.start_with!(dummy_starter)
         model.forward!
         model.forward!
         model.forward!
@@ -241,7 +250,7 @@ RSpec.describe Challenge::Selection, type: :model do
 
     context 'when asked' do
       before :each do
-        model.start!
+        model.start_with!(dummy_starter)
         model.forward!
         model.forward!
         model.forward!
@@ -271,7 +280,7 @@ RSpec.describe Challenge::Selection, type: :model do
 
     context 'when asked' do
       before :each do
-        model.start!
+        model.start_with!(dummy_starter)
         model.forward!
         model.forward!
         model.forward!
@@ -291,6 +300,10 @@ RSpec.describe Challenge::Selection, type: :model do
   end
 
   describe 'accessor' do
+    before :each do
+      model.start_with!(dummy_starter)
+    end
+
     context 'with index' do
       before :each do
         model.index
