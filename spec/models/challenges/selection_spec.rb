@@ -13,10 +13,10 @@ RSpec.describe Challenge::Selection, type: :model do
 
   describe 'game' do
     context 'when ready' do
-      it { expect{restored.start!}.to raise_error(Challenge::Selection::MissingRequiredParameters) }
+      it { expect { restored.start! }.to raise_error(Challenge::Selection::MissingRequiredParameters) }
     end
 
-    context 'when first' do
+    context 'when asking' do
       before :each do
         model.start_with!(dummy_starter)
         model.answer_and_forward!(1)
@@ -26,6 +26,16 @@ RSpec.describe Challenge::Selection, type: :model do
       it { expect(restored.question).to eq(3) }
       it { expect(restored.index).to eq(1) }
       it { expect(restored.asking?).to be_truthy }
+
+    end
+
+    context 'when not yet answered all' do
+      before :each do
+        model.start_with!(dummy_starter)
+        model.answer_and_forward!(1)
+      end
+
+      it { expect{restored.finish!}.to raise_error(Challenge::Selection::NotYetAnsweredAll) }
     end
 
     context 'when second' do
@@ -53,7 +63,7 @@ RSpec.describe Challenge::Selection, type: :model do
         it { expect(restored.answers).to eq([1]) }
         it { expect(restored.question).to eq(1) }
         it { expect(restored.index).to eq(0) }
-        it { expect(restored.asking_first?).to be_truthy }
+        it { expect(restored.asking?).to be_truthy }
 
         context 'then forward' do
           before :each do
@@ -79,7 +89,7 @@ RSpec.describe Challenge::Selection, type: :model do
       it { expect(restored.answers).to eq([1, 2, 3]) }
       it { expect(restored.question).to eq(4) }
       it { expect(restored.index).to eq(3) }
-      it { expect(restored.asking_last?).to be_truthy }
+      it { expect(restored.asking?).to be_truthy }
     end
 
     context 'when last' do
@@ -125,7 +135,7 @@ RSpec.describe Challenge::Selection, type: :model do
         it { expect(restored.answers).to eq([1, 2, 3, 4]) }
         it { expect(restored.question).to eq(4) }
         it { expect(restored.index).to eq(3) }
-        it { expect(restored.asking_last?).to be_truthy }
+        it { expect(restored.asking?).to be_truthy }
       end
     end
   end
@@ -135,13 +145,13 @@ RSpec.describe Challenge::Selection, type: :model do
 
     it do
       model.start_with!(dummy_starter)
-      expect(model.asking_first?).to be_truthy
+      expect(model.asking?).to be_truthy
     end
 
     it do
       model.start_with!(dummy_starter)
       read_model = klass.find(model.id)
-      expect(read_model.asking_first?).to be_truthy
+      expect(read_model.asking?).to be_truthy
     end
 
     context 'when ready' do
@@ -153,35 +163,12 @@ RSpec.describe Challenge::Selection, type: :model do
 
       it { expect(restored.start_with!(dummy_starter)).to be_truthy }
 
-      it { expect { restored.forward! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.backward! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.finish! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }
 
       it do
         model.start_with!(dummy_starter)
-        expect(restored.asking_first?).to be_truthy
-      end
-    end
-
-    context 'when asking_first' do
-      before :each do
-        model.start_with!(dummy_starter)
-      end
-
-      it { expect(restored.asking_first?).to be_truthy }
-
-      it { expect(restored.forward!).to be_truthy }
-
-      it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.backward! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.finish! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }
-
-      it do
-        model.forward!
         expect(restored.asking?).to be_truthy
       end
     end
@@ -189,60 +176,17 @@ RSpec.describe Challenge::Selection, type: :model do
     context 'when asking' do
       before :each do
         model.start_with!(dummy_starter)
-        model.forward!
       end
 
       it { expect(restored.asking?).to be_truthy }
-
-      it { expect(restored.forward!).to be_truthy }
-      it { expect(restored.backward!).to be_truthy }
+      it { expect{restored.finish!}.to raise_error(Challenge::Selection::NotYetAnsweredAll) }
 
       it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.finish! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }
-
-      it do
-        model.forward!
-        expect(restored.asking?).to be_truthy
-      end
-
-      it do
-        model.forward!
-        model.forward!
-        expect(restored.asking_last?).to be_truthy
-      end
-
-      it do
-        model.backward!
-        expect(restored.asking_first?).to be_truthy
-      end
-    end
-
-    context 'when asking_last' do
-      before :each do
-        model.start_with!(dummy_starter)
-        model.forward!
-        model.forward!
-        model.forward!
-      end
-
-      it { expect(restored.asking_last?).to be_truthy }
-
-      it { expect(restored.backward!).to be_truthy }
-      it { expect(restored.finish!).to be_truthy }
-
-      it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.forward! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }
 
       it do
-        model.backward!
-        expect(restored.asking?).to be_truthy
-      end
-
-      it do
+        model.answers = [1, 2, 3, 4]
         model.finish!
         expect(restored.asked?).to be_truthy
       end
@@ -251,9 +195,7 @@ RSpec.describe Challenge::Selection, type: :model do
     context 'when asked' do
       before :each do
         model.start_with!(dummy_starter)
-        model.forward!
-        model.forward!
-        model.forward!
+        model.answers = [1, 2, 3, 4]
         model.finish!
       end
 
@@ -263,13 +205,11 @@ RSpec.describe Challenge::Selection, type: :model do
       it { expect(restored.submit!).to be_truthy }
 
       it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.forward! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.backward! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.finish! }.to raise_error(AASM::InvalidTransition) }
 
       it do
         model.undo!
-        expect(restored.asking_last?).to be_truthy
+        expect(restored.asking?).to be_truthy
       end
 
       it do
@@ -281,9 +221,7 @@ RSpec.describe Challenge::Selection, type: :model do
     context 'when asked' do
       before :each do
         model.start_with!(dummy_starter)
-        model.forward!
-        model.forward!
-        model.forward!
+        model.answers = [1, 2, 3, 4]
         model.finish!
         model.submit!
       end
@@ -291,8 +229,6 @@ RSpec.describe Challenge::Selection, type: :model do
       it { expect(restored.marked?).to be_truthy }
 
       it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.forward! }.to raise_error(AASM::InvalidTransition) }
-      it { expect { restored.backward! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.finish! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.submit! }.to raise_error(AASM::InvalidTransition) }

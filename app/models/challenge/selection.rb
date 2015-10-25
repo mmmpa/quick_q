@@ -7,9 +7,7 @@ module Challenge
   # = State Machine State
   #
   # - ready このモデル作成直後の状態。問題などは揃っている。
-  # - asking_first 最初の問題の出題
-  # - asking 中途の問題の出題
-  # - asking_last 最後の問題の出題
+  # - asking 問題の出題
   # - asked 全て解答を終えた状態
   # - marked 採点を終えた状態
   #
@@ -48,50 +46,26 @@ module Challenge
 
     aasm do
       state :ready, initial: true, exit: :verify_required
-      state :asking_first
       state :asking
-      state :asking_last
-      state :asked
+      state :asked, enter: :verify_all_answered
       state :marked
 
       event :start do
-        transitions from: :ready, to: :asking_first
+        transitions from: :ready, to: :asking
 
         after do
           save
         end
       end
 
-      event :forward do
-        transitions from: :asking_first, to: :asking
-        transitions from: :asking, to: :asking_last, if: :next_index_last?
-        transitions from: :asking, to: :asking
-
-        after do
-          increment_index!
-          save
-        end
-      end
-
-      event :backward do
-        transitions from: :asking_last, to: :asking
-        transitions from: :asking, to: :asking_first, if: :prev_index_first?
-        transitions from: :asking, to: :asking
-
-        after do
-          decrement_index!
-          save
-        end
-      end
-
-      event :undo do
-        transitions from: :asked, to: :asking_last
+      event :finish do
+        transitions from: :asking, to: :asked
 
         after { save }
       end
 
-      event :finish do
-        transitions from: :asking_last, to: :asked
+      event :undo do
+        transitions from: :asked, to: :asking
 
         after { save }
       end
@@ -126,29 +100,40 @@ module Challenge
       end
     end
 
+    def verify_all_answered
+      raise NotYetAnsweredAll if total > answers.size
+      answers.each do |answer|
+        raise NotYetAnsweredAll if answer.blank?
+      end
+    end
+
     def answer_and_forward!(answer)
       self.answer = answer
-      asking_last? ? finish! : forward!
+      increment_index!
+      save
+    rescue IndexOver
+      finish!
+    end
+
+    def backward!
+      decrement_index!
+      save
+    rescue IndexOver
+      nil
     end
 
     def increment_index!
+      raise IndexOver if last?
       self.index += 1
     end
 
     def decrement_index!
+      raise IndexOver if first?
       self.index -= 1
     end
 
     def first?
       index == 0
-    end
-
-    def prev_index_first?
-      index - 1 == 0
-    end
-
-    def next_index_last?
-      index + 2 == total
     end
 
     def last?
@@ -161,7 +146,7 @@ module Challenge
 
     def answer=(value)
       raise NotYetStarted if ready?
-      raise AllQuestionsAnswered if asked? || marked?
+      raise AllQuestionsAsked if asked? || marked?
       answers[index] = value
     end
 
@@ -169,6 +154,10 @@ module Challenge
       raise NotYetStarted if ready?
       raise AllQuestionsAsked if asked? || marked?
       questions[index]
+    end
+
+    class IndexOver < StandardError
+
     end
 
     class MissingRequiredParameters < StandardError
@@ -179,7 +168,7 @@ module Challenge
 
     end
 
-    class AllQuestionsAnswered < StandardError
+    class NotYetAnsweredAll < StandardError
 
     end
 
