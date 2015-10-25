@@ -118,6 +118,8 @@ module Qa
     has_many :correct_answers, dependent: :destroy
     has_many :answer_options, dependent: :destroy
     has_one :explanation, dependent: :destroy
+    has_one :pal, dependent: :destroy
+    has_one :premise, through: :pal
 
     validates :name, :text, :way,
               presence: true

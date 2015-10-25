@@ -10,9 +10,7 @@ RSpec.describe Qa::Explanation, type: :model do
         model.text = nil
       end
 
-      it { expect(model.valid?).to be_falsey }
-      it { expect(model.save).to be_falsey }
-      it { expect { model.save! }.to raise_error(ActiveRecord::RecordInvalid) }
+      it_behaves_like 'invalid model'
     end
 
     context 'when question is blank' do
@@ -20,15 +18,11 @@ RSpec.describe Qa::Explanation, type: :model do
         model.question = nil
       end
 
-      it { expect(model.valid?).to be_falsey }
-      it { expect(model.save).to be_falsey }
-      it { expect { model.save! }.to raise_error(ActiveRecord::RecordInvalid) }
+      it_behaves_like 'invalid model'
     end
 
     context 'when text is input' do
-      it { expect(model.valid?).to be_truthy }
-      it { expect(model.save).to be_truthy }
-      it { expect(model.save!).to be_truthy }
+      it_behaves_like 'valid model'
     end
   end
 end
