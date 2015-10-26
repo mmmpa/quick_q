@@ -26,6 +26,13 @@ module Selection
     validates :choice_type,
               inclusion: {in: Selection.choice_types}
 
+    validates :total,
+              numericality: {
+                only_integer: true,
+                greater_than: 0,
+                unless: :manual?
+              }
+
     validate :question_count_correct
 
     def question_count_correct

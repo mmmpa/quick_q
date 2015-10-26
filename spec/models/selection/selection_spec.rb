@@ -22,12 +22,41 @@ RSpec.describe Selection::Selection, type: :model do
     end
 
     context 'when choice type is not manual' do
-      before :each do
-        model.choice_type = Selection::Selection.choice_types[:random]
-        model.questions << create(:qa_question, :valid)
+      context 'then question added' do
+        before :each do
+          model.choice_type = Selection::Selection.choice_types[:random]
+          model.total = 1
+          model.questions << create(:qa_question, :valid)
+        end
+
+        it_behaves_like 'invalid model'
       end
 
-      it_behaves_like 'invalid model'
+      context 'then total smaller than 1' do
+        before :each do
+          model.choice_type = Selection::Selection.choice_types[:random]
+          model.total = 0
+        end
+
+        it_behaves_like 'invalid model'
+      end
+
+      context 'then total is blank' do
+        before :each do
+          model.choice_type = Selection::Selection.choice_types[:random]
+        end
+
+        it_behaves_like 'invalid model'
+      end
+
+      context 'then total equal or larger 1' do
+        before :each do
+          model.choice_type = Selection::Selection.choice_types[:random]
+          model.total = 1
+        end
+
+        it_behaves_like 'valid model'
+      end
     end
 
     context 'when input' do

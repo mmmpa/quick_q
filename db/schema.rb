@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20151025190710) do
   create_table "selection_selections", force: :cascade do |t|
     t.string   "name",        null: false
     t.integer  "choice_type", null: false
+    t.integer  "total"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
