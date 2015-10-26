@@ -46,7 +46,6 @@ ActiveRecord::Schema.define(version: 20151025190710) do
   end
 
   add_index "qa_pals", ["premise_id"], name: "index_qa_pals_on_premise_id", using: :btree
-  add_index "qa_pals", ["question_id", "premise_id"], name: "index_qa_pals_on_question_id_and_premise_id", unique: true, using: :btree
   add_index "qa_pals", ["question_id"], name: "index_qa_pals_on_question_id", using: :btree
 
   create_table "qa_premises", force: :cascade do |t|
@@ -66,13 +65,14 @@ ActiveRecord::Schema.define(version: 20151025190710) do
 
   add_index "qa_questions", ["name"], name: "index_qa_questions_on_name", unique: true, using: :btree
 
-  create_table "selection_questions", force: :cascade do |t|
+  create_table "selection_selected_questions", force: :cascade do |t|
     t.integer "selection_id"
     t.integer "question_id"
   end
 
-  add_index "selection_questions", ["question_id"], name: "index_selection_questions_on_question_id", using: :btree
-  add_index "selection_questions", ["selection_id"], name: "index_selection_questions_on_selection_id", using: :btree
+  add_index "selection_selected_questions", ["question_id"], name: "index_selection_selected_questions_on_question_id", using: :btree
+  add_index "selection_selected_questions", ["selection_id", "question_id"], name: "selection_selected_questions_s_q", unique: true, using: :btree
+  add_index "selection_selected_questions", ["selection_id"], name: "index_selection_selected_questions_on_selection_id", using: :btree
 
   create_table "selection_selections", force: :cascade do |t|
     t.string   "name",        null: false

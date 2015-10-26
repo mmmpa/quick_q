@@ -11,7 +11,7 @@ module Qa
   # - premise 前提
   #
 
-class Pal < ActiveRecord::Base
+  class Pal < ActiveRecord::Base
     belongs_to :question, inverse_of: :pal
     belongs_to :premise, inverse_of: :pals
 

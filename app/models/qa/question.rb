@@ -120,6 +120,8 @@ module Qa
     has_one :explanation, dependent: :destroy
     has_one :pal, dependent: :destroy
     has_one :premise, through: :pal
+    has_many :selected, class_name: 'Selection::SelectedQuestion', dependent: :destroy
+    has_many :selections, class_name: 'Selection::Selection', through: :selected
 
     validates :name, :text, :way,
               presence: true
