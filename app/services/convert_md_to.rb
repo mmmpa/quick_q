@@ -4,15 +4,15 @@
 #
 # = Example
 #
-#   ConvertMdTo.questions(File.read('questions.md'))
+#   ConvertMdTo.questions(File.read('questions.md')).execute
 #
 #
 class ConvertMdTo
   include AASM
 
   class << self
-    def questions(md)
-      new(md)
+    def questions(md, options = {})
+      new(md, options)
     end
   end
 
@@ -53,32 +53,39 @@ class ConvertMdTo
     end
   end
 
-  def initialize(md)
+  def initialize(md, options = {})
     @md = md
     @questions = []
+    @update = !!options[:update]
 
     init_params_store!
     clear_buffer!
   end
 
   def convert!
-    pp @questions.compact
-    CoordinateQuestion.new(questions: @questions.compact).execute
+    CoordinateQuestion.new(questions: @questions.compact, update: @update).execute
   rescue => e
-    p e.result
+    e.result[:errors].each do |record|
+      begin
+        pp record.errors
+      rescue
+        pp record
+      end
+    end
   end
 
   def execute
     @md.lines.each do |line|
+      p line
       case line
-        when /^#([a-z_0-9]+)\n/
+        when /^#([a-z_0-9]+)\n/i
           start_format!
           @now = {
             name: $1
           }
-        when "##q\n"
+        when "##q\n", "##Q\n"
           start_question!
-        when "##a\n"
+        when "##a\n", "##A\n"
           start_answers!
         when (answers_scanning? || answer_scanning?) && /^(-|\+)(.*)/
           start_answer!

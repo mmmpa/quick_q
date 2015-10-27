@@ -12,7 +12,7 @@ Bundler.require(*Rails.groups)
 
 module QuickQ
   class Application < Rails::Application
-    
+
     config.active_record.raise_in_transactional_callbacks = true
     config.time_zone = 'Tokyo'
 
@@ -30,12 +30,17 @@ module QuickQ
       g.helper false
       g.view false
 
-      g.test_framework :rspec, fixtures: true, view_specs: false, helper_specs: false, routing_specs:
-                               false, controller_specs: true, request_specs: true
+      g.test_framework :rspec,
+                       fixtures: true,
+                       view_specs: false,
+                       helper_specs: false,
+                       routing_specs: false,
+                       controller_specs: true,
+                       request_specs: true
       g.fixture_replacement :factory_girl, dir: 'spec/factories'
     end
 
-    config.action_mailer.default_url_options = { :host => ENV['MY_HOST'] }
+    config.action_mailer.default_url_options = {:host => ENV['MY_HOST']}
     config.action_mailer.smtp_settings = {
       user_name: ENV["SENDGRID_USER_NAME"],
       password: ENV["SENDGRID_USER_PASSWORD"],
