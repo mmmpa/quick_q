@@ -12,7 +12,17 @@ RSpec.describe ConvertMdTo, type: :model do
   let(:md) { @md }
 
   it do
-    ConvertMdTo.questions(md).execute
+    expect {
+      ConvertMdTo.questions(md).execute
+    }.to change(Qa::Question, :count).by(2)
   end
-end
 
+  it do
+    ConvertMdTo.questions(md).execute
+
+    expect {
+      ConvertMdTo.questions(md).execute
+    }.to change(Qa::Question, :count).by(0)
+  end
+
+end

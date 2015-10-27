@@ -46,13 +46,26 @@ class ConvertMdTo
     event :stop do
       transitions from: :answer_scanning, to: :ended
       transitions from: :answers_scanning, to: :ended
+
+      after do
+        convert!
+      end
     end
   end
 
   def initialize(md)
     @md = md
     @questions = []
-    @buffer = ''
+
+    init_params_store!
+    clear_buffer!
+  end
+
+  def convert!
+    pp @questions.compact
+    CoordinateQuestion.new(questions: @questions.compact).execute
+  rescue => e
+    p e.result
   end
 
   def execute
@@ -67,12 +80,12 @@ class ConvertMdTo
           start_question!
         when "##a\n"
           start_answers!
-        when (answers_scanning? || answer_scanning?) && (/^(-)(.*)/ || /^(\+)(.*)/)
+        when (answers_scanning? || answer_scanning?) && /^(-|\+)(.*)/
           start_answer!
           @correct = $1 == '+'
           @buffer << $2
         when format_scanning? && /##([a-z_0-9]+)\n/
-          @now[:way] = $1.to_s.to_sym
+          @now[:way] = Qa::Question.ways[$1.to_s.to_sym]
         else
           @buffer << line
       end
@@ -99,9 +112,17 @@ class ConvertMdTo
     clear_buffer!
   end
 
-  def generate_question_hash
-    pp @now
+  def add_params!
+    @questions.push(@now) if @now != {}
+  end
+
+  def init_params_store!
     @now = {}
+  end
+
+  def generate_question_hash
+    add_params!
+    init_params_store!
     clear_buffer!
   end
 end

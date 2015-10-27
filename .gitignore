@@ -2,4 +2,6 @@
 /log/*
 !/log/.keep
 /tmp
-/db/info
+/db/md
+/db/md
+/db/json

@@ -1,16 +1,16 @@
 #test_question_1
-##single
+##single_choice
 ##q
 10進数の演算式7÷32の結果を2進数で表したものはどれか。
 ##a
 - 0.001011
 - 0.001101
-- 0.00111
++ 0.00111
 - 0.0111
 
 
 #test_question_2
-##single
+##single_choice
 ##q
 
 
@@ -25,6 +25,6 @@
 24
 - 
 32
-- 
++
 60
 
