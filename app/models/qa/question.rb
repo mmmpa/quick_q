@@ -108,8 +108,6 @@ module Qa
   #
 
   class Question < ActiveRecord::Base
-    include Pager
-
     BOOLEAN_O = 'o' #:nodoc:
     BOOLEAN_X = 'x' #:nodoc:
 

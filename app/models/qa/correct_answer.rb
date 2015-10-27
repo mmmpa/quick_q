@@ -20,5 +20,9 @@ module Qa
 
     validates :question, :answer_option, :index,
               presence: true
+
+    def text
+      answer_option.text
+    end
   end
 end

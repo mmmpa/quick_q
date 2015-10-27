@@ -1,11 +1,20 @@
 require 'rails_helper'
 
 module Api
+
+
   RSpec.describe "Qs", type: :request do
+    def read_csv(name)
+      File.read("#{Rails.root}/spec/fixtures/#{name}.csv")
+    end
+
     before :all do
-      @csv = File.read("#{Rails.root}/spec/fixtures/25.csv")
       Qa::Question.destroy_all
-      CoordinateQuestion.from(csv: @csv, way: :free_text)
+      CoordinateQuestion.from(csv: read_csv(:multiple), way: :multiple_choices)
+      CoordinateQuestion.from(csv: read_csv(:single), way: :single_choice)
+      CoordinateQuestion.from(csv: read_csv(:ox), way: :ox)
+      CoordinateQuestion.from(csv: read_csv(:order), way: :in_order)
+      CoordinateQuestion.from(csv: read_csv(:text), way: :free_text)
       @all_ids = Qa::Question.order { updated_at.desc }.pluck(:id)
     end
 
@@ -80,8 +89,33 @@ module Api
 
     describe "GET /api/q/:id" do
       it do
-        get api_question_path(random_id)
+        get api_question_path(1)
         expect(response).to have_http_status(200)
+        pp result_hash
+      end
+
+      it do
+        get api_question_path(6)
+        expect(response).to have_http_status(200)
+        pp result_hash
+      end
+
+      it do
+        get api_question_path(11)
+        expect(response).to have_http_status(200)
+        pp result_hash
+      end
+
+      it do
+        get api_question_path(16)
+        expect(response).to have_http_status(200)
+        pp result_hash
+      end
+
+      it do
+        get api_question_path(21)
+        expect(response).to have_http_status(200)
+        pp result_hash
       end
     end
   end

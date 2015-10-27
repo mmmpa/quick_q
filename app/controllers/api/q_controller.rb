@@ -10,11 +10,11 @@ module Api
 
   class QController < ApplicationController
     def index
-      render json: Qa::Question.page(page, par).order { updated_at.desc }
+      render json: Qa::QuestionIndex.newer_page(page, par)
     end
 
     def show
-      render json: Qa::Question.find(params[:id])
+      render json: Qa::QuestionDetail.find(params[:id])
     end
 
     private
