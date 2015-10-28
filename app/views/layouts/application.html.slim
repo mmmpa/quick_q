@@ -1,0 +1,14 @@
+doctype html
+html
+  head
+    title QuickQ
+    script src='/js/vendor.min.js'
+    script type='text/x-mathjax-config'
+      | MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+    = javascript_include_tag 'application'
+    script src='/js/build.min.js'
+    link href='/css/quick.css'
+    = csrf_meta_tags
+  body
+    = yield
