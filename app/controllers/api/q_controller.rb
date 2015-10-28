@@ -8,13 +8,13 @@ module Api
   # total = 20
   #
 
-  class QController < ApplicationController
+  class QController < BaseController
     def index
       render json: Qa::QuestionIndex.newer_page(page, par)
     end
 
     def show
-      render json: Qa::QuestionDetail.find(params[:id])
+      render json: Qa::QuestionOnly.find(params[:id])
     end
 
     private

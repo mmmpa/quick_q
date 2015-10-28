@@ -1,13 +1,7 @@
 require 'rails_helper'
 
 module Api
-
-
   RSpec.describe "Qs", type: :request do
-    def read_csv(name)
-      File.read("#{Rails.root}/spec/fixtures/#{name}.csv")
-    end
-
     before :all do
       Qa::Question.destroy_all
       CoordinateQuestion.from(csv: read_csv(:multiple), way: :multiple_choices)
@@ -22,7 +16,7 @@ module Api
       Qa::Question.destroy_all
     end
 
-    let(:random_id) { (rand(1..Qa::Question.count)) }
+    let(:random_id) { rand(Qa::Question.first.id..Qa::Question.last.id) }
     let!(:model) { random_id ? Qa::Question.find(random_id) : (raise 'not yet ready') }
     let(:result_hash) { JSON.parse(response.body) }
     let(:ids) { result_hash.map { |r| r['id'] } }
@@ -89,33 +83,43 @@ module Api
 
     describe "GET /api/q/:id" do
       it do
-        get api_question_path(1)
+        get api_question_path(random_id)
         expect(response).to have_http_status(200)
-        pp result_hash
       end
 
       it do
-        get api_question_path(6)
-        expect(response).to have_http_status(200)
-        pp result_hash
+        get api_question_path(0)
+        expect(response).to have_http_status(404)
       end
 
-      it do
-        get api_question_path(11)
-        expect(response).to have_http_status(200)
-        pp result_hash
+      it_behaves_like 'response for no option question' do
+        before :each do
+          get api_question_path(Qa::Question.free_text.take.id)
+        end
       end
 
-      it do
-        get api_question_path(16)
-        expect(response).to have_http_status(200)
-        pp result_hash
+      it_behaves_like 'response for no option question' do
+        before :each do
+          get api_question_path(Qa::Question.ox.take.id)
+        end
       end
 
-      it do
-        get api_question_path(21)
-        expect(response).to have_http_status(200)
-        pp result_hash
+      it_behaves_like 'response for have options question' do
+        before :each do
+          get api_question_path(Qa::Question.single_choice.take.id)
+        end
+      end
+
+      it_behaves_like 'response for have options question' do
+        before :each do
+          get api_question_path(Qa::Question.multiple_choices.take.id)
+        end
+      end
+
+      it_behaves_like 'response for have options question' do
+        before :each do
+          get api_question_path(Qa::Question.in_order.take.id)
+        end
       end
     end
   end

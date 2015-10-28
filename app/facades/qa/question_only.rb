@@ -1,16 +1,16 @@
 module Qa
 
   #
-  # 問題の詳細すべてをはきだすファサード。
-  # 編集などに使う。出題の際は答えを含めない他のファサードを使う。
+  # 問題のみのファサード。
+  # 出題に使う。
   #
 
-  class QuestionDetail < Question
+  class QuestionOnly < Question
     include Pager
 
     def as_json(options = {})
       options.merge!(
-        only: [:id, :name, :text, :way]
+        only: [:id, :text, :way]
       )
       super.merge!(detect_options)
     end
@@ -29,6 +29,5 @@ module Qa
         option.as_json(except: [:question_id])
       end
     end
-
   end
 end

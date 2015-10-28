@@ -136,6 +136,12 @@ module Qa
 
     before_validation :arrange!
 
+    scope :free_text, -> { where { way == Question.ways[:free_text] } }
+    scope :ox, -> { where { way == Question.ways[:ox] } }
+    scope :single_choice, -> { where { way == Question.ways[:single_choice] } }
+    scope :multiple_choices, -> { where { way == Question.ways[:multiple_choices] } }
+    scope :in_order, -> { where { way == Question.ways[:in_order] } }
+
     #
     # 答え合わせ
     #

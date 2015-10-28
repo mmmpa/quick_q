@@ -10,7 +10,7 @@ module Qa
     include Pager
 
     def as_json(options = {})
-      options.merge!(only: [:id, :text])
+      options.merge!(only: [:id, :text, :way])
       super
     end
   end

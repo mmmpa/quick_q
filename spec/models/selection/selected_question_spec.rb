@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Selection::Question, type: :model do
-  let(:klass) { Selection::Question }
-  let(:model) { build(:selection_question, :valid) }
+RSpec.describe Selection::SelectedQuestion, type: :model do
+  let(:klass) { Selection::SelectedQuestion }
+  let(:model) { build(:selection_selected_question, :valid) }
 
   describe 'validation' do
     context 'when question is blank' do
@@ -23,7 +23,7 @@ RSpec.describe Selection::Question, type: :model do
 
     context 'when question is already used' do
       before :each do
-        new_table = create(:selection_question, :valid)
+        new_table = create(:selection_selected_question, :valid)
         model.question = new_table.question
       end
 
@@ -32,7 +32,7 @@ RSpec.describe Selection::Question, type: :model do
 
     context 'when selection is already used' do
       before :each do
-        new_table = create(:selection_question, :valid)
+        new_table = create(:selection_selected_question, :valid)
         model.selection = new_table.selection
       end
 
@@ -41,7 +41,7 @@ RSpec.describe Selection::Question, type: :model do
 
     context 'when question and selection are already used' do
       before :each do
-        new_table = create(:selection_question, :valid)
+        new_table = create(:selection_selected_question, :valid)
         model.question = new_table.question
         model.selection = new_table.selection
       end
