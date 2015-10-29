@@ -13,6 +13,7 @@ console.log 'loading module'
 
 
 _.merge(App, require './models')
+
 App.JSX = require './jsx/jsx'
 App.Util = require './util'
 App.View = require './views'
@@ -23,7 +24,7 @@ App.Constant = require './constant'
 # contextsはクラスを直接参照するため、他のクラスの後に読み込む必要がある。
 _.merge(App, require './contexts')
 
-console.log 'loaded app'
+console.log 'loaded app', App
 
 App.start = (node)->
   router = new Arda.Router(Arda.DefaultLayout, node)

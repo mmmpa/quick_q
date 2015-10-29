@@ -1,96 +1,97 @@
+#
+# ReactApplicationの全てを統括するコンテキスト
+#
+# = Attributes
+#
+# - @content 実際にコンテンツを表示するルーター
+# - @notifier 全ての前面に表示されるオーバーレイルーター
+# - @menu グローバルメニューなどアプリケーション共通物を表示するルーター
+#
 module.exports = class MainContext extends Arda.Context
   _history = []
   _feature = []
   _now = 0
 
-  component: App.View.Qqa
+  component: App.View.Display
 
   initState: (props) -> props
 
   expandComponentProps: (props, state) -> props
 
-  stripPath: (path)->
-    (path || location.href).replace(/.+?:\/\/(.+?)\//, '/')
+  delegate: (subscribe) ->
+    super
 
-  detectComponent: (path)->
-    detector = @stripPath(path) || ''
-    switch
-      when detector.match(/^\/accounts\/new/)?
-        App.AccountContext
-      when detector.match(/^\/accounts\/.+\/edit/)?
-        App.AccountContext
-      when detector.match(/^\/accounts.*/)?
-        App.AccountIndexPageContext
-      when detector.match(/^\/workbooks\/new/)?
-        App.WorkbookEditContext
-      when detector.match(/^\/workbooks$/)?, detector.match(/^\/workbooks\/index\/.*/)?
-        App.WorkbookIndexContext
-      when detector.match(/^\/workbooks\/.+\/question\/new/)?
-        App.QuestionEditContext
-      when detector.match(/^\/workbooks\/.+\/selectors\/.+/)?
-        App.QuestionEditContext
-      when detector.match(/^\/workbooks\/.+\/edit/)?
-        App.WorkbookEditContext
-      when detector.match(/^\/workbooks\/.+/)?
-        App.WorkbookContext
-      when detector.match(/^\/workbooks\/.+/)?
-        App.WorkbookContext
-      when detector.match(/^\/challenges\/(.+)\/review/)?
-        challenge_key: RegExp.$1
-        component: App.ChallengeReviewContext
-      when detector.match(/^\/challenges\/(.+)\/([0-9]+)/)?
-        challenge_key: RegExp.$1
-        index: RegExp.$2
-        component: App.ChallengeQuestionContext
-      when detector.match(/^\/challenges\/(.+)/)?
-        challenge_key: RegExp.$1
-        component: App.ChallengeResultContext
-      when detector == '/'
-        App.PortalPageContext
+    subscribe 'context:created', @_initializeRouter
+    subscribe 'context:created', @_initializeEventWatcher
+    subscribe 'display:initialized', @_initializeDisplay
+    subscribe 'scene:replace', @_replaceScene
 
-  replaceScene: (body, header, path, historize = true) =>
-    component = if _.isFunction(result = @detectComponent(path))
-      params = {}
-      result
-    else
-      params = result
-      result.component
+    subscribe 'notify:success', (title, message)=>
 
-    console.log 'component', component, result
+    subscribe 'notify:fail', (title, message)=>
 
-    return unless component
+    subscribe 'reload', =>
+      @update((state) => state)
 
-    passingBody = body || @props.config.body
-    passingBody.params = params
+  #
+  # Initializer
+  #
 
-    (if @router.history.length
-      @router.replaceContext(component, passed =
-          body: passingBody
-          header: header || @props.config.header
-          root: @
-      )
-    else
-      @router.pushContext(component, passed =
-          body: passingBody
-          header: header || @props.config.header
-          root: @
-      )
-    ).then =>
-      if historize
-        @pushHistory(body, header, path)
-      window.scrollTo(null, 0)
+  _initializeEventWatcher: ->
+    HistoryWard.startBrutally()
+    $(window).on(HistoryWard.BACKWARD, @_backward)
+    $(window).on(HistoryWard.FORWARD, @_forward)
 
-  backward: (e)=>
+  _initializeDisplay: (routers)->
+    # このrouterはArda.Router
+    @content = routers.content
+    @notifier = routers.notifier
+    @menu = routers.menu
+
+    # 以降replaceContextで統一する
+    @content.pushContext(App.BlankContext, {name: 'Content'}).done =>
+      @_initializeScene()
+    @notifier.pushContext(App.BlankContext, {name: 'Notifier'}).done =>
+      @notifier.replaceContext(App.Notifier.GodContext, {})
+    @menu.pushContext(App.BlankContext, {name: 'Menu'}).done =>
+      @menu.replaceContext(App.Menu.GlobalContext, {})
+
+  _initializeRouter: ->
+    # これはuriから動作を振りわける一般的なルーター
+    @router = new App.Router()
+    @router.add('/', (params)-> new App.Cassette(App.PortalContext, params))
+
+  _initializeScene: ->
+    @content.pushContext(@_detectCassette().forPusher()...)
+  #
+  # History Manager
+  #
+  _backward: (e)=>
     @.emit 'scene:change',
       path: location.href
       unhistorize: true
 
-  forward: (e)=>
+  _forward: (e)=>
     @.emit 'scene:change',
       path: location.href
       unhistorize: true
 
-  pickHeaderParameters: (xhr)->
+  _pushHistory: (body, header, path)->
+    if fitstHistroy
+      fitstHistroy = false
+      return
+    _history = _history[0.._now]
+    _now = _history.length
+    _history.push({ body: body, header: header, path: path })
+    history.pushState({ position: _history.length - 1 }, null, path)
+
+  #
+  # Helper
+  #
+  _detectCassette: ->
+    @router.execute(@_strippedPath())
+
+  _pickHeaderParameters: (xhr)->
     required = [
       'Total-Pages'
       'Per-Page'
@@ -104,71 +105,28 @@ module.exports = class MainContext extends Arda.Context
       a
     , {})
 
-  pushHistory: (body, header, path)->
-    if fitstHistroy
-      fitstHistroy = false
-      return
-    _history = _history[0.._now]
-    _now = _history.length
-    _history.push({ body: body, header: header, path: path })
-    history.pushState({ position: _history.length - 1 }, null, path)
+  _strippedPath: ->
+    location.href.replace(/.+?:\/\/(.+?)\//, '/')
 
-  initializeEventWatcher: ->
-    HistoryWard.startBrutally()
-    $(window).on(HistoryWard.BACKWARD, @backward)
-    $(window).on(HistoryWard.FORWARD, @forward)
+  _isCrossDomain: (url)->
+    originAnchor = document.createElement("a")
+    originAnchor.href = location.href
+    urlAnchor = document.createElement("a")
 
-  delegate: (subscribe) ->
-    super
+    try
+      urlAnchor.href = url
+      urlAnchor.href = urlAnchor.href
 
-    subscribe 'context:created', ->
-      @initializeEventWatcher()
-      #@onSceneChange(@props.config.body, @props.config.header, null, true)
+      return !urlAnchor.protocol || !urlAnchor.host ||
+          (originAnchor.protocol + "//" + originAnchor.host !=
+            urlAnchor.protocol + "//" + urlAnchor.host)
+    catch e
+      return true
 
-    subscribe 'body:inited', (router)=>
-      @router = router
+  #
+  #
+  #
 
-    subscribe 'notify:success', (title, message)=>
-      notifySuccess(title, message)
-
-    subscribe 'notify:fail', (title, message)=>
-      notifyDanger(title, message)
-
-    subscribe 'reload', =>
-      @update((state) => state)
-
-    subscribe 'scene:change', (link)->
-      {data, method} = if link.method?
-        { data: { _method: link.method }, method: link.method }
-      else
-        { data: {}, method: 'get' }
-      $.ajax {
-        url: link.path + '.json',
-        dataType: 'json',
-        data: data
-        type: method
-      }
-      .success (body, _, xhr) =>
-        @replaceScene(body, @pickHeaderParameters(xhr), link.path, !link.unhistorize)
-      .fail (data) ->
-        console.error('error', link)
-
-storedHistory = []
-fitstHistroy = true
+  _replaceScene: (linker) ->
 
 
-
-isCrossDomain = (url)->
-  originAnchor = document.createElement("a")
-  originAnchor.href = location.href
-  urlAnchor = document.createElement("a")
-
-  try
-    urlAnchor.href = url
-    urlAnchor.href = urlAnchor.href
-
-    return !urlAnchor.protocol || !urlAnchor.host ||
-        (originAnchor.protocol + "//" + originAnchor.host !=
-          urlAnchor.protocol + "//" + urlAnchor.host)
-  catch e
-    return true
