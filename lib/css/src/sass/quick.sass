@@ -2,6 +2,11 @@
 @import "./bootstrap/bootswatch"
 @import "./font-awesome/font-awesome"
 
+body
+	color: #333
+	font-size: 16px
+	font-family: "Helvetica Neue", Helvetica, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif
+
 article#quick-q,
 article#content
 	position: relative
@@ -11,3 +16,85 @@ article#notifier
 	position: absolute
 	top: 0
 	left: 0
+
+.button
+	@extend .btn, .btn-lg
+	&.submit
+		@extend .btn-success
+
+.question-text-area
+	font-size: 16px
+	line-height: 170%
+	p
+		margin: 1em 0
+	table
+		@extend .table, .table-striped, .table-bordered
+		width: auto !important
+		min-width: 150px
+		margin: 0
+		thead
+			th
+				text-align: center
+	h3, h4, h5, h6
+		font-size: 18px
+		font-weight: bold
+
+.default-body
+	margin: 0 auto
+	max-width: 800px
+
+.question-q
+	&.q,
+	&.a
+		margin-top: 40px
+		font-size: 24px
+		font-weight: bold
+		border-bottom: 1px dotted $gray-light
+		padding-bottom: 10px
+	&.body
+		@extend .default-body
+	&.q-text,
+	&.a-text
+		@extend .question-text-area
+	&.control
+		margin-top: 40px
+		text-align: center
+	&.submit
+		font-size: 20px
+		&.disabled
+			@extend .btn-default
+	&.options
+		margin: 0
+		padding: 0
+	&.option
+		padding: 10px
+		list-style: none
+		border-bottom: 1px dotted $gray-light
+		transition: all 0.2s ease-in
+		.checker,
+		.a-text
+			display: table-cell
+			vertical-align: middle
+			p
+				margin: 0.5em
+		.checker
+			text-align: center
+			color: $brand-success
+		&:hover
+			background: $gray-lighter
+		.check
+			transition: all 0.2s ease-in
+			color: $gray-lighter
+			&.active
+				color: $brand-success
+.question-index
+	&.index
+		@extend .default-body
+	&.list
+		@extend .table, .table-striped
+		.id,
+		.way
+			width: 1px
+			white-space: nowrap
+	&.text
+		@extend .question-text-area

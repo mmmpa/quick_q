@@ -3,7 +3,7 @@
 # notify関係イベントがメインコンテキストから中継される。下部から直接は扱わない。
 # とりあえずブランク
 #
-module.exports = class GodContext extends Arda.Context
+module.exports = class GodContext extends App.BaseContext
   initState: (props) -> props
 
   component: React.createClass (

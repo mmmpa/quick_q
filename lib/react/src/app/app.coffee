@@ -20,6 +20,7 @@ App.View = require './views'
 App.Lang = require './lang'
 App.Path = require './path'
 App.Constant = require './constant'
+App.BaseContext = require './contexts/base-context'
 
 # contextsはクラスを直接参照するため、他のクラスの後に読み込む必要がある。
 _.merge(App, require './contexts')

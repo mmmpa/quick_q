@@ -1,6 +1,10 @@
 #
 # scene:replaceをdispatchするときに一緒に渡すモデル
 #
+# = Attributes
+#
+# - key apiStrikeでgetアクセスのデータ保持用に使う。
+#
 # = Example
 #
 #   App.Linker.post('/user/new', {name: 'mmmpa', job: 'none'})
@@ -8,11 +12,17 @@
 module.exports = class Linker
   constructor: (@method, @uri, @params)->
     @_replacePlaceholder()
+    @key = @uri + '::' + (for key, value of @params
+        "#{key}:#{value}"
+      ).join('::')
 
   _replacePlaceholder: ->
     while @uri.match(/(:([0-9_a-z]+))/)
       @uri = @uri.replace(RegExp.$1, @params[RegExp.$2] || '-')
       delete @params[RegExp.$2]
+
+  is_get: ->
+    @methd == 'get'
 
   @delete = (uri, params)->
     new @('delete', uri, params)

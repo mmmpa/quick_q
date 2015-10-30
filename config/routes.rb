@@ -11,4 +11,6 @@ Rails.application.routes.draw do
   end
 
   get '', to: 'portal#index', as: :portal
+  get '*path', to: 'portal#index'
+
 end

@@ -1,35 +1,9 @@
 module.exports = Path =
   portal: '/'
-  team: '/team/%{team_key}'
-  myTeam: '/teams'
-  teams: '/teams/index'
-  editMyself: '/accounts/me'
-  logout: '/logout'
-  createAccount: '/accounts/new'
-  accountIndex: '/accounts'
-  editAccount: '/accounts/%{account_key}/edit'
-  deleteAccount: '/accounts/%{account_key}'
-  createWorkbook: '/workbooks/new'
-  workbookIndex: '/workbooks'
-  showWorkbook: '/workbooks/%{workbook_key}'
-  updateEvalType: '/workbooks/%{workbook_key}/eval_type'
-  updatePoints: '/workbooks/%{workbook_key}/points'
-  showWorkbook: '/workbooks/%{workbook_key}'
-  editWorkbook: '/workbooks/%{workbook_key}/edit'
-  editWorkbookTitle: '/workbooks/%{workbook_key}/title'
-  deleteWorkbook: '/workbooks/%{workbook_key}'
-  createQuestion: '/workbooks/%{workbook_key}/question/new'
-  editQuestion: '/workbooks/%{workbook_key}/selectors/%{question_key}'
-  deleteQuestion: '/workbooks/%{workbook_key}/selectors/%{question_key}/delete'
-  sortQuestion: '/workbooks/%{workbook_key}/sort'
-  startChallenge: '/challenges/%{workbook_key}/new'
-  challengeResult: '/challenges/%{challenge_key}'
-  challengeQuestion: '/challenges/%{challenge_key}/%{index}'
-  challengeAnswer: '/challenges/%{challenge_key}/%{index}/answer'
-  challengeReview: '/challenges/%{challenge_key}/review'
-  challengeFinish: '/challenges/%{challenge_key}/finish'
+  q: '/q/:id'
+  qIndex: '/q'
+  mark: '/marks'
   render: (path, values)->
     _.reduce(values, (a, value, key)->
       a.replace("%{#{key}}", value)
     , Path[path])
-

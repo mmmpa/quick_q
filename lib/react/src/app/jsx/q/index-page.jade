@@ -1,0 +1,10 @@
+section.question-index.index
+  table.question-index.list
+    tbody
+      each question in index
+        tr
+          th.id= question.id
+          td.description
+            a(onClick=showQuestion(question) props=question)= question.description
+          td.way= question.wayText
+

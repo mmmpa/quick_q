@@ -1,4 +1,5 @@
 module.exports = Contexts = {}
+Contexts.BaseContext = require './base-context'
 Contexts.BlankContext = require './blank-context'
 Contexts.MainContext = require './main-context'
 Contexts.Menu = require './menu'

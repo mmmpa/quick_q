@@ -1,7 +1,15 @@
 #
 #
 #
-module.exports = class BlankContext extends Arda.Context
-  initState: (props) -> props
+module.exports = class BlankContext extends App.BaseContext
+  component: module.exports = Portal = React.createClass (
+    mixins: [Arda.mixin]
 
-  component: App.View.Portal
+    render: ->
+      App.JSX.portal()
+
+    componentDidMount: ->
+      console.log @
+  )
+
+  initState: (props) -> props

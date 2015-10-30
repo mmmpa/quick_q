@@ -1,0 +1,26 @@
+section.question-q.body
+  section.question-q.text
+    h1.question-q.q
+      Fa(icon='question-circle')
+      | 問題
+  section.question-q.question-area
+    div.question-q.q-text(dangerouslySetInnerHTML=question.marked)
+
+  section.question-q.answer
+    h1.question-q.a
+      Fa(icon='exclamation-circle')
+      | 答えは？
+
+    section.question-q.answer-area
+    if question.way == 'free_text'
+    else if question.way == 'ox'
+    else if question.way == 'single_choice'
+      SingleChoice(options=question.options answers=answers)
+    else if question.way == 'multiple_choices'
+    else if question.way == 'in_order'
+
+  section.question-q.control
+    button.question-q.button.submit(onClick=submit class=(is_active()))
+      Fa(icon='graduation-cap')
+      = ' '
+      | 正解を確認する

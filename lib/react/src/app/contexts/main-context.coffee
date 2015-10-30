@@ -8,11 +8,24 @@
 # - @menu グローバルメニューなどアプリケーション共通物を表示するルーター
 #
 module.exports = class MainContext extends Arda.Context
+  component: React.createClass (
+    mixins: [Arda.mixin]
+    render: ->
+      App.JSX.main()
+
+    componentDidMount: ->
+      routers = {
+        content: new Arda.Router(Arda.DefaultLayout, React.findDOMNode(@refs.content))
+        notifier: new Arda.Router(Arda.DefaultLayout, React.findDOMNode(@refs.notifier))
+        menu: new Arda.Router(Arda.DefaultLayout, React.findDOMNode(@refs.menu))
+      }
+      console.log 'Display mounted', routers
+      @dispatch 'display:initialized', routers
+  )
+
   _history = []
   _feature = []
   _now = 0
-
-  component: App.View.Display
 
   initState: (props) -> props
 
@@ -21,8 +34,11 @@ module.exports = class MainContext extends Arda.Context
   delegate: (subscribe) ->
     super
 
-    subscribe 'context:created', @_initializeRouter
-    subscribe 'context:created', @_initializeEventWatcher
+    subscribe 'context:created', ()->
+      @_initializeValuables()
+      @_initializeRouter()
+      @_initializeEventWatcher()
+
     subscribe 'display:initialized', @_initializeDisplay
     subscribe 'scene:replace', @_replaceScene
 
@@ -32,6 +48,19 @@ module.exports = class MainContext extends Arda.Context
 
     subscribe 'reload', =>
       @update((state) => state)
+
+    subscribe 'question:show', (q)->
+      @_replaceScene(App.Linker.get(App.Path.q, id: q.id))
+
+    subscribe 'inform:rendered', (q)->
+      MathJax.Hub.Typeset()
+
+  #
+  # Application method
+  #
+
+  strikeApi: (linker, forceReload)->
+    App.ApiStriker.strike(linker, forceReload)
 
   #
   # Initializer
@@ -49,41 +78,37 @@ module.exports = class MainContext extends Arda.Context
     @menu = routers.menu
 
     # 以降replaceContextで統一する
-    @content.pushContext(App.BlankContext, {name: 'Content'}).done =>
+    @content.pushContext(App.BlankContext, { name: 'Content' }).done =>
       @_initializeScene()
-    @notifier.pushContext(App.BlankContext, {name: 'Notifier'}).done =>
-      @notifier.replaceContext(App.Notifier.GodContext, {})
-    @menu.pushContext(App.BlankContext, {name: 'Menu'}).done =>
-      @menu.replaceContext(App.Menu.GlobalContext, {})
+    @notifier.pushContext(App.BlankContext, { name: 'Notifier' }).done =>
+      @notifier.replaceContext(App.Notifier.GodContext, { root: @ })
+    @menu.pushContext(App.BlankContext, { name: 'Menu' }).done =>
+      @menu.replaceContext(App.Menu.GlobalContext, { root: @ })
 
   _initializeRouter: ->
+    # 全てのコンテキストはメインコンテキストに通知を出せる
+    App.Cassette.root = @
+
     # これはuriから動作を振りわける一般的なルーター
     @router = new App.Router()
-    @router.add('/', (params)-> new App.Cassette(App.PortalContext, params))
+    #@router.add('/', (params)-> new App.Cassette(App.PortalContext, params))
+    @router.add('/', (params)-> new App.Cassette(App.Q.IndexContext, params))
+    @router.add('/q', (params)-> new App.Cassette(App.Q.IndexContext, params))
+    @router.add('/q/:id', (params)-> new App.Cassette(App.Q.QuestionContext, params))
 
   _initializeScene: ->
     @content.pushContext(@_detectCassette().forPusher()...)
+
+  _initializeValuables: ->
+
   #
   # History Manager
   #
   _backward: (e)=>
-    @.emit 'scene:change',
-      path: location.href
-      unhistorize: true
+    @content.pushContext(@_detectCassette().forPusher()...)
 
   _forward: (e)=>
-    @.emit 'scene:change',
-      path: location.href
-      unhistorize: true
-
-  _pushHistory: (body, header, path)->
-    if fitstHistroy
-      fitstHistroy = false
-      return
-    _history = _history[0.._now]
-    _now = _history.length
-    _history.push({ body: body, header: header, path: path })
-    history.pushState({ position: _history.length - 1 }, null, path)
+    @content.pushContext(@_detectCassette().forPusher()...)
 
   #
   # Helper
@@ -128,5 +153,8 @@ module.exports = class MainContext extends Arda.Context
   #
 
   _replaceScene: (linker) ->
+    history.pushState({}, null, linker.uri)
+    @content.pushContext(@_detectCassette().forPusher()...).then =>
+      MathJax.Hub.Typeset()
 
 
