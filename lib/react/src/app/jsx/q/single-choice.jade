@@ -2,6 +2,17 @@ ul.question-q.options
   each option, index in options
     li.question-q.option(onClick=toggle(option.id))
       div.question-q.checker
-        span.question-q.check(class=is_active(option.id))
-          Fa(icon='check' scale=2)
+        if is_marked()
+          if is_correct(option.id)
+            span.question-q.mark-on-check.correct
+              Fa(icon='circle-o')
+          else
+            span.question-q.mark-on-check.incorrect
+              Fa(icon='times')
+        if is_active(option.id)
+          span.question-q.check.active
+            Fa(icon='check' scale=2)
+        else
+          span.question-q.check
+            Fa(icon='check' scale=2)
       div.question-q.a-text(dangerouslySetInnerHTML=option.marked)

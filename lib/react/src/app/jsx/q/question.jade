@@ -5,22 +5,44 @@ section.question-q.body
       | 問題
   section.question-q.question-area
     div.question-q.q-text(dangerouslySetInnerHTML=question.marked)
-
   section.question-q.answer
     h1.question-q.a
       Fa(icon='exclamation-circle')
-      | 答えは？
+      = question.pleaseText
 
     section.question-q.answer-area
     if question.way == 'free_text'
     else if question.way == 'ox'
     else if question.way == 'single_choice'
-      SingleChoice(options=question.options answers=answers)
+      SingleChoice(options=question.options answers=answers result=result)
     else if question.way == 'multiple_choices'
     else if question.way == 'in_order'
 
-  section.question-q.control
-    button.question-q.button.submit(onClick=submit class=(is_active()))
+  if state == QuestionState.MARKED
+   section.question-q.result-area
+    div.question-q.mark-area
+     if result.is_correct()
+        h1.question-q.mark.correct= result.resultText
+      else
+        h1.question-q.mark.incorrect= result.resultText
+    h1.question-q.correct-answer
       Fa(icon='graduation-cap')
-      = ' '
-      | 正解を確認する
+      | 正解は...
+    div.question-q.answer-area(dangerouslySetInnerHTML=result.correctAnswer)
+  else
+   section.question-q.control
+    if state == QuestionState.ASKING
+      button.question-q.button.submit.disabled(disabled=true)
+        Fa(icon='graduation-cap')
+        = ' '
+        = question.pleaseText
+    else if state == QuestionState.ASKED
+      button.question-q.button.submit(onClick=submit)
+        Fa(icon='graduation-cap')
+        = ' '
+        | 正解を確認する
+    else if state == QuestionState.SUBMITTING
+      button.question-q.button.submit.disabled(disabled=true)
+        Fa(icon='spinner' animation='pulse')
+        = ' '
+        | 確認中...

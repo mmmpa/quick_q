@@ -6,6 +6,8 @@ body
 	color: #333
 	font-size: 16px
 	font-family: "Helvetica Neue", Helvetica, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif
+	overflow: scroll
+	padding: 40px
 
 article#quick-q,
 article#content
@@ -45,12 +47,33 @@ article#notifier
 
 .question-q
 	&.q,
-	&.a
+	&.a,
+	&.correct-answer
 		margin-top: 40px
 		font-size: 24px
 		font-weight: bold
 		border-bottom: 1px dotted $gray-light
 		padding-bottom: 10px
+	&.mark-area
+		text-align: center
+	&.mark
+		margin-top: 40px
+		display: inline-block
+		font-size: 40px
+		padding: 10px 40px
+		background: none
+		&.correct
+			color: $brand-primary
+		&.incorrect
+			color: $brand-danger
+	&.mark-on-check
+		position: absolute
+		font-size: 20px
+		margin-left: -10px
+		&.correct
+			color: $brand-primary
+		&.incorrect
+			color: $brand-danger
 	&.body
 		@extend .default-body
 	&.q-text,
@@ -87,6 +110,7 @@ article#notifier
 			color: $gray-lighter
 			&.active
 				color: $brand-success
+
 .question-index
 	&.index
 		@extend .default-body

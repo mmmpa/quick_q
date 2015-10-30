@@ -12,9 +12,25 @@ module.exports = class Question
     @description = App.Question.trim(@marked.__html).slice(0, 40)
     @way = obj.way || ''
     @wayText = App.Question.detectWayText(@way)
+    @pleaseText = App.Question.detectPleaseText(@way)
 
   @trim = (html)->
     html.replace(/<.*?>/igm, '')
+
+  @detectPleaseText = (way)->
+    switch way
+      when 'single_choice'
+        'ひとつ選んでください'
+      when 'multiple_choices'
+        'すべて選んでください'
+      when 'free_text'
+        '答えを入力してください'
+      when 'in_order'
+        'すべて選択してください'
+      when 'ox'
+        'いずれかを選んでください'
+      else
+        ''
 
   @detectWayText = (way)->
     switch way
