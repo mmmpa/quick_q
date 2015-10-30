@@ -8,15 +8,19 @@ module.exports = class QuestionContext extends App.BaseContext
       console.log @props
       return React.createElement('div', {}) if @props.state == App.QuestionState.LOADING
       App.JSX.Q.question(
-        state: @props.state
-        QuestionState: App.QuestionState
-        question: @props.question
-        answers: @props.answers
         Fa: App.View.Fa
         SingleChoice: App.View.SingleChoice
+        MultipleChoices: App.View.MultipleChoices
+        FreeText: App.View.FreeText
+        Ox: App.View.Ox
+        QuestionState: App.QuestionState
+
+        state: @props.state
+        question: @props.question
+        answers: @props.answers
         result: @props.result
+
         submit: =>
-          return unless @props.answers
           @dispatch('question:submit')
       )
 
@@ -49,7 +53,9 @@ module.exports = class QuestionContext extends App.BaseContext
       @update (s) ->
         if s.state == App.QuestionState.ASKING
           s.state = App.QuestionState.ASKED
-        _.merge(s, answers: answer)
+        # _.mergeは内部の配列もmergeで処理してしまうため
+        s.answers = answer
+        s
 
     subscribe 'question:submit', ->
       return unless @is_submittable()

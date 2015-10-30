@@ -74,6 +74,24 @@ article#notifier
 			color: $brand-primary
 		&.incorrect
 			color: $brand-danger
+	&.ox-control
+		text-align: center
+	&.ox-button
+		transition: all 0.2s ease-in-out
+		display: inline-block
+		font-size: 60px
+		overflow: hidden
+		width: 150px
+		height: 150px
+		line-height: 150px
+		text-align: center
+		color: $gray
+		&.active
+			font-size: 120px
+		&.o.active
+			color: $brand-primary
+		&.x.active
+			color: $brand-danger
 	&.body
 		@extend .default-body
 	&.q-text,

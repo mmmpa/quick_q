@@ -15,6 +15,46 @@ namespace :q do
     end
   end
 
+  desc 'db/csv内のファイルをインポートする（not アップデート）'
+  task :create_from_csv => :environment do
+    Qa::Question.transaction do
+      Dir[File.expand_path("#{Rails.root}/db/csv/multiple/*.csv", __FILE__)].each do |file_path|
+        # テンプレートは除外
+        next if file_path.include?('template')
+
+        CoordinateQuestion.from(csv: File.read(file_path), way: :multiple_choices)
+      end
+
+      Dir[File.expand_path("#{Rails.root}/db/csv/order/*.csv", __FILE__)].each do |file_path|
+        # テンプレートは除外
+        next if file_path.include?('template')
+
+        CoordinateQuestion.from(csv: File.read(file_path), way: :in_order)
+      end
+
+      Dir[File.expand_path("#{Rails.root}/db/csv/ox/*.csv", __FILE__)].each do |file_path|
+        # テンプレートは除外
+        next if file_path.include?('template')
+
+        CoordinateQuestion.from(csv: File.read(file_path), way: :ox)
+      end
+
+      Dir[File.expand_path("#{Rails.root}/db/csv/single/*.csv", __FILE__)].each do |file_path|
+        # テンプレートは除外
+        next if file_path.include?('template')
+
+        CoordinateQuestion.from(csv: File.read(file_path), way: :single_choice)
+      end
+
+      Dir[File.expand_path("#{Rails.root}/db/csv/text/*.csv", __FILE__)].each do |file_path|
+        # テンプレートは除外
+        next if file_path.include?('template')
+
+        CoordinateQuestion.from(csv: File.read(file_path), way: :free_text)
+      end
+    end
+  end
+
   desc 'db/md内のファイルをインポートする（not アップデート）'
   task :create_from_md => :environment do
     Dir[File.expand_path("#{Rails.root}/db/md/**/*.md", __FILE__)].each do |file_path|
