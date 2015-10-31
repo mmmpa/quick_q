@@ -26,7 +26,7 @@ module.exports = class Question
       when 'free_text'
         '答えを入力してください'
       when 'in_order'
-        'すべて選択してください'
+        'それぞれに対応するものを選んでください'
       when 'ox'
         'いずれかを選んでください'
       else

@@ -13,6 +13,7 @@ module.exports = class QuestionContext extends App.BaseContext
         MultipleChoices: App.View.MultipleChoices
         FreeText: App.View.FreeText
         Ox: App.View.Ox
+        InOrder: App.View.InOrder
         QuestionState: App.QuestionState
 
         state: @props.state

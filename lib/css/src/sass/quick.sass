@@ -92,6 +92,28 @@ article#notifier
 			color: $brand-primary
 		&.x.active
 			color: $brand-danger
+	&.order
+		&.selector
+			@extend .form-control
+			min-width: 200px
+		&.number,
+		&.select
+			display: table-cell
+		&.number
+			padding: 10px 10px 10px 0
+			span
+				text-align: center
+				width: 30px
+				height: 30px
+				display: inline-block
+				background: #333
+				color: #fff
+				font-weight: bold
+				border-radius: 40px
+		&.select
+			list-style: none
+			padding: 0
+			line-height: 100%
 	&.body
 		@extend .default-body
 	&.q-text,

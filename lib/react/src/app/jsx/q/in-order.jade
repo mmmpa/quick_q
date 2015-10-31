@@ -1,0 +1,9 @@
+each selector, index in options
+  section
+    div.question-q.order.number
+      span= index
+    div.question-q.order.select
+      select.question-q.order.selector(onChange=select name=index)
+       option 未選択
+       each option, index in options
+          option(dangerouslySetInnerHTML=option.marked value=option.id)

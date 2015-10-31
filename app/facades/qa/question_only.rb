@@ -19,6 +19,8 @@ module Qa
       case
         when free_text?, ox?
           {}
+        when in_order?
+          {options: options_for_choice, answers_number: correct_answers.count}
         else
           {options: options_for_choice}
       end

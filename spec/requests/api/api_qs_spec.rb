@@ -116,7 +116,7 @@ module Api
         end
       end
 
-      it_behaves_like 'response for have options question' do
+      it_behaves_like 'response for in order question' do
         before :each do
           get api_question_path(Qa::Question.in_order.take.id)
         end

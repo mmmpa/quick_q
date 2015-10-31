@@ -3,6 +3,7 @@ module.exports = JSX = {
   portal: require './portal.js'
   Q:
     freeText: require './q/free-text.js'
+    inOrder: require './q/in-order.js'
     indexPage: require './q/index-page.js'
     ox: require './q/ox.js'
     question: require './q/question.js'
