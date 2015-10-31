@@ -1,8 +1,3 @@
-jsdom = require 'jsdom'
-global.navigator = { userAgent: 'node.js' }
-global.document = jsdom.jsdom('<!doctype html><html><p id="main"></p><article id="app"></article></html>')
-global.window = document.defaultView
-
 config = require '../../helper'
 assert = require 'power-assert'
 
