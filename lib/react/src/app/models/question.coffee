@@ -4,13 +4,17 @@
 module.exports = class Question
   constructor: (obj)->
     @id = obj.id
+    @way = obj.way || ''
     @text = obj.text || ''
     @options = (_.map(obj.options || [], (option) =>
       id: option.id
-      marked: { __html: marked(option.text) }
+      marked: if @isInOrder()
+        { __html: Question.trim(marked(option.text)) }
+      else
+        { __html: marked(option.text) }
     ))
+
     @answersNumber = obj.answers_number || -1
-    @way = obj.way || ''
 
     @marked = { __html: marked(@text) }
     @description = Question.trim(@marked.__html).slice(0, 40)

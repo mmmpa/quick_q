@@ -5,7 +5,6 @@ module.exports = class QuestionContext extends App.BaseContext
     mixins: [Arda.mixin]
 
     render: ->
-      console.log @props
       return React.createElement('div', {}) if @props.state == App.QuestionState.LOADING
       App.JSX.Q.question(
         Fa: App.View.Fa

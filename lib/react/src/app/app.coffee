@@ -1,4 +1,4 @@
-console.log 'loading app'
+console.log 'loading app' unless global
 
 module.exports = App = {}
 
@@ -8,7 +8,7 @@ if window?
 if global?
   global.App = App
 
-console.log 'loading module'
+console.log 'loading module' unless global
 
 
 _.merge(App, require './models')
@@ -27,6 +27,5 @@ _.merge(App, require './contexts')
 App.start = (node)->
   router = new Arda.Router(Arda.DefaultLayout, node)
   router.pushContext(App.MainContext)
-
 
 

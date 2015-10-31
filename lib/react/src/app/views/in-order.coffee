@@ -7,7 +7,7 @@ module.exports = SingleChoice = React.createClass(
       Fa: App.View.Fa
 
       options: q.options
-      answersNumber:q.answersNumber
+      answersNumber: q.answersNumber
 
       isActive: (id)=> @props.answers == id
       isMarked: => @props.result?
