@@ -1,9 +1,18 @@
-each selector, index in options
+- var n = 0
+while n < answersNumber
   section
     div.question-q.order.number
-      span= index
+      if isMarked()
+        if isCorrect(n)
+          span.question-q.mark-on-check.correct
+            Fa(icon='circle-o')
+        else
+          span.question-q.mark-on-check.incorrect
+            Fa(icon='times')
+      span.number-circle= n + 1
     div.question-q.order.select
-      select.question-q.order.selector(onChange=select name=index)
-       option 未選択
+      select.question-q.order.selector(onChange=select name=n disabled=isMarked())
+       option(value='') 未選択
        each option, index in options
           option(dangerouslySetInnerHTML=option.marked value=option.id)
+  - n++

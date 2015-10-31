@@ -3,11 +3,13 @@ module.exports = SingleChoice = React.createClass(
 
   render: ()->
     App.JSX.Q.singleChoice(
-      options: @props.options
       Fa: App.View.Fa
-      is_active: (id)=> @props.answers == id
-      is_marked: => @props.result?
-      is_correct: (id)=> @props.result.answers[0] == id
+
+      options: @props.options
+
+      isActive: (id)=> @props.answers == id
+      isCorrect: (id)=> @props.result.answers[0] == id
+      isMarked: => @props.result?
       toggle: (index)=>
         @dispatch('question:answer', index)
     )

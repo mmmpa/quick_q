@@ -1,48 +1,66 @@
+#
+# 出題用APIのquestionを整形するモデル
+#
 module.exports = class Question
   constructor: (obj)->
     @id = obj.id
     @text = obj.text || ''
-    @options = (for option in obj.options || []
-      {
-        id: option.id
-        marked: {__html: marked(option.text)}
-      }
-    )
-    @marked = {__html: marked(@text)}
-    @description = App.Question.trim(@marked.__html).slice(0, 40)
+    @options = (_.map(obj.options || [], (option) =>
+      id: option.id
+      marked: { __html: marked(option.text) }
+    ))
+    @answersNumber = obj.answers_number || -1
     @way = obj.way || ''
-    @wayText = App.Question.detectWayText(@way)
-    @pleaseText = App.Question.detectPleaseText(@way)
+
+    @marked = { __html: marked(@text) }
+    @description = Question.trim(@marked.__html).slice(0, 40)
+    @wayText = Question.detectWayText(@)
+    @pleaseText = Question.detectPleaseText(@)
+
+  isSingleChoice: ->
+    @way == 'single_choice'
+
+  isMultipleChoices: ->
+    @way == 'multiple_choices'
+
+  isFreeText: ->
+    @way == 'free_text'
+
+  isInOrder: ->
+    @way == 'in_order'
+
+  isOx: ->
+    @way == 'ox'
 
   @trim = (html)->
     html.replace(/<.*?>/igm, '')
 
-  @detectPleaseText = (way)->
-    switch way
-      when 'single_choice'
+  @detectPleaseText = (q)->
+    switch
+      when q.isSingleChoice()
         'ひとつ選んでください'
-      when 'multiple_choices'
-        'すべて選んでください'
-      when 'free_text'
+      when q.isMultipleChoices()
+        '適切なものをすべて選んでください'
+      when q.isFreeText()
         '答えを入力してください'
-      when 'in_order'
+      when q.isInOrder()
         'それぞれに対応するものを選んでください'
-      when 'ox'
+      when q.isOx()
         'いずれかを選んでください'
       else
         ''
 
-  @detectWayText = (way)->
-    switch way
-      when 'single_choice'
+  @detectWayText = (q)->
+    switch
+      when q.isSingleChoice()
         '一つだけ選択'
-      when 'multiple_choices'
+      when q.isMultipleChoices()
         '複数選択'
-      when 'free_text'
+      when q.isFreeText()
         'テキスト入力'
-      when 'in_order'
+      when q.isInOrder()
         '順に並べる'
-      when 'ox'
+      when q.isOx()
         'ox問題'
       else
         ''

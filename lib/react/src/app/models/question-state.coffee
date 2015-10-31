@@ -1,3 +1,6 @@
+#
+# Q.QuestionContextのステートを統一する
+#
 module.exports = class QuestionState
   # 問題表示用にapiを叩いている
   @LOADING = 'loading'

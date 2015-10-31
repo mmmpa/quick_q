@@ -5,9 +5,8 @@ module.exports = App = {}
 
 if window?
   window.App = App
-else
+if global?
   global.App = App
-
 
 console.log 'loading module'
 
@@ -24,8 +23,6 @@ App.BaseContext = require './contexts/base-context'
 
 # contextsはクラスを直接参照するため、他のクラスの後に読み込む必要がある。
 _.merge(App, require './contexts')
-
-console.log 'loaded app', App
 
 App.start = (node)->
   router = new Arda.Router(Arda.DefaultLayout, node)

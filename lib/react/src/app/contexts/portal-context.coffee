@@ -2,7 +2,7 @@
 #
 #
 module.exports = class BlankContext extends App.BaseContext
-  component: module.exports = Portal = React.createClass (
+  component: Portal = React.createClass (
     mixins: [Arda.mixin]
 
     render: ->

@@ -1,4 +1,5 @@
 window.React   = require 'react'
+window.ReactDOM   = require 'react-dom'
 window.Promise = require 'bluebird'
 window.Arda = require 'arda'
 window._ = require 'lodash'

@@ -1,15 +1,13 @@
+#
+# 正解確認用のmarks APIの結果を整形するモデル
+#
 module.exports = class Mark
   constructor: (@mark, @options)->
-    @resultText = if @mark.mark
-      '正解!!'
-    else
-      '不正解'
-
-    @answers = _.flatten([@mark.correct_answer])
+    @resultText = Mark.detectResultText(@)
+    @answers = Mark.arralize(@mark.correct_answer)
 
     @correctAnswer = {
       __html: if @options.length
-
         _.map(@answers, (id)=>
           _.find(@options, (option)=>
             option.id == id
@@ -19,5 +17,18 @@ module.exports = class Mark
         @mark.correct_answer
     }
 
-  is_correct: ->
+  isCorrect: ->
     @mark.mark
+
+  @arralize = (value)->
+    if _.isArray(value)
+      value
+    else
+      [value]
+
+  @detectResultText = (mark)->
+    if mark.isCorrect()
+      '正解!!'
+    else
+      '不正解'
+

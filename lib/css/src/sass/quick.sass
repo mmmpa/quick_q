@@ -45,6 +45,7 @@ article#notifier
 	margin: 0 auto
 	max-width: 800px
 
+
 .question-q
 	&.q,
 	&.a,
@@ -92,6 +93,8 @@ article#notifier
 			color: $brand-primary
 		&.x.active
 			color: $brand-danger
+	&.free-text
+		@extend .form-control
 	&.order
 		&.selector
 			@extend .form-control
@@ -101,13 +104,12 @@ article#notifier
 			display: table-cell
 		&.number
 			padding: 10px 10px 10px 0
-			span
+			.number-circle
 				text-align: center
 				width: 30px
 				height: 30px
 				display: inline-block
-				background: #333
-				color: #fff
+				background: $gray-lighter
 				font-weight: bold
 				border-radius: 40px
 		&.select

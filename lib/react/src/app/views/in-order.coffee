@@ -2,12 +2,16 @@ module.exports = SingleChoice = React.createClass(
   mixins: [Arda.mixin]
 
   render: ()->
+    q = @props.question
     App.JSX.Q.inOrder(
-      options: @props.options
       Fa: App.View.Fa
-      is_active: (id)=> @props.answers == id
-      is_marked: => @props.result?
-      is_correct: (id)=> @props.result.answers[0] == id
+
+      options: q.options
+      answersNumber:q.answersNumber
+
+      isActive: (id)=> @props.answers == id
+      isMarked: => @props.result?
+      isCorrect: (index, id)=> +@props.answers[index] == @props.result.answers[index]
       select: (e)=>
         new_answers = @props.answers?.concat() || []
         new_answers[e.target.name] = e.target.value

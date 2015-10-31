@@ -1,4 +1,5 @@
 #
+# apiアクセス方法を統一するサービスクラス
 # 一度アクセスしたapiのデータは保持する（GETのみ）
 #
 module.exports = class ApiStriker
@@ -6,7 +7,7 @@ module.exports = class ApiStriker
 
   @strike = (linker, forceReload)->
     if !forceReload && linker.is_get && @_struck[linker.key]
-      # Promiceを期待されるので空うちする。
+      # Promiseを期待されるので空うちする。
       return new Promise((resolve, reject)=>
         resolve(@_struck[linker.key])
       )

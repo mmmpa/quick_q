@@ -39,27 +39,39 @@ module.exports = class QuestionContext extends App.BaseContext
   expandComponentProps: (props, state) ->
     state
 
-  is_answerable: ->
+  isAnswerable: ->
     @state.state == App.QuestionState.ASKING || @state.state == App.QuestionState.ASKED
 
-  is_submittable: ->
+  isSubmittable: ->
     @state.state == App.QuestionState.ASKED
+
+  isInOrder: ->
+    @state.question.isInOrder()
+
+  isAnswersFullFilled: ->
+    if @isInOrder()
+      !_.include(@state.answers, '') && !_.include(@state.answers, null) && !_.include(@state.answers, undefined)
+    else
+      !_.isNull(@state.answers) && (@state.answers.length > 0 || _.isNumber(@state.answers))
 
   delegate: (subscribe) ->
     super
     subscribe 'context:started', -> @_initializeQuestion()
     subscribe 'question:show', (q)-> @root.emit('question:show', q)
     subscribe 'question:answer', (answer)->
-      return unless @is_answerable()
+      return unless @isAnswerable()
       @update (s) ->
-        if s.state == App.QuestionState.ASKING
-          s.state = App.QuestionState.ASKED
         # _.mergeは内部の配列もmergeで処理してしまうため
         s.answers = answer
         s
+      .then =>
+        if @isAnswersFullFilled()
+          @update (s) -> _.merge(s, state: App.QuestionState.ASKED)
+        else
+          @update (s) -> _.merge(s, state: App.QuestionState.ASKING)
 
     subscribe 'question:submit', ->
-      return unless @is_submittable()
+      return unless @isSubmittable()
       @update (s) -> _.merge(s, state: App.QuestionState.SUBMITTING)
       @strikeApi(App.Linker.post(App.Path.mark, id: @state.question.id, answers: @state.answers)).then (data)=>
         @update (s) -> _.merge(s,
@@ -73,3 +85,7 @@ module.exports = class QuestionContext extends App.BaseContext
         question: new App.Question(data)
         state: App.QuestionState.ASKING
       )
+      .then =>
+        if @isInOrder()
+          @update (s) -> _.merge(s, answers: new Array(s.question.answersNumber))
+

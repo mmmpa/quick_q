@@ -20,12 +20,12 @@ section.question-q.body
     else if question.way == 'multiple_choices'
       MultipleChoices(options=question.options answers=answers result=result)
     else if question.way == 'in_order'
-      InOrder(options=question.options answers=answers result=result)
+      InOrder(question=question answers = answers result=result)
 
   if state == QuestionState.MARKED
    section.question-q.result-area
     div.question-q.mark-area
-     if result.is_correct()
+     if result.isCorrect()
         h1.question-q.mark.correct
           Fa(icon='thumbs-o-up')
           = result.resultText
