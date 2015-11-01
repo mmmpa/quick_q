@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151025190710) do
+ActiveRecord::Schema.define(version: 20151101053348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,22 @@ ActiveRecord::Schema.define(version: 20151025190710) do
   end
 
   add_index "qa_questions", ["name"], name: "index_qa_questions_on_name", unique: true, using: :btree
+
+  create_table "qa_quotes", force: :cascade do |t|
+    t.integer "question_id"
+    t.integer "source_link_id"
+  end
+
+  add_index "qa_quotes", ["question_id", "source_link_id"], name: "index_qa_quotes_on_question_id_and_source_link_id", unique: true, using: :btree
+  add_index "qa_quotes", ["question_id"], name: "index_qa_quotes_on_question_id", using: :btree
+  add_index "qa_quotes", ["source_link_id"], name: "index_qa_quotes_on_source_link_id", using: :btree
+
+  create_table "qa_source_links", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "url",  null: false
+  end
+
+  add_index "qa_source_links", ["url"], name: "index_qa_source_links_on_url", unique: true, using: :btree
 
   create_table "selection_selected_questions", force: :cascade do |t|
     t.integer "selection_id"

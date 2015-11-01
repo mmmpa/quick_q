@@ -122,6 +122,8 @@ module Qa
     has_one :premise, through: :pal
     has_many :selected, class_name: 'Selection::SelectedQuestion', dependent: :destroy
     has_many :selections, class_name: 'Selection::Selection', through: :selected
+    has_one :quote, dependent: :destroy
+    has_one :source_link
 
     validates :name, :text, :way,
               presence: true
