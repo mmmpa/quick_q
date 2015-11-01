@@ -1,4 +1,5 @@
 module.exports = JSX = {
+  loading: require './loading.js'
   main: require './main.js'
   portal: require './portal.js'
   Q:

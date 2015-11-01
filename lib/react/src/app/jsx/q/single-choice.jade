@@ -1,6 +1,6 @@
 ul.question-q.options
   each option, index in options
-    li.question-q.option(onClick=toggle(option.id))
+    li.question-q.option(onClick=toggle(option.id) key=option.id)
       div.question-q.checker
         if isMarked()
           if isCorrect(option.id)

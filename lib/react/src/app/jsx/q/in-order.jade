@@ -1,6 +1,6 @@
 - var n = 0
 while n < answersNumber
-  section
+  section(key=n)
     div.question-q.order.number
       if isMarked()
         if isCorrect(n)
@@ -11,8 +11,8 @@ while n < answersNumber
             Fa(icon='times')
       span.number-circle= n + 1
     div.question-q.order.select
-      select.question-q.order.selector(onChange=select name=n disabled=isMarked())
+      select.question-q.order.selector(onChange=select name=n disabled=isMarked() value=selected(n))
         option(value='') 未選択
         each opt, index in options
-          option(value=opt.id)= opt.marked.__html
+          option(value=opt.id key=opt.id)= opt.marked.__html
   - n++

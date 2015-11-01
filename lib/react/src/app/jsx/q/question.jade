@@ -20,7 +20,7 @@ section.question-q.body
     else if question.way == 'multiple_choices'
       MultipleChoices(options=question.options answers=answers result=result)
     else if question.way == 'in_order'
-      InOrder(question=question answers = answers result=result)
+      InOrder(question=question answers=answers result=result)
 
   if state == QuestionState.MARKED
    section.question-q.result-area

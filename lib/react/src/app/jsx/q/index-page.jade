@@ -2,7 +2,7 @@ section.question-index.index
   table.question-index.list
     tbody
       each question in index
-        tr
+        tr(key=question.id)
           th.id= question.id
           td.description
             a(onClick=showQuestion(question) props=question)= question.description

@@ -2,6 +2,7 @@ jsdom = require 'jsdom'
 global.navigator = { userAgent: 'node.js' }
 global.document = jsdom.jsdom('<!doctype html><html><p id="main"></p><article id="app"></article></html>')
 global.window = document.defaultView
+global.$ = require('jquery')
 
 global.React = require 'react'
 global.Promise = require 'bluebird'
