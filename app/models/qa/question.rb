@@ -47,6 +47,7 @@ module Qa
   # - answers free_text, ox問題の場合の正答。
   # - options 解答選択肢のhash。{text: '選択肢1', correct_answer: true} # or false
   # - order in_orderの正答順。optionsの*index*で指定する
+  # - source_link 出典。create時に使う場合は前もって登録しておく。
   #
   # == Examples
   #
@@ -122,11 +123,14 @@ module Qa
     has_one :premise, through: :pal
     has_many :selected, class_name: 'Selection::SelectedQuestion', dependent: :destroy
     has_many :selections, class_name: 'Selection::Selection', through: :selected
-    has_one :quote, dependent: :destroy
-    has_one :source_link
+
+    belongs_to :source_link, inverse_of: :questions
 
     validates :name, :text, :way,
               presence: true
+
+    validates :source_link,
+              presence: {if: :source_link_id}
 
     validates :way,
               inclusion: {in: Question.ways}

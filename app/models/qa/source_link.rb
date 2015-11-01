@@ -10,13 +10,12 @@ module Qa
   #
 
   class SourceLink < ActiveRecord::Base
-    has_many :quotes
-    has_many :questions, through: :quotes
+    has_many :questions
 
-    validates :name, :url,
+    validates :name, :url, :display,
               presence: true
 
-    validates :url,
+    validates :name,
               uniqueness: true
   end
 end

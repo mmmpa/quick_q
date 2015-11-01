@@ -6,10 +6,10 @@ RSpec.describe Qa::SourceLink, type: :model do
 
 
   describe 'validation' do
-    context 'when url is already used' do
+    context 'when name is already used' do
       before :each do
-        create(:qa_source_link, :valid, url: 'a')
-        model.url = 'a'
+        create(:qa_source_link, :valid, name: 'a')
+        model.name = 'a'
       end
 
       it_behaves_like 'invalid model'
@@ -38,23 +38,17 @@ RSpec.describe Qa::SourceLink, type: :model do
     context 'when name is input' do
       it_behaves_like 'valid model'
     end
-  end
 
-  describe 'assciation' do
-    context 'with question' do
-      let(:question) { create(:qa_question, :valid) }
-
-      it do
-        model.save!
-        model.questions << question
-        expect(model.questions(true).size).to eq(1)
+    context 'when display is blank' do
+      before :each do
+        model.display = nil
       end
 
-      it do
-        model.save!
-        model.questions << question
-        expect { model.questions << question }.to raise_error(ActiveRecord::RecordInvalid)
-      end
+      it_behaves_like 'invalid model'
+    end
+
+    context 'when url is input' do
+      it_behaves_like 'valid model'
     end
   end
 end

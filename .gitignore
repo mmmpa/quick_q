@@ -3,6 +3,6 @@
 !/log/.keep
 /tmp
 /db/md
-/db/md
 /db/json
 node_modules
+/db/csv

@@ -498,6 +498,14 @@ RSpec.describe Qa::Question, type: :model do
       it_behaves_like 'invalid model'
     end
 
+    context 'when source link is not exist' do
+      before :each do
+        model.source_link_id = 0
+      end
+
+      it_behaves_like 'invalid model'
+    end
+
     context 'when all are input' do
       it_behaves_like 'valid model'
     end

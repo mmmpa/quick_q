@@ -5,6 +5,16 @@
 #
 
 namespace :q do
+  desc '問題の出典元を登録する'
+  task :create_from_json => :environment do
+    Dir[File.expand_path("#{__dir__}/db/csv/link/*.csv", __FILE__)].each do |file_path|
+      # テンプレートは除外
+      next if file_path.include?('template')
+
+      CreateSourceLink.from(json: File.read(file_path))
+    end
+  end
+
   desc 'db/json内の問題集データから問題のみを作成する'
   task :create_from_json => :environment do
     Dir[File.expand_path("#{__dir__}/db/md/**/*.json", __FILE__)].each do |file_path|
