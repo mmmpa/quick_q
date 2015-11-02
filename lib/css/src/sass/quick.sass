@@ -48,6 +48,21 @@ article#notifier
 .common-loading
 	@extend .default-body
 
+.paginator
+	&.list
+		margin: 0
+		padding: 0
+	&.body
+		list-style: none
+		display: inline-block
+		margin-right: 5px
+	&.anchor
+		@extend .btn
+		&.now
+			@extend .btn-default
+		&.ready
+			@extend .btn-primary
+
 .question-q
 	&.q,
 	&.a,
@@ -156,6 +171,9 @@ article#notifier
 				color: $brand-success
 
 .question-index
+	&.paginator.area
+		@extend .default-body
+		margin: 40px auto
 	&.index
 		@extend .default-body
 	&.list

@@ -5,13 +5,43 @@
 #
 
 namespace :q do
-  desc '問題の出典元を登録する'
-  task :create_from_json => :environment do
-    Dir[File.expand_path("#{__dir__}/db/csv/link/*.csv", __FILE__)].each do |file_path|
+  desc 'タグを登録する'
+  task :register_tag => :environment do
+    Dir[File.expand_path("#{Rails.root}/db/csv/tag/**/*.csv", __FILE__)].each do |file_path|
       # テンプレートは除外
       next if file_path.include?('template')
 
-      CreateSourceLink.from(json: File.read(file_path))
+      RegisterTag.(File.read(file_path))
+    end
+  end
+
+  desc '問題にタギングする'
+  task :tag_q_to_tag => :environment do
+    Dir[File.expand_path("#{Rails.root}/db/csv/tagging/**/*.csv", __FILE__)].each do |file_path|
+      # テンプレートは除外
+      next if file_path.include?('template')
+
+      TagQToTag.(File.read(file_path))
+    end
+  end
+
+  desc '問題の出典元を登録する'
+  task :register_source => :environment do
+    Dir[File.expand_path("#{Rails.root}/db/csv/link/**/*.csv", __FILE__)].each do |file_path|
+      # テンプレートは除外
+      next if file_path.include?('template')
+
+      RegisterSourceLink.(File.read(file_path))
+    end
+  end
+
+  desc '問題を出典にリンクする'
+  task :link_q_to_src => :environment do
+    Dir[File.expand_path("#{Rails.root}/db/csv/linking/**/*.csv", __FILE__)].each do |file_path|
+      # テンプレートは除外
+      next if file_path.include?('template')
+
+      LinkQToSource.(File.read(file_path))
     end
   end
 

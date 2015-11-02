@@ -87,7 +87,7 @@ config.params =
     text: '# 問題文'
     way: 'free_text'
 
-   :
+  ox:
     id: 1
     text: '# 問題文'
     way: 'ox'

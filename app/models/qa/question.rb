@@ -121,6 +121,8 @@ module Qa
     has_one :explanation, dependent: :destroy
     has_one :pal, dependent: :destroy
     has_one :premise, through: :pal
+    has_many :questions_tags, dependent: :destroy
+    has_many :tags, through: :questions_tags
     has_many :selected, class_name: 'Selection::SelectedQuestion', dependent: :destroy
     has_many :selections, class_name: 'Selection::Selection', through: :selected
 
@@ -204,6 +206,8 @@ module Qa
     # ダイレクトに反映される
     #
     def arrange!
+      return if persisted? && answers.nil? && options.nil?
+
       case
         when free_text?
           arrange_for_free_text!

@@ -2,6 +2,7 @@ config = require '../helper'
 assert = require 'power-assert'
 Question = require config.path('model', 'question')
 
+
 describe 'Question', ->
   describe 'Base', ->
     it 'attributes', ->

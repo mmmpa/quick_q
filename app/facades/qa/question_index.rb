@@ -13,5 +13,15 @@ module Qa
       options.merge!(only: [:id, :text, :way])
       super
     end
+
+    class << self
+      def header_information(page, per)
+        {
+          'Total-Pages' => (count / per).to_s,
+          'Per-Page' => per.to_s,
+          'Current-Page' => page.to_s,
+        }
+      end
+    end
   end
 end

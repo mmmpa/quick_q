@@ -15,14 +15,20 @@ module.exports = class Linker
     @key = @uri + '::' + (for key, value of @params
         "#{key}:#{value}"
       ).join('::')
+    @paramsUri = if @isGet && @params
+      @uri + '?' + (for key, value of @params
+        encodeURIComponent(key) + "=" + encodeURIComponent(value)
+      ).join('&')
+    else
+      @uri
 
   _replacePlaceholder: ->
     while @uri.match(/(:([0-9_a-z]+))/)
       @uri = @uri.replace(RegExp.$1, @params[RegExp.$2] || '-')
       delete @params[RegExp.$2]
 
-  is_get: ->
-    @methd == 'get'
+  isGet: ->
+    @method == 'get'
 
   @delete = (uri, params)->
     new @('delete', uri, params)

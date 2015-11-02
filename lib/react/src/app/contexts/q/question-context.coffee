@@ -74,14 +74,14 @@ module.exports = class QuestionContext extends App.BaseContext
       @update (s) -> _.merge(s, state: App.QuestionState.SUBMITTING)
       @strikeApi(App.Linker.post(App.Path.mark, id: @state.question.id, answers: @state.answers)).then (data)=>
         @update (s) -> _.merge(s,
-          result: new App.Mark(data, s.question.options)
+          result: new App.Mark(data.body, s.question.options)
           state: App.QuestionState.MARKED
         )
 
   _initializeQuestion: ->
     @strikeApi(App.Linker.get(App.Path.q, id: @props.id)).then (data)=>
       @update (s) -> _.merge(s,
-        question: new App.Question(data)
+        question: new App.Question(data.body)
         state: App.QuestionState.ASKING
       )
       .then =>

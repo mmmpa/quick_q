@@ -1,0 +1,8 @@
+section.question-index.paginator.area
+  ul.question-index.paginator.list
+    each link in links
+      li(key=link.page).question-index.paginator.body
+        if link.isCurrent
+          a.question-index.paginator.anchor.now(onClick=paginate(link.page))= link.page
+        else
+          a.question-index.paginator.anchor.ready(onClick=paginate(link.page))= link.page

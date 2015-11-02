@@ -10,7 +10,8 @@ module Api
 
   class QController < BaseController
     def index
-      render json: Qa::QuestionIndex.newer_page(page, par)
+      response.headers.merge!(Qa::QuestionIndex.header_information(page, per))
+      render json: Qa::QuestionIndex.newer_page(page, per)
     end
 
     def show
@@ -24,9 +25,9 @@ module Api
       page_num > 0 ? page_num : Q_DEFAULT_PAGE
     end
 
-    def par
-      par_num = params[:par].to_i
-      par_num > 0 ? par_num : Q_DEFAULT_PAR
+    def per
+      per_num = params[:per].to_i
+      per_num > 0 ? per_num : Q_DEFAULT_PER
     end
   end
 end

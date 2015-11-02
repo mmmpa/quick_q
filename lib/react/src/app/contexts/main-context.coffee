@@ -45,6 +45,7 @@ module.exports = class MainContext extends Arda.Context
     subscribe 'notify:success', (title, message)=>
 
     subscribe 'notify:fail', (title, message)=>
+    subscribe 'history:push', (linker)=> history.pushState({}, null, linker.paramsUri)
 
     subscribe 'reload', =>
       @update((state) => state)

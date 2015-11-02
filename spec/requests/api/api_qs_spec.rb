@@ -24,8 +24,8 @@ module Api
     shared_examples 'with default parameter' do
       it do
         expect(response).to have_http_status(200)
-        expect(result_hash.size).to eq(Q_DEFAULT_PAR)
-        expect(ids).to match_array(@all_ids[0, Q_DEFAULT_PAR])
+        expect(result_hash.size).to eq(Q_DEFAULT_PER)
+        expect(ids).to match_array(@all_ids[0, Q_DEFAULT_PER])
       end
     end
 
@@ -42,8 +42,8 @@ module Api
         it do
           get api_questions_path(page: 2)
           expect(response).to have_http_status(200)
-          expect(result_hash.size).to eq(@all_ids.size - Q_DEFAULT_PAR)
-          expect(ids).to match_array(@all_ids[Q_DEFAULT_PAR, Q_DEFAULT_PAR])
+          expect(result_hash.size).to eq(@all_ids.size - Q_DEFAULT_PER)
+          expect(ids).to match_array(@all_ids[Q_DEFAULT_PER, Q_DEFAULT_PER])
         end
 
         it do

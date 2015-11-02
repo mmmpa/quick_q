@@ -10,3 +10,6 @@ module.exports = class BaseContext extends Arda.Context
 
   strikeApi: (linker)->
     @root.strikeApi(linker)
+
+  _strippedPath: ->
+    @root._strippedPath()

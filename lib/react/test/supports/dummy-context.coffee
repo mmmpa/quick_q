@@ -1,7 +1,11 @@
 module.exports = class DummyContext
+  @header = {}
   @struck = {}
   @emit: ->
   @strikeApi: (linker)->
     new Promise((resolve, reject)=>
-      resolve(@struck)
+      resolve(
+        header: @header
+        body: @struck
+      )
     )

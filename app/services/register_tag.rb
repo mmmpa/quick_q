@@ -1,8 +1,8 @@
 #
-# 出典を一括登録する。
+# タグを一括登録する。
 # createとupdate両用。
 #
-class RegisterSourceLink
+class RegisterTag
   class << self
     def call(csv_string)
       csv_lines = CSV.parse(csv_string)
@@ -12,18 +12,17 @@ class RegisterSourceLink
     private
 
     def register!(line)
-      prefix, id, url, *displays = *line
+      prefix, id, *displays = *line
       params = {
         name: [prefix, id].compact.join('_'),
-        url: url,
         display: displays.compact.join('::')
       }
 
       begin
-        if (old = Qa::SourceLink.find_by(name: params[:name]))
+        if (old = Qa::Tag.find_by(name: params[:name]))
           old.update!(params)
         else
-          Qa::SourceLink.create!(params)
+          Qa::Tag.create!(params)
         end
       rescue => e
         p e

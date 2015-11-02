@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151101053018) do
+ActiveRecord::Schema.define(version: 20151101193637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,15 @@ ActiveRecord::Schema.define(version: 20151101053018) do
   add_index "qa_questions", ["name"], name: "index_qa_questions_on_name", unique: true, using: :btree
   add_index "qa_questions", ["source_link_id"], name: "index_qa_questions_on_source_link_id", using: :btree
 
+  create_table "qa_questions_tags", force: :cascade do |t|
+    t.integer "question_id"
+    t.integer "tag_id"
+  end
+
+  add_index "qa_questions_tags", ["question_id", "tag_id"], name: "index_qa_questions_tags_on_question_id_and_tag_id", unique: true, using: :btree
+  add_index "qa_questions_tags", ["question_id"], name: "index_qa_questions_tags_on_question_id", using: :btree
+  add_index "qa_questions_tags", ["tag_id"], name: "index_qa_questions_tags_on_tag_id", using: :btree
+
   create_table "qa_source_links", force: :cascade do |t|
     t.string "name",    null: false
     t.string "display", null: false
@@ -74,6 +83,14 @@ ActiveRecord::Schema.define(version: 20151101053018) do
   end
 
   add_index "qa_source_links", ["name"], name: "index_qa_source_links_on_name", unique: true, using: :btree
+
+  create_table "qa_tags", force: :cascade do |t|
+    t.string "name",    null: false
+    t.string "display", null: false
+  end
+
+  add_index "qa_tags", ["display"], name: "index_qa_tags_on_display", unique: true, using: :btree
+  add_index "qa_tags", ["name"], name: "index_qa_tags_on_name", unique: true, using: :btree
 
   create_table "selection_selected_questions", force: :cascade do |t|
     t.integer "selection_id"

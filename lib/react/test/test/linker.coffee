@@ -61,5 +61,3 @@ describe 'Placeholder auto replacement', ->
     assert.equal linker.uri, '/user/1/address/-'
     assert.deepEqual linker.params, {index: '2'}
 
-
-

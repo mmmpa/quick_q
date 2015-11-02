@@ -2,7 +2,8 @@
 #
 module.exports = class IndexContext extends App.BaseContext
   initState: (props) ->
-    { index: [] }
+    index: []
+    header: {}
 
   expandComponentProps: (props, state) ->
     state
@@ -13,9 +14,11 @@ module.exports = class IndexContext extends App.BaseContext
     render: ->
       console.log @props
       App.JSX.Q.indexPage(
+        Paginator: App.View.Paginator
         index: (for q in @props.index
           new App.Question(q)
         )
+        header: @props.header
         showQuestion: (e)=>
           @dispatch('question:show', e)
       )
@@ -29,9 +32,19 @@ module.exports = class IndexContext extends App.BaseContext
     #@_initializeIndex()
     subscribe 'context:started', -> @_initializeIndex()
     subscribe 'question:show', (q)-> @root.emit('question:show', q)
+    subscribe 'question:index:paginate', @paginate
+
+  paginate: (page)->
+    linker = App.Linker.get(App.Path.qIndex, page: page)
+    @strikeApi(linker).then (data)=>
+      @update (s) =>
+        index: data.body
+        header: data.header
+    .then =>
+      @root.emit('history:push', linker)
 
   _initializeIndex: ->
-    @strikeApi(App.Linker.get(App.Path.qIndex, par: 100)).then (data)=>
-      console.log data
+    @strikeApi(App.Linker.get(@_strippedPath())).then (data)=>
       @update (s) =>
-        index: data
+        index: data.body
+        header: data.header
