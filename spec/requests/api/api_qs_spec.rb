@@ -47,14 +47,14 @@ module Api
         end
 
         it do
-          get api_questions_path(page: 2, par: 5)
+          get api_questions_path(page: 2, per: 5)
           expect(response).to have_http_status(200)
           expect(result_hash.size).to eq(5)
           expect(ids).to match_array(@all_ids[5, 5])
         end
 
         it do
-          get api_questions_path(par: 100)
+          get api_questions_path(per: 100)
           expect(response).to have_http_status(200)
           expect(result_hash.size).to eq(@all_ids.size)
           expect(ids).to match_array(@all_ids)
@@ -75,7 +75,7 @@ module Api
 
         it_behaves_like 'with default parameter' do
           before :each do
-            get api_questions_path(par: -1)
+            get api_questions_path(per: -1)
           end
         end
       end

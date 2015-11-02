@@ -8,6 +8,7 @@ module Qa
 
   class QuestionIndex < Question
     include Pager
+    include TaggedPicker
 
     def as_json(options = {})
       options.merge!(only: [:id, :text, :way])

@@ -1,5 +1,9 @@
 require 'rails_helper'
 
+class Qa::Tagged < Qa::Question
+  include TaggedPicker
+end
+
 RSpec.describe Qa::Tagged, type: :model do
   before :all do
     @q = File.read("#{Rails.root}/spec/fixtures/tagged/q.csv")
