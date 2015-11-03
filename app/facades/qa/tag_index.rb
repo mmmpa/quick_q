@@ -32,8 +32,8 @@ module Qa
       # 指定されたタグを持つ問題が、どれだけのタグを持っているかカウントする。
       #
       def with_tag(*tag_ids)
-        q_ids = Qa::QuestionsTag.where { tag_id.in(tag_ids) }.pluck(:question_id)
-        stored_count = Qa::QuestionsTag.where { question_id.in(q_ids) }.group { tag_id }.count { tag_id }
+        q_ids_sub_query = Qa::QuestionIndex.on(*tag_ids).select(:id)
+        stored_count = Qa::QuestionsTag.where { question_id.in(q_ids_sub_query) }.group { tag_id }.count { tag_id }
         all.order { name }.map { |r| r.counted = stored_count[r.id].to_i; r }
       end
     end

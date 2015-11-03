@@ -20,9 +20,17 @@ module Api
       Qa::Tag.destroy_all
     end
 
+    let(:tag1) { Qa::Tag.find_by(name: :tag1).id }
+    let(:tag2) { Qa::Tag.find_by(name: :tag2).id }
+    let(:tag3) { Qa::Tag.find_by(name: :tag3).id }
+    let(:tag4) { Qa::Tag.find_by(name: :tag4).id }
+    let(:tag5) { Qa::Tag.find_by(name: :tag5).id }
+    let(:tag5) { Qa::Tag.find_by(name: :tag6).id }
+
     describe 'indexing' do
       let(:result_hash) { JSON.parse(response.body) }
       let(:ids) { result_hash.map { |r| r['id'] } }
+      let(:counts) { result_hash.map { |r| r['count'] } }
 
       before :each do
         get api_tags_path
@@ -32,6 +40,45 @@ module Api
         expect(response).to have_http_status(200)
         expect(result_hash.size).to eq(Qa::Tag.count)
         expect(ids).to match_array(Qa::Tag.pluck(:id))
+        expect(counts).to eq([4, 3, 3, 0, 0, 0])
+      end
+    end
+
+    describe 'tags on tags' do
+      let(:result_hash) { JSON.parse(response.body) }
+      let(:ids) { result_hash.map { |r| r['id'] } }
+      let(:counts) { result_hash.map { |r| r['count'] } }
+
+      it do
+        get api_tagged_tag_path(tag1)
+        expect(response).to have_http_status(200)
+        expect(result_hash.size).to eq(Qa::Tag.count)
+        expect(ids).to match_array(Qa::Tag.pluck(:id))
+        expect(counts).to eq([4, 2, 2, 0, 0, 0])
+      end
+
+      it do
+        get api_tagged_tag_path(tag3)
+        expect(response).to have_http_status(200)
+        expect(result_hash.size).to eq(Qa::Tag.count)
+        expect(ids).to match_array(Qa::Tag.pluck(:id))
+        expect(counts).to eq([2, 1, 3, 0, 0, 0])
+      end
+
+      it do
+        get api_tagged_tag_path([tag1, tag2].join(','))
+        expect(response).to have_http_status(200)
+        expect(result_hash.size).to eq(Qa::Tag.count)
+        expect(ids).to match_array(Qa::Tag.pluck(:id))
+        expect(counts).to eq([2, 2, 1, 0, 0, 0])
+      end
+
+      it do
+        get api_tagged_tag_path([tag1, tag2, tag3].join(','))
+        expect(response).to have_http_status(200)
+        expect(result_hash.size).to eq(Qa::Tag.count)
+        expect(ids).to match_array(Qa::Tag.pluck(:id))
+        expect(counts).to eq([1, 1, 1, 0, 0, 0])
       end
     end
 
