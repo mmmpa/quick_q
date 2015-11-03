@@ -27,7 +27,7 @@ module Api
     private
 
     def tags
-      pp Array.wrap(params[:tags].split(',')).map(&:to_i).uniq.compact
+      Array.wrap(params[:tags].split(',')).map(&:to_i).uniq.compact
     end
 
     def page
