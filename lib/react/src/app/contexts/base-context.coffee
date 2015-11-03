@@ -13,3 +13,6 @@ module.exports = class BaseContext extends Arda.Context
 
   _strippedPath: ->
     @root._strippedPath()
+
+  _choppedPath: ->
+    @root._choppedPath()

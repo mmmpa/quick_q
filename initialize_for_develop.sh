@@ -14,3 +14,4 @@ rake q:register_tag
 # link question to information
 rake q:link_q_to_src
 rake q:tag_q_to_tag
+rake q:tag_way

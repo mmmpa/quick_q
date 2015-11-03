@@ -56,6 +56,10 @@ module.exports = class MainContext extends Arda.Context
     subscribe 'inform:rendered', (q)->
       MathJax.Hub.Typeset()
 
+    subscribe 'question:tagged:index', (id)->
+      @_replaceScene(App.Linker.get(App.Path.taggedIndex, tags: [id]))
+
+
   #
   # Application method
   #
@@ -93,8 +97,9 @@ module.exports = class MainContext extends Arda.Context
     # これはuriから動作を振りわける一般的なルーター
     @router = new App.Router()
     #@router.add('/', (params)-> new App.Cassette(App.PortalContext, params))
-    @router.add('/', (params)-> new App.Cassette(App.Q.IndexContext, params))
+    @router.add('/', (params)-> new App.Cassette(App.PortalContext, params))
     @router.add('/q', (params)-> new App.Cassette(App.Q.IndexContext, params))
+    @router.add('/q/tagged/:tags', (params)-> new App.Cassette(App.Q.IndexContext, params))
     @router.add('/q/:id', (params)-> new App.Cassette(App.Q.QuestionContext, params))
 
   _initializeScene: ->
@@ -133,6 +138,9 @@ module.exports = class MainContext extends Arda.Context
 
   _strippedPath: ->
     location.href.replace(/.+?:\/\/(.+?)\//, '/')
+
+  _choppedPath: ->
+    location.href.replace(/.+?:\/\/(.+?)\//, '/').replace(/\?.*/, '')
 
   _isCrossDomain: (url)->
     originAnchor = document.createElement("a")

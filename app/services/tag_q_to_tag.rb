@@ -9,6 +9,24 @@ class TagQToTag
       csv_lines.map(&method(:register!))
     end
 
+    def with_way
+      tags = {
+        in_order: Qa::Tag.find_by(name: :way_in_order),
+        free_text: Qa::Tag.find_by(name: :way_free_text),
+        ox: Qa::Tag.find_by(name: :way_ox),
+        single_choice: Qa::Tag.find_by(name: :way_single_choice),
+        multiple_choices: Qa::Tag.find_by(name: :way_multiple_choices)
+      }
+
+      Qa::Question.find_each do |q|
+        begin
+          tags[q.way.to_sym].questions << q
+        rescue => e
+          p e
+        end
+      end
+    end
+
     private
 
     def register!(line)

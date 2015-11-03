@@ -25,6 +25,11 @@ namespace :q do
     end
   end
 
+  desc '問題種別でタギングする'
+  task :tag_way => :environment do
+    TagQToTag.with_way
+  end
+
   desc '問題の出典元を登録する'
   task :register_source => :environment do
     Dir[File.expand_path("#{Rails.root}/db/csv/link/**/*.csv", __FILE__)].each do |file_path|

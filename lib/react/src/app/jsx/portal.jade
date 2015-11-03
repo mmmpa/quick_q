@@ -1,1 +1,35 @@
-h1 Portal
+section.portal.portal-body
+  section.portal.tag-list.area
+    h1.portal.sub-title
+      Fa(icon='tags')
+      | タグリスト
+    if !isTagsLoaded()
+      Loading
+    else
+      ul.portal.tag-list-body
+        each tag in qTags
+          if tag.has_question()
+            li(key=tag.id).portal.tag-list-tag
+              Fa(icon='tag')
+              a(onClick=showTaggedIndex(tag.id))
+                span.name= tag.display
+                span.count= tag.countText
+          else
+            li(key=tag.id).portal.tag-list-tag.disabled
+              Fa(icon='tag')
+              span
+                span.name= tag.display
+                span.count= tag.countText
+
+  section.portal.source.area
+    h1.portal.sub-title
+      Fa(icon='link')
+      | 出典リスト（予定含む）
+    if !isSourcesLoaded()
+      Loading
+    else
+      ul.portal.source-list-body
+        each source in sources
+          li(key=source.id).portal.source-list-source
+            Fa(icon='link')
+            a(href=(source.url))= source.display

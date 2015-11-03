@@ -16,7 +16,7 @@ module Api
     end
 
     def tagged_index
-      response.headers.merge!(Qa::QuestionIndex.header_information(page, per))
+      response.headers.merge!(Qa::QuestionIndex.on(*tags).header_information(page, per))
       render json: Qa::QuestionIndex.on(*tags).newer_page(page, per)
     end
 

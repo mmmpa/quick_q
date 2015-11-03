@@ -15,6 +15,11 @@ Rails.application.routes.draw do
       get '2', to: 'tags#index2', as: :tags2
       get 'tagged/:tags', to: 'tags#with_tag', as: :tagged_tag
     end
+
+    scope :src do
+      get '', to: 'sources#index', as: :sources
+      get ':id', to: 'sources#show', as: :source
+    end
   end
 
   get '', to: 'portal#index', as: :portal

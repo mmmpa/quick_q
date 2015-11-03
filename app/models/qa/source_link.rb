@@ -17,5 +17,12 @@ module Qa
 
     validates :name,
               uniqueness: true
+
+    def as_json(options = {})
+      options.merge!(
+               only: [:id, :url, :display]
+      )
+      super
+    end
   end
 end

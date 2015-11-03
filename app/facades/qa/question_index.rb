@@ -18,10 +18,17 @@ module Qa
     class << self
       def header_information(page, per)
         {
-          'Total-Pages' => (count / per).to_s,
+          'Total-Pages' => (normalized_count.to_f / per).ceil.to_s,
           'Per-Page' => per.to_s,
           'Current-Page' => page.to_s,
         }
+      end
+
+      private
+
+      def normalized_count
+        return count unless Hash === count
+        count.keys.size
       end
     end
   end

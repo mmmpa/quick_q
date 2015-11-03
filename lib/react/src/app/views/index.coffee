@@ -2,6 +2,7 @@ module.exports = Views = {}
 Views.Fa = require './fa'
 Views.FreeText = require './free-text'
 Views.InOrder = require './in-order'
+Views.Loading = require './loading'
 Views.MultipleChoices = require './multiple_choices'
 Views.Ox = require './ox'
 Views.Paginator = require './paginator'

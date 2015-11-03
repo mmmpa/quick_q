@@ -4,6 +4,7 @@ module.exports = class IndexContext extends App.BaseContext
   initState: (props) ->
     index: []
     header: {}
+    basePath: ''
 
   expandComponentProps: (props, state) ->
     state
@@ -12,7 +13,7 @@ module.exports = class IndexContext extends App.BaseContext
     mixins: [Arda.mixin]
 
     render: ->
-      console.log @props
+      return App.JSX.loading(Fa: App.View.Fa) if @props.index.length == 0
       App.JSX.Q.indexPage(
         Paginator: App.View.Paginator
         index: (for q in @props.index
@@ -34,10 +35,21 @@ module.exports = class IndexContext extends App.BaseContext
     subscribe 'question:show', (q)-> @root.emit('question:show', q)
     subscribe 'question:index:paginate', @paginate
 
+  generateId: ->
+    @id ?= 0
+    @id++
+    @id
+
+  currentId: ->
+    @id ?= 0
+
   paginate: (page)->
-    linker = App.Linker.get(App.Path.qIndex, page: page)
+    linker = App.Linker.get(@state.basePath, page: page)
+    myId = @generateId()
     @strikeApi(linker).then (data)=>
+      throw 'older' if myId != @currentId()
       @update (s) =>
+        basePath: @_choppedPath()
         index: data.body
         header: data.header
     .then =>
@@ -46,5 +58,6 @@ module.exports = class IndexContext extends App.BaseContext
   _initializeIndex: ->
     @strikeApi(App.Linker.get(@_strippedPath())).then (data)=>
       @update (s) =>
+        basePath: @_choppedPath()
         index: data.body
         header: data.header

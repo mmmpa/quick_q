@@ -6,10 +6,10 @@ module.exports = class ApiStriker
   @_struck = {}
 
   @strike = (linker, forceReload)->
-    if !forceReload && linker.isGet && @_struck[linker.key]
+    if !forceReload && linker.isGet && @_struck[linker.paramsUri]
       # Promiseを期待されるので空うちする。
       return new Promise((resolve, reject)=>
-        resolve(@_struck[linker.key])
+        resolve(@_struck[linker.paramsUri])
       )
 
     $.ajax(
@@ -22,7 +22,7 @@ module.exports = class ApiStriker
       # データ保持動作
       header = @pickHeaderParameters(xhr)
       if linker.isGet
-        @_struck[linker.key] =
+        @_struck[linker.paramsUri] =
           body: data
           header: header
       $.Deferred().resolve(

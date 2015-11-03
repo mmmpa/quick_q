@@ -16,7 +16,7 @@ module Qa
       # 乱暴だけどとりあえず速い
       #
       def brutal_index
-        stored_count = Qa::QuestionsTag.group { tag_id }.count { tag_id }
+        stored_count = Qa::QuestionsTag.tag_counted
         all.order { name }.map { |r| r.counted = stored_count[r.id].to_i; r }
       end
 
@@ -24,8 +24,7 @@ module Qa
       # 1クエリで決まってスマートっぽい
       #
       def index
-        joins { questions_tags.outer }
-          .select('qa_tags.*, COUNT(qa_questions_tags.id) AS ar_counted').group { id }.order { name }
+        joins { questions_tags.outer }.select('qa_tags.*, COUNT(qa_questions_tags.id) AS ar_counted').group { id }.order { name }
       end
 
       #
@@ -33,7 +32,7 @@ module Qa
       #
       def with_tag(*tag_ids)
         q_ids_sub_query = Qa::QuestionIndex.on(*tag_ids).select(:id)
-        stored_count = Qa::QuestionsTag.where { question_id.in(q_ids_sub_query) }.group { tag_id }.count { tag_id }
+        stored_count = Qa::QuestionsTag.on_question(q_ids_sub_query).tag_counted
         all.order { name }.map { |r| r.counted = stored_count[r.id].to_i; r }
       end
     end

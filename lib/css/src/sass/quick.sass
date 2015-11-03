@@ -9,6 +9,9 @@ body
 	overflow: scroll
 	padding: 40px
 
+a
+	cursor: pointer
+
 article#quick-q,
 article#content
 	position: relative
@@ -58,6 +61,7 @@ article#notifier
 		margin-right: 5px
 	&.anchor
 		@extend .btn
+		transition: all 0s ease-in-out !important
 		&.now
 			@extend .btn-default
 		&.ready
@@ -184,3 +188,39 @@ article#notifier
 			white-space: nowrap
 	&.text
 		@extend .question-text-area
+
+.portal
+	&.area
+		margin: 40px auto
+	&.sub-title
+		font-size: 24px
+	&.portal-body
+		@extend .default-body
+		margin: 40px auto
+	&.tag-list-body
+		padding: 0
+		margin: 0
+		line-height: 200%
+	&.source-list-body
+		padding: 0
+		margin: 0
+	&.portal.source-list-source
+		font-size: 14px
+		list-style: none
+		display: inline-block
+		margin-right: 20px
+		white-space: nowrap
+		vertical-align: top
+	&.tag-list-tag
+		list-style: none
+		display: inline-block
+		margin-right: 20px
+		white-space: nowrap
+		vertical-align: top
+		.name
+			font-size: 18px
+		.count
+			font-size: 12px
+			margin-left: 5px
+		&.disabled
+			color: $gray-light
