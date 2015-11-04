@@ -12,6 +12,10 @@ module Api
       render json: Qa::TagIndex.with_tag(*tags)
     end
 
+    def with_question
+      render json: Qa::Question.find(params[:question_id]).tags
+    end
+
     private
 
     def tags

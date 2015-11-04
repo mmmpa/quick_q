@@ -68,14 +68,33 @@ article#notifier
 			@extend .btn-primary
 
 .question-q
+	&.source-link-area
+		margin-top: 40px
+	&.tagged-tag-area
+		margin-top: 80px
+	&.question-q.tagged-tag-tag
+		list-style: none
+		display: inline-block
+		margin-right: 20px
+		white-space: nowrap
+		vertical-align: top
+		.name
+			font-size: 18px
+	&.tagged-tag-body
+		margin: 0
+		padding: 0
 	&.q,
 	&.a,
-	&.correct-answer
+	&.correct-answer,
+	&.source-link-title,
+	&.tagged-tag-title
 		margin-top: 40px
 		font-size: 24px
-		font-weight: bold
 		border-bottom: 1px dotted $gray-light
 		padding-bottom: 10px
+	&.source-link-title,
+	&.tagged-tag-title
+		font-size: 20px
 	&.mark-area
 		text-align: center
 	&.mark

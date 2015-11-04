@@ -14,14 +14,17 @@ module.exports = class QuestionContext extends App.BaseContext
         Ox: App.View.Ox
         InOrder: App.View.InOrder
         QuestionState: App.QuestionState
-
+        Loading: App.View.Loading
+        sourceLink: @props.sourceLink
         state: @props.state
         question: @props.question
         answers: @props.answers
         result: @props.result
-
+        qTags: @props.qTags
         submit: =>
           @dispatch('question:submit')
+        showTaggedIndex: (id)=>
+          @dispatch('question:tagged:index', id)
       )
 
     componentDidMount: ->
@@ -34,6 +37,8 @@ module.exports = class QuestionContext extends App.BaseContext
     answers: null
     state: App.QuestionState.LOADING
     result: null
+    sourceLink: null
+    qTags: null
 
   expandComponentProps: (props, state) ->
     state
@@ -77,6 +82,7 @@ module.exports = class QuestionContext extends App.BaseContext
           result: new App.Mark(data.body, s.question.options)
           state: App.QuestionState.MARKED
         )
+    subscribe 'question:tagged:index', (id)-> @root.emit('question:tagged:index', [id])
 
   _initializeQuestion: ->
     @strikeApi(App.Linker.get(App.Path.q, id: @props.id)).then (data)=>
@@ -87,4 +93,17 @@ module.exports = class QuestionContext extends App.BaseContext
       .then =>
         if @isInOrder()
           @update (s) -> _.merge(s, answers: new Array(s.question.answersNumber))
+      .then =>
+        if @state.question.hasSource
+          @strikeApi(App.Linker.get(App.Path.source, id: @state.question.sourceLinkId)).then (data)=>
+            @update (s) ->
+              s.sourceLink = new App.SourceLink(data.body)
+              s
+          @strikeApi(App.Linker.get(App.Path.qTags, id: @props.id)).then (data)=>
+            @update (s) ->
+              s.qTags = _.map(data.body, (tag)=>
+                new App.Tag(tag)
+              )
+              s
 
+              

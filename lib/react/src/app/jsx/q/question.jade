@@ -23,34 +23,57 @@ section.question-q.body
       InOrder(question=question answers=answers result=result)
 
   if state == QuestionState.MARKED
-   section.question-q.result-area
-    div.question-q.mark-area
-     if result.isCorrect()
-        h1.question-q.mark.correct
-          Fa(icon='thumbs-o-up')
-          = result.resultText
-      else
-        h1.question-q.mark.incorrect
-          Fa(icon='hand-stop-o')
-          = result.resultText
-    h1.question-q.correct-answer
-      Fa(icon='graduation-cap')
-      | 正解は...
-    div.question-q.answer-area(dangerouslySetInnerHTML=result.correctAnswer)
+    section.question-q.result-area
+      div.question-q.mark-area
+        if result.isCorrect()
+          h1.question-q.mark.correct
+            Fa(icon='thumbs-o-up')
+            = result.resultText
+        else
+          h1.question-q.mark.incorrect
+            Fa(icon='hand-stop-o')
+            = result.resultText
+      h1.question-q.correct-answer
+        Fa(icon='graduation-cap')
+        | 正解は...
+      div.question-q.answer-area(dangerouslySetInnerHTML=result.correctAnswer)
   else
-   section.question-q.control
-    if state == QuestionState.ASKING
-      button.question-q.button.submit.disabled(disabled=true)
-        Fa(icon='graduation-cap')
-        = ' '
-        = question.pleaseText
-    else if state == QuestionState.ASKED
-      button.question-q.button.submit(onClick=submit)
-        Fa(icon='graduation-cap')
-        = ' '
-        | 正解を確認する
-    else if state == QuestionState.SUBMITTING
-      button.question-q.button.submit.disabled(disabled=true)
-        Fa(icon='spinner' animation='pulse')
-        = ' '
-        | 確認中...
+    section.question-q.control
+      if state == QuestionState.ASKING
+        button.question-q.button.submit.disabled(disabled=true)
+          Fa(icon='graduation-cap')
+          = ' '
+          = question.pleaseText
+      else if state == QuestionState.ASKED
+        button.question-q.button.submit(onClick=submit)
+          Fa(icon='graduation-cap')
+          = ' '
+          | 正解を確認する
+      else if state == QuestionState.SUBMITTING
+        button.question-q.button.submit.disabled(disabled=true)
+          Fa(icon='spinner' animation='pulse')
+          = ' '
+          | 確認中...
+
+  section.question-q.tagged-tag-area
+    h1.question-q.tagged-tag-title
+      Fa(icon='tags')
+      | タグ
+    if qTags
+      ul.question-q.tagged-tag-body
+        each tag in qTags
+          li(key=tag.id).question-q.tagged-tag-tag
+            Fa(icon='tag')
+            a(onClick=showTaggedIndex(tag.id))
+              span.name= tag.display
+    else
+      Loading
+
+  if question.hasSource() && sourceLink
+    section.question-q.source-link-area
+      h1.question-q.source-link-title
+        Fa(icon='link')
+        | 出典
+      p
+        Fa(icon='link')
+        a(href=sourceLink.url)= sourceLink.display
