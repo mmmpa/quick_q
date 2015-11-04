@@ -1,3 +1,4 @@
+require 'csv'
 #
 # タグを一括登録する。
 # createとupdate両用。

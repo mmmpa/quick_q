@@ -1,3 +1,4 @@
+require 'csv'
 #
 # webからの入力以外からQa::Questionを作成する
 #

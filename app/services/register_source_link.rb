@@ -1,3 +1,4 @@
+require 'csv'
 #
 # 出典を一括登録する。
 # createとupdate両用。
