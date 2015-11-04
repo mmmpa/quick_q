@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     scope :q do
       get '', to: 'q#index', as: :questions
       get 'tagged/:tags', to: 'q#tagged_index', as: :tagged_questions
+      get 'tagged/', to: 'q#index', as: :no_tagged_questions
       get ':id', to: 'q#show', as: :question
     end
 
@@ -14,6 +15,7 @@ Rails.application.routes.draw do
       get '', to: 'tags#index', as: :tags
       get '2', to: 'tags#index2', as: :tags2
       get 'tagged/:tags', to: 'tags#with_tag', as: :tagged_tag
+      get 'tagged/', to: 'tags#index', as: :no_tagged_tag
     end
 
     scope :src do

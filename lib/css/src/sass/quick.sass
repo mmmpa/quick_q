@@ -189,6 +189,33 @@ article#notifier
 	&.text
 		@extend .question-text-area
 
+.tag-selector
+	&.sub-title
+		font-size: 24px
+	&.tag-list-body
+		padding: 0
+		margin: 0
+		line-height: 200%
+	&.tag-list-body
+		padding: 0
+		margin: 0 0 10px 0
+	&.tag-list-tag
+		list-style: none
+		display: inline-block
+		margin-right: 20px
+		white-space: nowrap
+		vertical-align: top
+		.name
+			font-size: 18px
+		.count
+			font-size: 12px
+			margin-left: 5px
+	&.tag-selector-body
+		@extend .default-body
+		margin: 40px auto
+	&.tag-selector-opner
+		@extend .btn, .btn-success
+
 .portal
 	&.area
 		margin: 40px auto

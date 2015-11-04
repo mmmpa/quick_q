@@ -43,6 +43,7 @@ module.exports = class MainContext extends Arda.Context
     subscribe 'scene:replace', @_replaceScene
 
     subscribe 'notify:success', (title, message)=>
+    subscribe 'window:top', -> window.scrollTo(0, 0)
 
     subscribe 'notify:fail', (title, message)=>
     subscribe 'history:push', (linker)=> history.pushState({}, null, linker.paramsUri)
@@ -100,6 +101,7 @@ module.exports = class MainContext extends Arda.Context
     @router.add('/', (params)-> new App.Cassette(App.PortalContext, params))
     @router.add('/q', (params)-> new App.Cassette(App.Q.IndexContext, params))
     @router.add('/q/tagged/:tags', (params)-> new App.Cassette(App.Q.IndexContext, params))
+    @router.add('/q/tagged/', (params)-> new App.Cassette(App.Q.IndexContext, params))
     @router.add('/q/:id', (params)-> new App.Cassette(App.Q.QuestionContext, params))
 
   _initializeScene: ->
@@ -107,9 +109,9 @@ module.exports = class MainContext extends Arda.Context
 
   _initializeValuables: ->
 
-  #
-  # History Manager
-  #
+    #
+    # History Manager
+    #
   _backward: (e)=>
     @content.pushContext(@_detectCassette().forPusher()...)
 

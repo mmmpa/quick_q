@@ -10,4 +10,5 @@ module.exports = JSX = {
     ox: require './q/ox.js'
     question: require './q/question.js'
     singleChoice: require './q/single-choice.js'
+    tagSelector: require './q/tag-selector.js'
 }

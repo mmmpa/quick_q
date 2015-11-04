@@ -4,6 +4,7 @@ module.exports = Path =
   qIndex: '/q'
   mark: '/marks'
   tags: '/tags'
+  taggedTags: '/tags/tagged/:tags'
   taggedIndex: '/q/tagged/:tags'
   sources: '/src'
   render: (path, values)->

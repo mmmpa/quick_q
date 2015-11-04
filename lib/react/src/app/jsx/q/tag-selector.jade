@@ -1,0 +1,29 @@
+section.tag-selector.tag-selector-body
+  if isOpen()
+    h1.tag-selector.sub-title
+      Fa(icon='tags')
+      | タグを選択
+    ul.tag-selector.tag-list-body
+      each tag in qTags
+        if tag.has_question()
+          li(key=tag.id).tag-selector.tag-list-tag
+            label
+              input(type='checkbox' checked=isChecked(tag.id) onChange=toggleTag(tag.id))
+              span.name= tag.display
+              span.count= tag.countText
+    button.tag-selector.tag-selector-opner(onClick=closeSelector)
+      Fa(icon='chevron-up')
+      | 閉じる
+  else
+    h1.tag-selector.sub-title
+      Fa(icon='tags')
+      | 選択中のタグ
+    ul.tag-selector.tag-list-body
+      each tag in qTags
+        if tag.has_question() && isChecked(tag.id)
+          li(key=tag.id).tag-selector.tag-list-tag
+            Fa(icon='tag')
+            span.name= tag.display
+    button.tag-selector.tag-selector-opner(onClick=openSelector)
+      Fa(icon='chevron-down')
+      | タグを編集する

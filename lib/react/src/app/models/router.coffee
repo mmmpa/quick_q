@@ -93,5 +93,5 @@ module.exports = class Router
     @_pickHolder(url.replace(result[1], ':'), holders.concat(result[1].replace(':', '')))
 
   _strip: (url)->
-    url.replace(/\/$/ig, '').replace(/.+?:\/\/(.+?)\//, '/')
+    url.replace(/\/$/ig, '').replace(/.+?:\/\/(.+?)\//, '/').replace(/\?.*/, '')
 
