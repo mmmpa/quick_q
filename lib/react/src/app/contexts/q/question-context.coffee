@@ -8,7 +8,6 @@ module.exports = class QuestionContext extends App.BaseContext
       informed: false
 
     render: ->
-      console.log window.history.state
       return App.JSX.loading(Fa: App.View.Fa) if @props.state == App.QuestionState.LOADING
       App.JSX.Q.question(
         Fa: App.View.Fa

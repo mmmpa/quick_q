@@ -27,5 +27,6 @@ Rails.application.routes.draw do
   end
 
   get '', to: 'portal#index', as: :portal
+  get 'sitemap.txt', to: 'meta#site_map', as: :site_map
   get '*path', to: 'portal#index'
 end
