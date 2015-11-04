@@ -53,14 +53,13 @@ module.exports = class MainContext extends Arda.Context
     subscribe 'reload', =>
       @update((state) => state)
 
-    subscribe 'question:show', (q)->
-      @_replaceScene(App.Linker.get(App.Path.q, id: q.id))
+    subscribe 'question:show', (q)-> @_replaceScene(App.Linker.get(App.Path.q, id: q.id))
 
     subscribe 'inform:rendered', (q)->
       MathJax.Hub.Typeset()
 
     subscribe 'question:tagged:index', (id)->
-      @_replaceScene(App.Linker.get(App.Path.taggedIndex, tags: [id]))
+      @_replaceScene(App.Linker.get(App.Path.taggedIndex, tags: _.flatten([id])))
 
 
   #
@@ -102,9 +101,13 @@ module.exports = class MainContext extends Arda.Context
     #@router.add('/', (params)-> new App.Cassette(App.PortalContext, params))
     @router.add('/', (params)-> new App.Cassette(App.PortalContext, params))
     @router.add('/q', (params)-> new App.Cassette(App.Q.IndexContext, params))
+    @router.add('/q/tagged/-', (params)-> new App.Cassette(App.Q.IndexContext, params))
     @router.add('/q/tagged/:tags', (params)-> new App.Cassette(App.Q.IndexContext, params))
-    @router.add('/q/tagged/', (params)-> new App.Cassette(App.Q.IndexContext, params))
-    @router.add('/q/:id', (params)-> new App.Cassette(App.Q.QuestionContext, params))
+    @router.add('/q/:id', (params)=>
+      if @state.fromIndex
+        params.fromIndex = @state.fromIndex
+        @state.fromIndex = null
+      new App.Cassette(App.Q.QuestionContext, params))
 
   _initializeScene: ->
     @content.pushContext(@_detectCassette().forPusher()...)

@@ -2,7 +2,6 @@ module.exports = TagSelector = React.createClass(
   mixins: [Arda.mixin]
 
   render: ()->
-    console.log @props
     App.JSX.Q.tagSelector(
       Fa: App.View.Fa
       qTags: @props.qTags

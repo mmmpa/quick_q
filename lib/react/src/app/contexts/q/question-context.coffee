@@ -8,6 +8,7 @@ module.exports = class QuestionContext extends App.BaseContext
       informed: false
 
     render: ->
+      console.log window.history.state
       return App.JSX.loading(Fa: App.View.Fa) if @props.state == App.QuestionState.LOADING
       App.JSX.Q.question(
         Fa: App.View.Fa
@@ -28,12 +29,20 @@ module.exports = class QuestionContext extends App.BaseContext
           @dispatch('question:submit')
         showTaggedIndex: (id)=>
           @dispatch('question:tagged:index', id)
+        goBack: =>
+          if @hasHistory()
+            history.back()
+          else
+            @dispatch('app:home')
       )
 
     componentDidUpdate: ->
       unless @state.informed && @props.question
         @dispatch('inform:rendered')
         @state.informed = true
+
+    hasHistory: ->
+      window.history.state && window.history.state.historyWardUID
   )
 
   initState: (props) ->
@@ -88,6 +97,7 @@ module.exports = class QuestionContext extends App.BaseContext
           state: App.QuestionState.MARKED
         )
     subscribe 'question:tagged:index', (id)-> @root.emit('question:tagged:index', [id])
+    subscribe 'app:home', -> @root.emit('app:home')
 
   _initializeQuestion: ->
     @strikeApi(App.Linker.get(App.Path.q, id: @props.id)).then (data)=>

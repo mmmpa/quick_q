@@ -55,25 +55,30 @@ section.question-q.body
           = ' '
           | 確認中...
 
-  section.question-q.tagged-tag-area
-    h1.question-q.tagged-tag-title
-      Fa(icon='tags')
-      | タグ
-    if qTags
-      ul.question-q.tagged-tag-body
-        each tag in qTags
-          li(key=tag.id).question-q.tagged-tag-tag
-            Fa(icon='tag')
-            a(onClick=showTaggedIndex(tag.id))
-              span.name= tag.display
-    else
-      Loading
+  section.question-q.control-area
+    button.button.go-back(onClick=goBack)
+      Fa(icon='arrow-circle-o-left')
+      | 一覧にもどる
 
-  if question.hasSource() && sourceLink
-    section.question-q.source-link-area
-      h1.question-q.source-link-title
-        Fa(icon='link')
-        | 出典
-      p
-        Fa(icon='link')
-        a(href=sourceLink.url)= sourceLink.display
+    section.question-q.tagged-tag-area
+      h1.question-q.tagged-tag-title
+        Fa(icon='tags')
+        | タグ
+      if qTags
+        ul.question-q.tagged-tag-body
+          each tag in qTags
+            li(key=tag.id).question-q.tagged-tag-tag
+              Fa(icon='tag')
+              a(onClick=showTaggedIndex(tag.id))
+                span.name= tag.display
+      else
+        Loading
+
+    if question.hasSource() && sourceLink
+      section.question-q.source-link-area
+        h1.question-q.source-link-title
+          Fa(icon='link')
+          | 出典
+        p
+          Fa(icon='link')
+          a(href=sourceLink.url)= sourceLink.display

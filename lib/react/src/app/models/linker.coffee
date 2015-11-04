@@ -24,7 +24,7 @@ module.exports = class Linker
 
   _replacePlaceholder: ->
     while @uri.match(/(:([0-9_a-z]+))/)
-      @uri = @uri.replace(RegExp.$1, @params[RegExp.$2] || '')
+      @uri = @uri.replace(RegExp.$1, @params[RegExp.$2] || '-')
       delete @params[RegExp.$2]
 
   isGet: ->

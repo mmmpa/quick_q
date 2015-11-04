@@ -7,7 +7,7 @@ module.exports = class IndexContext extends App.BaseContext
     qTags: []
     tagSelectorState: App.TagSelectorState.LOADING
     selectorOpened: false
-    selectedTags: if !@props.tags
+    selectedTags: if !props.tags
       []
     else
       _.map(@props.tags.split(','), (n)=> +n)
@@ -140,7 +140,7 @@ module.exports = class IndexContext extends App.BaseContext
         @_initializeTags()
 
   _initializeTags: ->
-    @strikeApi(App.Linker.get(App.Path.taggedTags, tags: @props.tags)).then (data)=>
+    @strikeApi(App.Linker.get(App.Path.taggedTags, tags: @state.selectedTags)).then (data)=>
       @update (s) =>
         s.tagSelectorState = App.TagSelectorState.LOADED
         s.qTags = data.body

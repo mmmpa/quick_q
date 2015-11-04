@@ -1,6 +1,7 @@
 module.exports = Models = {}
 Models.ApiStriker = require './api-striker'
 Models.Cassette = require './cassette'
+Models.FromIndex = require './from-index'
 Models.Linker = require './linker'
 Models.Mark = require './mark'
 Models.Notice = require './notice'
