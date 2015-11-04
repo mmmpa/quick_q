@@ -5,6 +5,7 @@ module.exports = class IndexContext extends App.BaseContext
     index: []
     header: {}
     qTags: []
+    tagSelectorState: App.TagSelectorState.LOADING
     selectorOpened: false
     selectedTags: if !@props.tags
       []
@@ -19,15 +20,16 @@ module.exports = class IndexContext extends App.BaseContext
     mixins: [Arda.mixin]
 
     render: ->
-      return App.JSX.loading(Fa: App.View.Fa) if @props.index.length == 0
       App.JSX.Q.indexPage(
         Paginator: App.View.Paginator
         TagSelector: App.View.TagSelector
+        Loading: App.View.Loading
         index: (for q in @props.index
           new App.Question(q)
         )
         header: @props.header
         selectedTags: @props.selectedTags
+        tagSelectorState: @props.tagSelectorState
         selectorOpened: @props.selectorOpened
         qTags: (for tag in @props.qTags
           new App.Tag(tag)
@@ -47,6 +49,10 @@ module.exports = class IndexContext extends App.BaseContext
     subscribe 'question:show', (q)-> @root.emit('question:show', q)
     subscribe 'question:index:paginate', @paginate
     subscribe 'question:tag:toggle', @toggleTag
+    subscribe 'question:tagSelector:toggle', ->
+      @update (s) ->
+        s.selectorOpened = !s.selectorOpened
+        s
 
   generateId: ->
     @id ?= 0
@@ -55,6 +61,14 @@ module.exports = class IndexContext extends App.BaseContext
 
   currentId: ->
     @id ?= 0
+
+  generateTagId: ->
+    @tagId ?= 0
+    @tagId++
+    @tagId
+
+  currentTagId: ->
+    @tagId ?= 0
 
   paginate: (page)->
     linker = App.Linker.get(@state.basePath, page: page)
@@ -77,15 +91,22 @@ module.exports = class IndexContext extends App.BaseContext
       newTags.push(id)
       newTags
 
+    tags = _.sortBy(tags)
+
     linker = App.Linker.get(App.Path.taggedIndex, tags: tags.join(','))
 
-    myId = @generateId()
+    myId = @generateTagId()
+    @generateId()
+    @update (s) =>
+      s.tagSelectorState = App.TagSelectorState.TOGGLED
+      s.selectedTags = tags
+      s.index = []
+      s
     @strikeApi(linker).then (data)=>
-      #throw 'older' if myId != @currentId()
+      throw 'older' if myId != @currentTagId()
       @update (s) =>
         s.index = data.body
         s.header = data.header
-        s.selectedTags = tags
         s
     .then =>
       @root.emit('history:push', linker)
@@ -93,8 +114,13 @@ module.exports = class IndexContext extends App.BaseContext
         s.basePath = @_choppedPath()
         s
     .then =>
+      @update (s) =>
+        s.tagSelectorState = App.TagSelectorState.LOADING
+        s
+    .then =>
       @strikeApi(App.Linker.get(App.Path.taggedTags, tags: tags)).then (data)=>
         @update (s) =>
+          s.tagSelectorState = App.TagSelectorState.LOADED
           s.qTags = data.body
           s
 
@@ -111,5 +137,6 @@ module.exports = class IndexContext extends App.BaseContext
   _initializeTags: ->
     @strikeApi(App.Linker.get(App.Path.taggedTags, tags: @props.tags)).then (data)=>
       @update (s) =>
+        s.tagSelectorState = App.TagSelectorState.LOADED
         s.qTags = data.body
         s

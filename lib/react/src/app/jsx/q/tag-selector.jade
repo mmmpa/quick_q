@@ -8,12 +8,14 @@ section.tag-selector.tag-selector-body
         if tag.has_question()
           li(key=tag.id).tag-selector.tag-list-tag
             label
-              input(type='checkbox' checked=isChecked(tag.id) onChange=toggleTag(tag.id))
+              input(type='checkbox' checked=isChecked(tag.id) onChange=toggleTag(tag.id) disabled=isLocked())
               span.name= tag.display
               span.count= tag.countText
     button.tag-selector.tag-selector-opner(onClick=closeSelector)
       Fa(icon='chevron-up')
       | 閉じる
+    if isLocked()
+      Loading
   else
     h1.tag-selector.sub-title
       Fa(icon='tags')

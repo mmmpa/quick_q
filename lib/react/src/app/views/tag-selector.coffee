@@ -1,22 +1,24 @@
 module.exports = TagSelector = React.createClass(
   mixins: [Arda.mixin]
 
-  getInitialState: ->
-    opened: false
-
   render: ()->
+    console.log @props
     App.JSX.Q.tagSelector(
       Fa: App.View.Fa
       qTags: @props.qTags
+      Loading: App.View.Loading
       toggleTag: (id)=>
         @dispatch('question:tag:toggle', id)
       isChecked: (id)=>
         _.include(@props.selectedTags, id)
+      isLocked: =>
+        @props.tagSelectorState != App.TagSelectorState.LOADED
       isOpen: =>
-        @state.opened
+        @props.selectorOpened
       openSelector: =>
-        @setState(opened: true)
+        @dispatch('question:tagSelector:toggle')
       closeSelector: =>
-        @setState(opened: false)
+        @dispatch('question:tagSelector:toggle')
     )
 )
+

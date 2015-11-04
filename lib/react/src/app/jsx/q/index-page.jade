@@ -1,16 +1,17 @@
-TagSelector(qTags=qTags selectedTags=selectedTags selectorOpened=selectorOpened)
+TagSelector(qTags=qTags selectedTags=selectedTags selectorOpened=selectorOpened tagSelectorState=tagSelectorState)
 
-Paginator(header=header)
-
-section.question-index.index
-  table.question-index.list
-    tbody
-      each question in index
-        tr(key=question.id)
-          th.id= question.id
-          td.description
-            a(onClick=showQuestion(question) props=question)= question.description
-          td.way= question.wayText
-
-Paginator(header=header)
+if index.length == 0
+  Loading
+else
+  Paginator(header=header)
+  section.question-index.index
+    table.question-index.list
+      tbody
+        each question in index
+          tr(key=question.id)
+            th.id= question.id
+            td.description
+              a(onClick=showQuestion(question) props=question)= question.description
+            td.way= question.wayText
+  Paginator(header=header)
 
