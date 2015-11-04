@@ -4,6 +4,9 @@ module.exports = class QuestionContext extends App.BaseContext
   component: React.createClass (
     mixins: [Arda.mixin]
 
+    getInitialState: ->
+      informed: false
+
     render: ->
       return App.JSX.loading(Fa: App.View.Fa) if @props.state == App.QuestionState.LOADING
       App.JSX.Q.question(
@@ -27,8 +30,10 @@ module.exports = class QuestionContext extends App.BaseContext
           @dispatch('question:tagged:index', id)
       )
 
-    componentDidMount: ->
-    componentDidUpdate: -> @dispatch('inform:rendered')
+    componentDidUpdate: ->
+      unless @state.informed && @props.question
+        @dispatch('inform:rendered')
+        @state.informed = true
   )
 
   initState: (props) ->
@@ -106,4 +111,3 @@ module.exports = class QuestionContext extends App.BaseContext
               )
               s
 
-              

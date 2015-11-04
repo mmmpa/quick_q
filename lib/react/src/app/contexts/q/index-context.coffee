@@ -19,6 +19,9 @@ module.exports = class IndexContext extends App.BaseContext
   component: React.createClass (
     mixins: [Arda.mixin]
 
+    getInitialState: ->
+      old: null
+
     render: ->
       App.JSX.Q.indexPage(
         Paginator: App.View.Paginator
@@ -38,8 +41,10 @@ module.exports = class IndexContext extends App.BaseContext
           @dispatch('question:show', e)
       )
 
-    componentDidMount: ->
-    componentDidUpdate: -> @dispatch('inform:rendered')
+    componentDidUpdate: ->
+      if @state.old != @props.index
+        @dispatch('inform:rendered')
+        @state.old = @props.index
   )
 
   delegate: (subscribe) ->

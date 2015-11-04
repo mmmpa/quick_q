@@ -1,6 +1,8 @@
 module.exports = JSX = {
   loading: require './loading.js'
   main: require './main.js'
+  Menu:
+    menu: require './menu/menu.js'
   paginator: require './paginator.js'
   portal: require './portal.js'
   Q:

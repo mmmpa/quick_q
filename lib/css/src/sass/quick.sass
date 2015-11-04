@@ -7,20 +7,34 @@ body
 	font-size: 16px
 	font-family: "Helvetica Neue", Helvetica, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif
 	overflow: scroll
-	padding: 40px
+	padding: 0
+	margin: 0
 
 a
 	cursor: pointer
 
+article#menu
+	z-index: 1000
+
+article#notifier
+	z-index: 10000
+
+article#content
+	z-index: 1
+
 article#quick-q,
 article#content
 	position: relative
+
+article#content
+	padding: 60px 0
 
 article#menu,
 article#notifier
 	position: absolute
 	top: 0
 	left: 0
+	width: 100%
 
 .button
 	@extend .btn, .btn-lg
@@ -67,6 +81,17 @@ article#notifier
 		&.ready
 			@extend .btn-primary
 
+.global-menu
+	&.menu-area
+		width: 100%
+	&.menu-body
+		@extend .default-body
+		padding: 20px 0
+		margin: 0 auto
+	&.go-home
+		@extend .btn, .btn-primary
+		padding: 10px
+		font-size: 10px
 .question-q
 	&.source-link-area
 		margin-top: 40px
@@ -78,8 +103,6 @@ article#notifier
 		margin-right: 20px
 		white-space: nowrap
 		vertical-align: top
-		.name
-			font-size: 18px
 	&.tagged-tag-body
 		margin: 0
 		padding: 0
@@ -92,9 +115,12 @@ article#notifier
 		font-size: 24px
 		border-bottom: 1px dotted $gray-light
 		padding-bottom: 10px
+	&.tagged-tag-area,
+	&.source-link-area
+		font-size: 14px
 	&.source-link-title,
 	&.tagged-tag-title
-		font-size: 20px
+		font-size: 18px
 	&.mark-area
 		text-align: center
 	&.mark
@@ -245,7 +271,7 @@ article#notifier
 		font-size: 24px
 	&.portal-body
 		@extend .default-body
-		margin: 40px auto
+		margin: 0 auto
 	&.tag-list-body
 		padding: 0
 		margin: 0

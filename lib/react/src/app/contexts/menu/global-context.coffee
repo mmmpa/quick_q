@@ -3,9 +3,20 @@
 # ゲストかアカウントかで切り替えるが未実装なのでブランク。
 #
 module.exports = class GlobalContext extends App.BaseContext
+  component: React.createClass (
+    mixins: [Arda.mixin]
+
+    render: ->
+      App.JSX.Menu.menu(
+        Fa:App.View.Fa
+        goHome: =>
+          @dispatch('app:home')
+      )
+  )
+
   initState: (props) -> props
 
-  component: React.createClass (
-    render: ->
-      React.createElement('div', {})
-  )
+  delegate: (subscribe) ->
+    super
+    subscribe 'app:home', (id)-> @root.emit('app:home')
+

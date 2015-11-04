@@ -44,6 +44,8 @@ module.exports = class MainContext extends Arda.Context
 
     subscribe 'notify:success', (title, message)=>
     subscribe 'window:top', -> window.scrollTo(0, 0)
+    subscribe 'app:home', ->
+      @_replaceScene(App.Linker.get(App.Path.portal))
 
     subscribe 'notify:fail', (title, message)=>
     subscribe 'history:push', (linker)=> history.pushState({}, null, linker.paramsUri)
