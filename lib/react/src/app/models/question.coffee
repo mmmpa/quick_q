@@ -21,12 +21,25 @@ module.exports = class Question
     @description = Question.trim(@marked.__html).slice(0, 40)
     @wayText = Question.detectWayText(@)
     @pleaseText = Question.detectPleaseText(@)
+    @index = obj.index
+
+    @children = if obj.children
+      _.map(obj.children, (child, index)->
+        child.index = index
+        new Question(child)
+      )
+
+  hasChildren: ->
+    @children && @children.length != 0
 
   hasSource: ->
     @sourceLinkId != null && @sourceLinkId != undefined
 
   hasPremise: ->
     @premiseId != null && @premiseId != undefined
+
+  isMultipleQuestions: ->
+    @way == 'multiple_questions'
 
   isSingleChoice: ->
     @way == 'single_choice'
@@ -58,6 +71,8 @@ module.exports = class Question
         'それぞれに対応するものを選んでください'
       when q.isOx()
         'いずれかを選んでください'
+      when q.isMultipleQuestions()
+        'すべての設問に回答してください'
       else
         ''
 
@@ -73,5 +88,7 @@ module.exports = class Question
         '順に並べる'
       when q.isOx()
         'ox問題'
+      when q.isMultipleQuestions()
+        '複数の設問'
       else
         ''

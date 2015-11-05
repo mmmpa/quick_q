@@ -22,32 +22,34 @@ section.question-q.body
       = question.pleaseText
 
     section.question-q.answer-area
-    if question.way == 'free_text'
-      FreeText(options=question.options answers=answers result=result)
-    else if question.way == 'ox'
-      Ox(options=question.options answers=answers result=result)
-    else if question.way == 'single_choice'
-      SingleChoice(options=question.options answers=answers result=result)
-    else if question.way == 'multiple_choices'
-      MultipleChoices(options=question.options answers=answers result=result)
-    else if question.way == 'in_order'
+    if question.isFreeText()
+      FreeText(question=question options=question.options answers=answers result=result)
+    else if question.isOx()
+      Ox(question=question options=question.options answers=answers result=result)
+    else if question.isSingleChoice()
+      SingleChoice(question=question options=question.options answers=answers result=result)
+    else if question.isMultipleChoices()
+      MultipleChoices(question=question options=question.options answers=answers result=result)
+    else if question.isInOrder()
       InOrder(question=question answers=answers result=result)
+    else if question.isMultipleQuestions()
+      MultipleQuestions(question=question answers=answers result=result)
 
   if state == QuestionState.MARKED
     section.question-q.result-area
       div.question-q.mark-area
-        if result.isCorrect()
+        if isCorrect()
           h1.question-q.mark.correct
             Fa(icon='thumbs-o-up')
-            = result.resultText
+            = resultText()
         else
           h1.question-q.mark.incorrect
             Fa(icon='hand-stop-o')
-            = result.resultText
-      h1.question-q.correct-answer
-        Fa(icon='graduation-cap')
-        | 正解は...
-      div.question-q.answer-area(dangerouslySetInnerHTML=result.correctAnswer)
+            = resultText()
+      //h1.question-q.correct-answer
+      //  Fa(icon='graduation-cap')
+      //  | 正解は...
+      //div.question-q.answer-area(dangerouslySetInnerHTML=result.correctAnswer)
   else
     section.question-q.control
       if state == QuestionState.ASKING

@@ -18,6 +18,7 @@ module.exports = class QuestionContext extends App.BaseContext
         InOrder: App.View.InOrder
         QuestionState: App.QuestionState
         Loading: App.View.Loading
+        MultipleQuestions: App.View.MultipleQuestions
         sourceLink: @props.sourceLink
         state: @props.state
         question: @props.question
@@ -33,6 +34,16 @@ module.exports = class QuestionContext extends App.BaseContext
             history.back()
           else
             @dispatch('app:home')
+        isCorrect: =>
+          if @props.result.isCorrect
+            @props.result.isCorrect()
+          else
+            @props.result[0].isCorrect()
+        resultText: =>
+          if @props.result.resultText
+            @props.result.resultText
+          else
+            @props.result[0].resultText
       )
 
     componentDidUpdate: ->
@@ -75,11 +86,15 @@ module.exports = class QuestionContext extends App.BaseContext
     super
     subscribe 'context:started', -> @_initializeQuestion()
     subscribe 'question:show', (q)-> @root.emit('question:show', q)
-    subscribe 'question:answer', (answer)->
+    subscribe 'question:answer', (answer, index)->
       return unless @isAnswerable()
       @update (s) ->
         # _.mergeは内部の配列もmergeで処理してしまうため
-        s.answers = answer
+        if _.isNumber(index)
+          s.answers ?= []
+          s.answers[+index] = answer
+        else
+          s.answers = answer
         s
       .then =>
         if @isAnswersFullFilled()
@@ -91,10 +106,21 @@ module.exports = class QuestionContext extends App.BaseContext
       return unless @isSubmittable()
       @update (s) -> _.merge(s, state: App.QuestionState.SUBMITTING)
       @strikeApi(App.Linker.post(App.Path.mark, id: @state.question.id, answers: @state.answers)).then (data)=>
-        @update (s) -> _.merge(s,
-          result: new App.Mark(data.body, s.question.options)
-          state: App.QuestionState.MARKED
-        )
+        if @state.question.isMultipleQuestions()
+          subMarks = _.map(data.body.correct_answer, (mark, index)=>
+            subMark = _.clone(data.body)
+            subMark.correct_answer = mark
+            new App.Mark(subMark, @state.question.children[index].options)
+          )
+          @update (s) ->
+            s.result = subMarks
+            s.state = App.QuestionState.MARKED
+            s
+        else
+          @update (s) -> _.merge(s,
+            result: new App.Mark(data.body, s.question.options)
+            state: App.QuestionState.MARKED
+          )
     subscribe 'question:tagged:index', (id)-> @root.emit('question:tagged:index', [id])
     subscribe 'app:home', -> @root.emit('app:home')
 

@@ -9,6 +9,7 @@ module.exports = JSX = {
     freeText: require './q/free-text.js'
     inOrder: require './q/in-order.js'
     indexPage: require './q/index-page.js'
+    multipleQuestions: require './q/multiple_questions.js'
     ox: require './q/ox.js'
     question: require './q/question.js'
     singleChoice: require './q/single-choice.js'

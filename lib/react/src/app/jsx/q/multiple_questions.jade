@@ -1,0 +1,19 @@
+each child in children
+  section.question-q.text
+    h1.question-q.q
+      Fa(icon='question')
+      | 設問
+  section.question-q.question-area
+    div.question-q.q-text(dangerouslySetInnerHTML=child.marked)
+
+  if child.isFreeText()
+    FreeText(question=child options=child.options answers=answers[child.index] result=result[child.index])
+  else if child.isOx()
+    Ox(question=child options=child.options answers=answers[child.index] result=result[child.index])
+  else if child.isSingleChoice()
+    SingleChoice(question=child options=child.options answers=answers[child.index] result=result[child.index])
+  else if child.isMultipleChoices()
+    MultipleChoices(question=child options=child.options answers=answers[child.index] result=result[child.index])
+  else if child.isInOrder()
+    InOrder(question=child answers=answers[child.index] result=result[child.index])
+
