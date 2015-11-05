@@ -8,6 +8,9 @@ module Qa
   class QuestionOnly < Question
     include Pager
 
+    # as_json対策
+    has_many :children, class_name: self.name, foreign_key: :question_id
+
     def as_json(options = {})
       options.merge!(
         only: [:id, :text, :way, :source_link_id, :premise_id]
@@ -21,6 +24,8 @@ module Qa
           {}
         when in_order?
           {options: options_for_choice, answers_number: correct_answers.count}
+        when multiple_questions?
+          {children: children.map(&:as_json)}
         else
           {options: options_for_choice}
       end

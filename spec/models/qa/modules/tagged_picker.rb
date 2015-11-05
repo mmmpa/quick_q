@@ -16,6 +16,17 @@ RSpec.describe Qa::Tagged, type: :model do
 
     @tag_to = File.read("#{Rails.root}/spec/fixtures/tagged/tag_to.csv")
     TagQToTag.(@tag_to)
+
+    10.times do
+      q = Qa::Question.take
+      q.way = Qa::Question.ways[:multiple_questions]
+      q.answer_options.destroy_all
+      q.correct_answers.destroy_all
+      q.save!
+      create(:qa_question, :valid, to: q)
+    end
+
+    TagQToTag.with_way
   end
 
   after :all do
@@ -29,11 +40,12 @@ RSpec.describe Qa::Tagged, type: :model do
   let(:tag4) { Qa::Tag.find_by(name: :tag4).id }
   let(:tag5) { Qa::Tag.find_by(name: :tag5).id }
   let(:tag5) { Qa::Tag.find_by(name: :tag6).id }
+  let(:single) { Qa::Tag.find_by(name: :way_single_choice).id }
 
   describe 'premise' do
-    it { expect(Qa::Question.count).to eq(10) }
-    it { expect(Qa::Tag.count).to eq(6) }
-    it { expect(Qa::QuestionsTag.count).to eq(10) }
+    it { expect(Qa::Question.count).to eq(20) }
+    it { expect(Qa::Tag.count).to eq(12) }
+    it { expect(Qa::QuestionsTag.count).to eq(20) }
   end
 
   describe 'on' do
@@ -43,5 +55,7 @@ RSpec.describe Qa::Tagged, type: :model do
     it { expect(Qa::Tagged.on(tag1, tag2).pluck(:name)).to match_array(%w(q_3 q_5)) }
     it { expect(Qa::Tagged.on(tag1, tag3).pluck(:name)).to match_array(%w(q_4 q_5)) }
     it { expect(Qa::Tagged.on(tag1, tag2, tag3).pluck(:name)).to match_array(%w(q_5)) }
+    it { expect(Qa::Tagged.on(tag1, tag2, tag3).pluck(:name)).to match_array(%w(q_5)) }
+    it { expect(Qa::Tagged.on(single).pluck(:name)).to match_array([]) }
   end
 end

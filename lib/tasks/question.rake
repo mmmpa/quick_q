@@ -106,7 +106,7 @@ namespace :q do
       # テンプレートは除外
       next if file_path.include?('template')
 
-      ConvertMdTo.questions(File.read(file_path)).execute
+      ConvertMdTo.questions(File.read(file_path)).execute rescue p "fail #{file_path}"
     end
   end
 

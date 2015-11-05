@@ -4,3 +4,9 @@ tag3,,tag3
 tag4,,tag4
 tag5,,tag5
 tag6,,tag6
+way,in_order,順に並べる問題
+way,free_text,テキスト入力
+way,single_choice,一つだけ選ぶ問題
+way,multiple_choices,複数選ぶ問題
+way,ox,ox問題
+way,multiple_questions,複数の問題

@@ -5,10 +5,14 @@ module Qa
   # as_jsonでのパラメーター制御。
   # 将来的にはredisからのカウント取得などがありうる。
   #
+  # 親持ちの問題は除外される
+  #
 
   class QuestionIndex < Question
     include Pager
     include TaggedPicker
+
+    default_scope -> { where { question_id == nil } }
 
     def as_json(options = {})
       options.merge!(only: [:id, :text, :way])

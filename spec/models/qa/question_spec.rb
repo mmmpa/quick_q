@@ -18,9 +18,16 @@ RSpec.describe Qa::Question, type: :model do
     it { expect(model.correct_answers.size).to eq(0) }
     it { expect(model.answer_options.size).to eq(0) }
 
+    let(:in_order_ids) { model.children.last.correct_answers.order { index }.pluck(:answer_option_id) }
+
     context 'with correct?' do
-      it { expect(model.correct?(true)).to be_truthy }
-      it { expect(model.correct?(false)).to be_falsey }
+      it { expect(model.correct?([true, in_order_ids])).to be_truthy }
+      it { expect(model.correct?([false, in_order_ids])).to be_falsey }
+      it { expect(model.correct?([true, [1, 3, 3, 2]])).to be_falsey }
+
+      it 'no answer' do
+        expect(model.correct?([])).to be_falsey
+      end
     end
   end
 
@@ -312,6 +319,16 @@ RSpec.describe Qa::Question, type: :model do
           text: 'q',
           way: Qa::Question.ways[:multiple_questions],
         )
+        Qa::Question.create!(
+          text: 'q',
+          way: Qa::Question.ways[:ox],
+          answers: true,
+          to: @model
+        )
+        params = choice_param(:in_order)
+        params[:order] = [0, 3, 3, 2]
+        params[:to] = @model
+        Qa::Question.create!(params)
       end
 
       after :all do

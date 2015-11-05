@@ -9,7 +9,15 @@ module Api
       CoordinateQuestion.from(csv: read_csv(:ox), way: :ox)
       CoordinateQuestion.from(csv: read_csv(:order), way: :in_order)
       CoordinateQuestion.from(csv: read_csv(:text), way: :free_text)
+      10.times do
+        create(:qa_question, :valid, way: Qa::Question.ways[:multiple_questions])
+      end
+
       @all_ids = Qa::Question.order { updated_at.desc }.pluck(:id)
+
+      10.times do
+        create(:qa_question, :valid, to: Qa::Question.multiple_questions.take)
+      end
     end
 
     after :all do
@@ -119,6 +127,12 @@ module Api
       it_behaves_like 'response for in order question' do
         before :each do
           get api_question_path(Qa::Question.in_order.take.id)
+        end
+      end
+
+      it_behaves_like 'response for multiple questions question' do
+        before :each do
+          get api_question_path(Qa::Question.multiple_questions.take.id)
         end
       end
     end

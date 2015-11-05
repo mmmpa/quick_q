@@ -16,12 +16,17 @@ class TagQToTag
         free_text: Qa::Tag.find_by(name: :way_free_text),
         ox: Qa::Tag.find_by(name: :way_ox),
         single_choice: Qa::Tag.find_by(name: :way_single_choice),
-        multiple_choices: Qa::Tag.find_by(name: :way_multiple_choices)
+        multiple_choices: Qa::Tag.find_by(name: :way_multiple_choices),
+        multiple_questions: Qa::Tag.find_by(name: :way_multiple_questions)
       }
 
       Qa::Question.find_each do |q|
         begin
-          tags[q.way.to_sym].questions << q
+          if q.parent
+            q.tags.clear
+          else
+            tags[q.way.to_sym].questions << q
+          end
         rescue => e
           p e
         end

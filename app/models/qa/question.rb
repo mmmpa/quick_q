@@ -51,6 +51,20 @@ module Qa
   #
   # == Examples
   #
+  # === 複数問題
+  #
+  #   # 親側
+  #   Qa::Question.create!(
+  #     way: Qa::Question.ways[:multiple_questions],
+  #     text: '問題文'
+  #   )
+  #
+  #   # 子側
+  #   Qa::Question.create!(
+  #     to: 1,  # 親のIDかインスタンス
+  #             # 残りは普通の問題と同様
+  #   )
+  #
   # === テキスト入力
   #
   #   Qa::Question.create!(
@@ -112,7 +126,7 @@ module Qa
     BOOLEAN_O = 'o' #:nodoc:
     BOOLEAN_X = 'x' #:nodoc:
 
-    attr_accessor :answers, :options, :explanation_text, :order #:nodoc:
+    attr_accessor :answers, :options, :explanation_text, :order, :to #:nodoc:
 
     enum way: {free_text: 10, ox: 20, single_choice: 30, multiple_choices: 40, in_order: 50, multiple_questions: 60}
 
@@ -127,8 +141,8 @@ module Qa
     belongs_to :premise, inverse_of: :questions
     belongs_to :source_link, inverse_of: :questions
 
-    belongs_to :parent, class_name: 'Qa::Question', foreign_key: :question_id
-    has_many :children, class_name: 'Qa::Question', foreign_key: :question_id
+    belongs_to :parent, class_name: self.name, foreign_key: :question_id
+    has_many :children, class_name: self.name, foreign_key: :question_id
 
     validates :name, :text, :way,
               presence: true
@@ -151,6 +165,7 @@ module Qa
     scope :single_choice, -> { where { way == Question.ways[:single_choice] } }
     scope :multiple_choices, -> { where { way == Question.ways[:multiple_choices] } }
     scope :in_order, -> { where { way == Question.ways[:in_order] } }
+    scope :multiple_questions, -> { where { way == Question.ways[:multiple_questions] } }
 
     #
     # 答え合わせ
@@ -160,6 +175,11 @@ module Qa
     # - answer 解答。解答方法によって値がちがう。
     #
     # == Example
+    #
+    # === 複数の問題
+    #
+    #   # 各問題に対応する答えを配列で
+    #   question.correct?(['答え', true, [1, 3, 2]])
     #
     # === テキスト入力
     #
@@ -194,6 +214,13 @@ module Qa
         when in_order?
           # 順序まで完全に同じか
           correct_answers.order { index }.pluck(:answer_option_id) == normalized
+        when multiple_questions?
+          # すべての子が正解かみる
+          children.zip(answer).each do |q, a|
+            return false unless q.correct?(a)
+          end
+
+          true
         else
           # 正答のみが含まれているか
           corrects = correct_set
@@ -221,6 +248,7 @@ module Qa
           arrange_for_choice_way!
       end
 
+      arrange_parent!
       arrange_added_name!
       arrange_explanation!
 
@@ -329,6 +357,27 @@ module Qa
       self
     end
 
+    def arrange_parent!
+      return if to.nil?
+
+      maybe = detect_parent(to)
+      raise Qa::Question::CannotBeParent unless maybe.multiple_questions?
+
+      self.parent = maybe
+    end
+
+    def detect_parent(key)
+      if Qa::Question === key
+        key
+      else
+        if key.to_i != 0
+          Qa::Question.find_by(name: key)
+        else
+          Qa::Question.find(key)
+        end
+      end
+    end
+
     def correct_answers_included?
       corrects = correct_set
       options = option_set
@@ -412,6 +461,10 @@ module Qa
       unless correct_answers_length_valid?
         errors.add(:correct_answers, :length)
       end
+    end
+
+    class CannotBeParent < StandardError
+
     end
   end
 end

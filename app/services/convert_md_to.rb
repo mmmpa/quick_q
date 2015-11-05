@@ -124,6 +124,8 @@ class ConvertMdTo
             @now = {
               name: $1
             }
+          when /^##to:([a-z_0-9]+)\n/i
+            @now[:to] = $1
           when "##q\n", "##Q\n"
             start_question!
           when "##a\n", "##A\n"
