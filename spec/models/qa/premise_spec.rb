@@ -37,12 +37,6 @@ RSpec.describe Qa::Premise, type: :model do
         model.questions << question
         expect(model.questions(true).size).to eq(1)
       end
-
-      it do
-        model.save!
-        model.questions << question
-        expect { model.questions << question }.to raise_error(ActiveRecord::RecordInvalid)
-      end
     end
   end
 end

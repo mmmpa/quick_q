@@ -114,19 +114,21 @@ module Qa
 
     attr_accessor :answers, :options, :explanation_text, :order #:nodoc:
 
-    enum way: {free_text: 10, ox: 20, single_choice: 30, multiple_choices: 40, in_order: 50}
+    enum way: {free_text: 10, ox: 20, single_choice: 30, multiple_choices: 40, in_order: 50, multiple_questions: 60}
 
     has_many :correct_answers, dependent: :destroy
     has_many :answer_options, dependent: :destroy
     has_one :explanation, dependent: :destroy
-    has_one :pal, dependent: :destroy
-    has_one :premise, through: :pal
     has_many :questions_tags, dependent: :destroy
     has_many :tags, through: :questions_tags
     has_many :selected, class_name: 'Selection::SelectedQuestion', dependent: :destroy
     has_many :selections, class_name: 'Selection::Selection', through: :selected
 
+    belongs_to :premise, inverse_of: :questions
     belongs_to :source_link, inverse_of: :questions
+
+    belongs_to :parent, class_name: 'Qa::Question', foreign_key: :question_id
+    has_many :children, class_name: 'Qa::Question', foreign_key: :question_id
 
     validates :name, :text, :way,
               presence: true
@@ -213,6 +215,8 @@ module Qa
           arrange_for_free_text!
         when ox?
           arrange_for_boolean!
+        when multiple_questions?
+          nil
         else
           arrange_for_choice_way!
       end
@@ -334,6 +338,8 @@ module Qa
 
     def answer_options_length_valid?
       case
+        when multiple_questions?
+          answer_options.size == 0
         when free_text?
           answer_options.size == 1
         when ox?
@@ -345,6 +351,8 @@ module Qa
 
     def correct_answers_length_valid?
       case
+        when multiple_questions?
+          correct_answers.size == 0
         when free_text?, single_choice?, ox?
           correct_answers.size == 1
         when multiple_choices?

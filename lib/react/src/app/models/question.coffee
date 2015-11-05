@@ -16,6 +16,7 @@ module.exports = class Question
 
     @answersNumber = obj.answers_number || -1
     @sourceLinkId = obj.source_link_id
+    @premiseId = obj.premise_id
     @marked = { __html: marked(@text) }
     @description = Question.trim(@marked.__html).slice(0, 40)
     @wayText = Question.detectWayText(@)
@@ -23,6 +24,9 @@ module.exports = class Question
 
   hasSource: ->
     @sourceLinkId != null && @sourceLinkId != undefined
+
+  hasPremise: ->
+    @premiseId != null && @premiseId != undefined
 
   isSingleChoice: ->
     @way == 'single_choice'

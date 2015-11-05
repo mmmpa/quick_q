@@ -16,8 +16,7 @@ module Qa
   #
 
   class Premise < ActiveRecord::Base
-    has_many :pals, dependent: :destroy
-    has_many :questions, through: :pals
+    has_many :questions
 
     validates :text,
               presence: true
@@ -29,6 +28,13 @@ module Qa
       super
 
       self.name ||= SecureRandom.hex(8)
+    end
+
+    def as_json(options = {})
+      options.merge!(
+        only: [:id, :text]
+      )
+      super
     end
   end
 end

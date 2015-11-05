@@ -11,7 +11,7 @@ module Qa
 
     def as_json(options = {})
       options.merge!(
-        only: [:id, :name, :text, :way]
+        only: [:id, :text, :way, :source_link_id, :premise_id]
       )
       super.merge!(detect_answer)
     end

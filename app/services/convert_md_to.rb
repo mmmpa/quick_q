@@ -12,7 +12,11 @@ class ConvertMdTo
 
   class << self
     def questions(md, options = {})
-      new(md, options)
+      new(md, options.merge!(question: true))
+    end
+
+    def premises(md, options = {})
+      new(md, options.merge!(premise: true))
     end
   end
 
@@ -23,6 +27,19 @@ class ConvertMdTo
     state :answers_scanning
     state :answer_scanning, exit: :push_answer
     state :ended, enter: :generate_question_hash
+
+    state :premise_naming, enter: :generate_premise_hash
+    state :premise_scanning, exit: :push_premise
+    state :premise_ended, enter: :generate_premise_hash
+
+    event :start_premise_name do
+      transitions from: :ready, to: :premise_naming
+      transitions from: :premise_scanning, to: :premise_naming
+    end
+
+    event :start_premise do
+      transitions from: :premise_naming, to: :premise_scanning
+    end
 
     event :start_format do
       transitions from: :ready, to: :format_scanning
@@ -46,6 +63,7 @@ class ConvertMdTo
     event :stop do
       transitions from: :answer_scanning, to: :ended
       transitions from: :answers_scanning, to: :ended
+      transitions from: :premise_scanning, to: :premise_ended
 
       after do
         convert!
@@ -57,13 +75,36 @@ class ConvertMdTo
     @md = md
     @questions = []
     @update = !!options[:update]
+    @mode = if options[:question]
+              :q
+            elsif options[:premise]
+              :p
+            end
 
     init_params_store!
     clear_buffer!
   end
 
+  def question?
+    @mode == :q
+  end
+
+  def premise?
+    @mode == :p
+  end
+
   def convert!
-    CoordinateQuestion.new(questions: @questions.compact, update: @update).execute
+    if question?
+      CoordinateQuestion.new(questions: @questions.compact, update: @update).execute
+    elsif premise?
+      @questions.each do |premise|
+        if old = Qa::Premise.find_by(name: premise[:name])
+          old.update!(premise)
+        else
+          Qa::Premise.create!(premise)
+        end
+      end
+    end
   rescue => e
     e.result[:errors].each do |record|
       begin
@@ -76,25 +117,38 @@ class ConvertMdTo
 
   def execute
     @md.lines.each do |line|
-      p line
-      case line
-        when /^#([a-z_0-9]+)\n/i
-          start_format!
-          @now = {
-            name: $1
-          }
-        when "##q\n", "##Q\n"
-          start_question!
-        when "##a\n", "##A\n"
-          start_answers!
-        when (answers_scanning? || answer_scanning?) && /^(-|\+)(.*)/
-          start_answer!
-          @correct = $1 == '+'
-          @buffer << $2
-        when format_scanning? && /##([a-z_0-9]+)\n/
-          @now[:way] = Qa::Question.ways[$1.to_s.to_sym]
-        else
-          @buffer << line
+      if question?
+        case line
+          when /^#([a-z_0-9]+)\n/i
+            start_format!
+            @now = {
+              name: $1
+            }
+          when "##q\n", "##Q\n"
+            start_question!
+          when "##a\n", "##A\n"
+            start_answers!
+          when (answers_scanning? || answer_scanning?) && /^(-|\+)(.*)/
+            start_answer!
+            @correct = $1 == '+'
+            @buffer << $2
+          when format_scanning? && /##([a-z_0-9]+)\n/
+            @now[:way] = Qa::Question.ways[$1.to_s.to_sym]
+          else
+            @buffer << line
+        end
+      elsif premise?
+        case line
+          when /^#([a-z_0-9]+)\n/i
+            start_premise_name!
+            @now = {
+              name: $1
+            }
+          when "##p\n", "##P\n"
+            start_premise!
+          else
+            @buffer << line
+        end
       end
     end
     stop!
@@ -109,6 +163,11 @@ class ConvertMdTo
   end
 
   def push_question
+    @now[:text] = stripped_buffer
+    clear_buffer!
+  end
+
+  def push_premise
     @now[:text] = stripped_buffer
     clear_buffer!
   end
@@ -128,6 +187,12 @@ class ConvertMdTo
   end
 
   def generate_question_hash
+    add_params!
+    init_params_store!
+    clear_buffer!
+  end
+
+  def generate_premise_hash
     add_params!
     init_params_store!
     clear_buffer!

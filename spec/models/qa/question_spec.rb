@@ -13,6 +13,18 @@ RSpec.describe Qa::Question, type: :model do
   # shared_examples
   #
 
+  shared_examples 'multiple questions question' do
+    it { expect(model.multiple_questions?).to be_truthy }
+    it { expect(model.correct_answers.size).to eq(0) }
+    it { expect(model.answer_options.size).to eq(0) }
+
+    context 'with correct?' do
+      it { expect(model.correct?(true)).to be_truthy }
+      it { expect(model.correct?(false)).to be_falsey }
+    end
+  end
+
+
   shared_examples 'ox question' do
     it { expect(model.ox?).to be_truthy }
     it { expect(model.correct_answers.size).to eq(1) }
@@ -38,7 +50,7 @@ RSpec.describe Qa::Question, type: :model do
     end
   end
 
-  shared_examples 'single choide question' do
+  shared_examples 'single choice question' do
     it { expect(model.single_choice?).to be_truthy }
     it { expect(model.correct_answers.size).to eq(1) }
     it { expect(model.answer_options.size).to eq(4) }
@@ -240,7 +252,7 @@ RSpec.describe Qa::Question, type: :model do
           @model.destroy
         end
 
-        it_behaves_like 'single choide question'
+        it_behaves_like 'single choice question'
       end
 
       context 'with invalid' do
@@ -293,6 +305,21 @@ RSpec.describe Qa::Question, type: :model do
         end
       end
     end
+
+    context 'multiple questions' do
+      before :all do
+        @model = Qa::Question.create!(
+          text: 'q',
+          way: Qa::Question.ways[:multiple_questions],
+        )
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it_behaves_like 'multiple questions question'
+    end
   end
 
   describe 'update!' do
@@ -308,7 +335,7 @@ RSpec.describe Qa::Question, type: :model do
         @model.destroy
       end
 
-      it_behaves_like 'single choide question'
+      it_behaves_like 'single choice question'
     end
 
     context 'to free text' do
@@ -419,7 +446,7 @@ RSpec.describe Qa::Question, type: :model do
         @model.destroy
       end
 
-      it_behaves_like 'single choide question'
+      it_behaves_like 'single choice question'
 
       it { expect(Qa::AnswerOption.find(@params2[:options][1][:id])).to be_a(Qa::AnswerOption) }
       it { expect(Qa::AnswerOption.find(@params2[:options][2][:id])).to be_a(Qa::AnswerOption) }
@@ -443,7 +470,7 @@ RSpec.describe Qa::Question, type: :model do
         model.save
       end
 
-      it_behaves_like 'single choide question'
+      it_behaves_like 'single choice question'
     end
 
     context 'with "multiple choices" way' do

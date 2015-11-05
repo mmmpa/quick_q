@@ -9,5 +9,7 @@ class CreateQaQuestions < ActiveRecord::Migration
 
     add_index :qa_questions, :name, unique: true
     add_reference :qa_questions, :source_link, index: true
+    add_reference :qa_questions, :premise, index: true
+    add_reference :qa_questions, :question, index: true
   end
 end

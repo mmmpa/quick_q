@@ -40,14 +40,6 @@ ActiveRecord::Schema.define(version: 20151101193637) do
 
   add_index "qa_explanations", ["question_id"], name: "index_qa_explanations_on_question_id", using: :btree
 
-  create_table "qa_pals", force: :cascade do |t|
-    t.integer "question_id"
-    t.integer "premise_id"
-  end
-
-  add_index "qa_pals", ["premise_id"], name: "index_qa_pals_on_premise_id", using: :btree
-  add_index "qa_pals", ["question_id"], name: "index_qa_pals_on_question_id", using: :btree
-
   create_table "qa_premises", force: :cascade do |t|
     t.string "name", null: false
     t.text   "text", null: false
@@ -62,9 +54,13 @@ ActiveRecord::Schema.define(version: 20151101193637) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.integer  "source_link_id"
+    t.integer  "premise_id"
+    t.integer  "question_id"
   end
 
   add_index "qa_questions", ["name"], name: "index_qa_questions_on_name", unique: true, using: :btree
+  add_index "qa_questions", ["premise_id"], name: "index_qa_questions_on_premise_id", using: :btree
+  add_index "qa_questions", ["question_id"], name: "index_qa_questions_on_question_id", using: :btree
   add_index "qa_questions", ["source_link_id"], name: "index_qa_questions_on_source_link_id", using: :btree
 
   create_table "qa_questions_tags", force: :cascade do |t|

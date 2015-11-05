@@ -1,4 +1,15 @@
 section.question-q.body
+  if question.hasPremise()
+      section.question-q.premise
+        h1.question-q.premise-title
+          Fa(icon='question-circle')
+          | 問題
+        if premise
+          section.question-q.premise-area
+            div.question-q.q-text(dangerouslySetInnerHTML=question.marked)
+        else
+          Loading
+
   section.question-q.text
     h1.question-q.q
       Fa(icon='question-circle')
