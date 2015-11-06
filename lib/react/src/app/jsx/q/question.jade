@@ -3,7 +3,7 @@ section.question-q.body
       section.question-q.premise
         h1.question-q.premise-title
           Fa(icon='question-circle')
-          | 問題
+          | 説明
         if premise
           section.question-q.premise-area
             div.question-q.q-text(dangerouslySetInnerHTML=question.marked)
@@ -22,18 +22,7 @@ section.question-q.body
       = question.pleaseText
 
     section.question-q.answer-area
-    if question.isFreeText()
-      FreeText(question=question options=question.options answers=answers result=result)
-    else if question.isOx()
-      Ox(question=question options=question.options answers=answers result=result)
-    else if question.isSingleChoice()
-      SingleChoice(question=question options=question.options answers=answers result=result)
-    else if question.isMultipleChoices()
-      MultipleChoices(question=question options=question.options answers=answers result=result)
-    else if question.isInOrder()
-      InOrder(question=question answers=answers result=result)
-    else if question.isMultipleQuestions()
-      MultipleQuestions(question=question answers=answers result=result)
+      AnswerOption(question=question options=question.options answers=answers result=result)
 
   if state == QuestionState.MARKED
     section.question-q.result-area

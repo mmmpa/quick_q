@@ -126,6 +126,10 @@ class ConvertMdTo
             }
           when /^##to:([a-z_0-9]+)\n/i
             @now[:to] = $1
+          when /^##tag:([a-z_0-9]+)\n/i
+            @now[:tags] = $1.split(',')
+          when /^##premise:([a-z_0-9]+)\n/i
+            @now[:premise] = $1.split(',')
           when "##q\n", "##Q\n"
             start_question!
           when "##a\n", "##A\n"

@@ -40,7 +40,7 @@ module Api
         expect(response).to have_http_status(200)
         expect(result_hash.size).to eq(Qa::Tag.count)
         expect(ids).to match_array(Qa::Tag.pluck(:id))
-        expect(counts).to eq([4, 3, 3, 0, 0, 0])
+        expect(counts).to eq([4, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0])
       end
     end
 
@@ -54,7 +54,7 @@ module Api
         expect(response).to have_http_status(200)
         expect(result_hash.size).to eq(Qa::Tag.count)
         expect(ids).to match_array(Qa::Tag.pluck(:id))
-        expect(counts).to eq([4, 2, 2, 0, 0, 0])
+        expect(counts).to eq([4, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0])
       end
 
       it do
@@ -62,7 +62,7 @@ module Api
         expect(response).to have_http_status(200)
         expect(result_hash.size).to eq(Qa::Tag.count)
         expect(ids).to match_array(Qa::Tag.pluck(:id))
-        expect(counts).to eq([2, 1, 3, 0, 0, 0])
+        expect(counts).to eq([2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0])
       end
 
       it do
@@ -70,7 +70,7 @@ module Api
         expect(response).to have_http_status(200)
         expect(result_hash.size).to eq(Qa::Tag.count)
         expect(ids).to match_array(Qa::Tag.pluck(:id))
-        expect(counts).to eq([2, 2, 1, 0, 0, 0])
+        expect(counts).to eq([2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
       end
 
       it do
@@ -78,7 +78,7 @@ module Api
         expect(response).to have_http_status(200)
         expect(result_hash.size).to eq(Qa::Tag.count)
         expect(ids).to match_array(Qa::Tag.pluck(:id))
-        expect(counts).to eq([1, 1, 1, 0, 0, 0])
+        expect(counts).to eq([1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
       end
     end
 

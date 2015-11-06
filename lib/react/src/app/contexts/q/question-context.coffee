@@ -9,16 +9,13 @@ module.exports = class QuestionContext extends App.BaseContext
 
     render: ->
       return App.JSX.loading(Fa: App.View.Fa) if @props.state == App.QuestionState.LOADING
+
       App.JSX.Q.question(
         Fa: App.View.Fa
-        SingleChoice: App.View.SingleChoice
-        MultipleChoices: App.View.MultipleChoices
-        FreeText: App.View.FreeText
-        Ox: App.View.Ox
+        AnswerOption: @detectAnswerOption()
         InOrder: App.View.InOrder
         QuestionState: App.QuestionState
         Loading: App.View.Loading
-        MultipleQuestions: App.View.MultipleQuestions
         sourceLink: @props.sourceLink
         state: @props.state
         question: @props.question
@@ -53,6 +50,22 @@ module.exports = class QuestionContext extends App.BaseContext
 
     hasHistory: ->
       window.history.state && window.history.state.historyWardUID
+
+    detectAnswerOption: ->
+      q = @props.question
+      switch
+        when q.isFreeText()
+          App.View.FreeText
+        when q.isOx()
+          App.View.Ox
+        when q.isSingleChoice()
+          App.View.SingleChoice
+        when q.isMultipleChoices()
+          App.View.MultipleChoices
+        when q.isInOrder()
+          App.View.InOrder
+        when q.isMultipleQuestions()
+          App.View.MultipleQuestions
   )
 
   initState: (props) ->
@@ -76,11 +89,26 @@ module.exports = class QuestionContext extends App.BaseContext
   isInOrder: ->
     @state.question.isInOrder()
 
+  isMultipleQuestions: ->
+    @state.question.isMultipleQuestions()
+
   isAnswersFullFilled: ->
-    if @isInOrder()
-      !_.include(@state.answers, '') && !_.include(@state.answers, null) && !_.include(@state.answers, undefined)
+    if @isMultipleQuestions()
+      result = true
+      _.each(_.zip(@state.question.children, @state.answers), (qa)=>
+        [q, a] = qa
+        result = false unless @isAnswersFullFilledOf(q, a || '')
+      )
+      result
     else
-      !_.isNull(@state.answers) && (@state.answers.length > 0 || _.isNumber(@state.answers))
+      @isAnswersFullFilledOf(@state.question, @state.answers)
+
+
+  isAnswersFullFilledOf: (q, a)->
+    if q.isInOrder()
+      !_.include(a, '') && !_.include(a, null) && !_.include(a, undefined)
+    else
+      !_.isNull(a) && (a.length > 0 || _.isNumber(a))
 
   delegate: (subscribe) ->
     super
@@ -90,7 +118,7 @@ module.exports = class QuestionContext extends App.BaseContext
       return unless @isAnswerable()
       @update (s) ->
         # _.mergeは内部の配列もmergeで処理してしまうため
-        if _.isNumber(index)
+        if @isMultipleQuestions()
           s.answers ?= []
           s.answers[+index] = answer
         else
@@ -106,7 +134,7 @@ module.exports = class QuestionContext extends App.BaseContext
       return unless @isSubmittable()
       @update (s) -> _.merge(s, state: App.QuestionState.SUBMITTING)
       @strikeApi(App.Linker.post(App.Path.mark, id: @state.question.id, answers: @state.answers)).then (data)=>
-        if @state.question.isMultipleQuestions()
+        if @isMultipleQuestions()
           subMarks = _.map(data.body.correct_answer, (mark, index)=>
             subMark = _.clone(data.body)
             subMark.correct_answer = mark

@@ -3,6 +3,7 @@ each child in children
     h1.question-q.q
       Fa(icon='question')
       | 設問
+      = child.index + 1
   section.question-q.question-area
     div.question-q.q-text(dangerouslySetInnerHTML=child.marked)
 

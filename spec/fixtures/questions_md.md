@@ -1,5 +1,7 @@
 #test_question_1
 ##single_choice
+##tag:tag1,tag2
+##premise:test_premise_1
 ##q
 10進数の演算式7÷32の結果を2進数で表したものはどれか。
 ##a
@@ -11,6 +13,7 @@
 
 #test_question_2
 ##single_choice
+##tag:tag3
 ##q
 
 
