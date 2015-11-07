@@ -30,6 +30,9 @@ module.exports = class Linker
   isGet: ->
     @method == 'get'
 
+  isPost: ->
+    @method == 'post'
+
   @delete = (uri, params)->
     new @('delete', uri, params)
 

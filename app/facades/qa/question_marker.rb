@@ -17,6 +17,7 @@ class Qa::QuestionMarker
       when for_q.single_choice?
         answers.to_i
       when for_q.multiple_questions?
+        answers = JSON.parse(answers) rescue [] if String === answers
         for_q.children.zip(answers).map do |child_q, child_a|
           normalized_answer_for(child_a, child_q)
         end

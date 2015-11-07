@@ -64,6 +64,32 @@ module Api
       end
 
       context 'with correct answer' do
+        context 'to multiple questions question' do
+          let(:q) { Qa::Question.multiple_questions.take }
+          let(:correct_answer) do
+            q.children.map do |child|
+              case
+                when child.free_text?
+                  child.correct_answers.first.text
+                when child.ox?
+                  child.correct_answers.first.text
+                when child.single_choice?
+                  child.correct_answers.first.answer_option_id
+                when child.multiple_choices?
+                  child.correct_answers.pluck(:answer_option_id)
+                when child.in_order?
+                  child.correct_answers.order { index }.pluck(:answer_option_id)
+                else
+                  nil
+              end
+            end
+          end
+
+          it_behaves_like 'response for correct answer' do
+            before { post api_mark_path(id: q.id, answers: JSON.generate(correct_answer)) }
+          end
+        end
+
         context 'to free text question' do
           let(:q) { Qa::Question.free_text.take }
           let(:correct_answer) { q.correct_answers.first.text }

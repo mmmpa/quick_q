@@ -12,13 +12,22 @@ module.exports = class ApiStriker
         resolve(@_struck[linker.paramsUri])
       )
 
-    $.ajax(
-      url: '/api' + linker.uri
-      type: linker.method
-      dataType: 'json'
-      data: linker.params
-    )
-    .then (data, __, xhr)=>
+    (if linker.isPost()
+      $.ajax(
+        url: '/api' + linker.uri
+        type: linker.method
+        dataType: 'json'
+        contentType: 'application/json'
+        data: JSON.stringify(linker.params)
+      )
+    else
+      $.ajax(
+        url: '/api' + linker.uri
+        type: linker.method
+        dataType: 'json'
+        data: linker.params
+      )
+    ).then (data, __, xhr)=>
       # データ保持動作
       header = @pickHeaderParameters(xhr)
       if linker.isGet
