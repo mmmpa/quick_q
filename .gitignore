@@ -5,7 +5,6 @@
 /db/md
 /db/json
 node_modules
-/db/csv
 /db/premise
 /db/.gitignore
 /db/*.html
