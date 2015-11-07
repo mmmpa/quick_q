@@ -1,3 +1,4 @@
+require 'pp'
 #
 # カスタムフォーマットのマークダウンファイルからQa::Questionを生成する
 # HashのArrayに整形し、CoordinateQuestionにわたす
