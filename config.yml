@@ -1,0 +1,5 @@
+adapter: postgresql
+encoding: unicode
+username: <%= ENV['PG_USER'] %>
+password: <%= ENV['PG_PASSWORD'] %>
+database: <%= ENV['DATABASE_NAME'] %>

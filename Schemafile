@@ -1,0 +1,105 @@
+create_table "qa_answer_options", force: :cascade do |t|
+  t.string  "text",                    null: false
+  t.integer "index",       default: 0, null: false
+  t.integer "question_id"
+end
+
+add_index "qa_answer_options", ["question_id"], name: "index_qa_answer_options_on_question_id", using: :btree
+
+create_table "qa_correct_answers", force: :cascade do |t|
+  t.integer "index",            default: 0, null: false
+  t.integer "question_id"
+  t.integer "answer_option_id"
+end
+
+add_index "qa_correct_answers", ["answer_option_id"], name: "index_qa_correct_answers_on_answer_option_id", using: :btree
+add_index "qa_correct_answers", ["question_id"], name: "index_qa_correct_answers_on_question_id", using: :btree
+
+create_table "qa_explanations", force: :cascade do |t|
+  t.text    "text"
+  t.integer "question_id"
+end
+
+add_index "qa_explanations", ["question_id"], name: "index_qa_explanations_on_question_id", using: :btree
+
+create_table "qa_premises", force: :cascade do |t|
+  t.string "name", null: false
+  t.text   "text", null: false
+end
+
+add_index "qa_premises", ["name"], name: "index_qa_premises_on_name", unique: true, using: :btree
+
+create_table "qa_questions", force: :cascade do |t|
+  t.string   "name",                       null: false
+  t.string   "text",                       null: false
+  t.integer  "way",            default: 0, null: false
+  t.datetime "created_at",                 null: false
+  t.datetime "updated_at",                 null: false
+  t.integer  "source_link_id"
+  t.integer  "premise_id"
+  t.integer  "question_id"
+end
+
+add_index "qa_questions", ["name"], name: "index_qa_questions_on_name", unique: true, using: :btree
+add_index "qa_questions", ["premise_id"], name: "index_qa_questions_on_premise_id", using: :btree
+add_index "qa_questions", ["question_id"], name: "index_qa_questions_on_question_id", using: :btree
+add_index "qa_questions", ["source_link_id"], name: "index_qa_questions_on_source_link_id", using: :btree
+
+create_table "qa_questions_tags", force: :cascade do |t|
+  t.integer "question_id"
+  t.integer "tag_id"
+end
+
+add_index "qa_questions_tags", ["question_id", "tag_id"], name: "index_qa_questions_tags_on_question_id_and_tag_id", unique: true, using: :btree
+add_index "qa_questions_tags", ["question_id"], name: "index_qa_questions_tags_on_question_id", using: :btree
+add_index "qa_questions_tags", ["tag_id"], name: "index_qa_questions_tags_on_tag_id", using: :btree
+
+create_table "qa_source_links", force: :cascade do |t|
+  t.string "name",    null: false
+  t.string "display", null: false
+  t.string "url",     null: false
+end
+
+add_index "qa_source_links", ["name"], name: "index_qa_source_links_on_name", unique: true, using: :btree
+
+create_table "qa_tags", force: :cascade do |t|
+  t.string "name",    null: false
+  t.string "display", null: false
+end
+
+add_index "qa_tags", ["display"], name: "index_qa_tags_on_display", unique: true, using: :btree
+add_index "qa_tags", ["name"], name: "index_qa_tags_on_name", unique: true, using: :btree
+
+create_table "selection_selected_questions", force: :cascade do |t|
+  t.integer "selection_id"
+  t.integer "question_id"
+end
+
+add_index "selection_selected_questions", ["question_id"], name: "index_selection_selected_questions_on_question_id", using: :btree
+add_index "selection_selected_questions", ["selection_id", "question_id"], name: "selection_selected_questions_s_q", unique: true, using: :btree
+add_index "selection_selected_questions", ["selection_id"], name: "index_selection_selected_questions_on_selection_id", using: :btree
+
+create_table "selection_selections", force: :cascade do |t|
+  t.string   "name",        null: false
+  t.integer  "choice_type", null: false
+  t.integer  "total"
+  t.datetime "created_at",  null: false
+  t.datetime "updated_at",  null: false
+end
+
+create_table "workbook_books", force: :cascade do |t|
+  t.string   "name",       null: false
+  t.integer  "eval_type",  null: false
+  t.integer  "passing",    null: false
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+end
+
+create_table "workbook_questions", force: :cascade do |t|
+  t.integer "score",       default: 1, null: false
+  t.integer "book_id"
+  t.integer "question_id"
+end
+
+add_index "workbook_questions", ["book_id"], name: "index_workbook_questions_on_book_id", using: :btree
+add_index "workbook_questions", ["question_id"], name: "index_workbook_questions_on_question_id", using: :btree
