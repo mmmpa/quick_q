@@ -162,7 +162,7 @@ RSpec.describe CoordinateQuestion, type: :model do
             ]
           }
           EOS
-        }.to raise_error(CoordinateQuestion::UpdateFailed)
+        }.to change(Qa::Question, :count).by(1)
       end
     end
   end
