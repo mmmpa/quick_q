@@ -19,7 +19,6 @@ module.exports = class MainContext extends Arda.Context
         notifier: new Arda.Router(Arda.DefaultLayout, React.findDOMNode(@refs.notifier))
         menu: new Arda.Router(Arda.DefaultLayout, React.findDOMNode(@refs.menu))
       }
-      console.log 'Display mounted', routers
       @dispatch 'display:initialized', routers
   )
 
@@ -48,7 +47,9 @@ module.exports = class MainContext extends Arda.Context
       @_replaceScene(App.Linker.get(App.Path.portal))
 
     subscribe 'notify:fail', (title, message)=>
-    subscribe 'history:push', (linker)=> history.pushState({}, null, linker.paramsUri)
+    subscribe 'history:push', (linker)=>
+      history.pushState({}, null, linker.paramsUri)
+      ga('send', 'pageview', linker.paramsUri)
 
     subscribe 'reload', =>
       @update((state) => state)
@@ -169,8 +170,7 @@ module.exports = class MainContext extends Arda.Context
   #
 
   _replaceScene: (linker) ->
-    history.pushState({}, null, linker.uri)
+    @emit('history:push', linker)
     @content.pushContext(@_detectCassette().forPusher()...).then =>
       MathJax.Hub.Typeset()
-
 
