@@ -106,7 +106,12 @@ namespace :q do
       # テンプレートは除外
       next if file_path.include?('template')
 
-      ConvertMdTo.questions(File.read(file_path)).execute rescue p "fail #{file_path}"
+      begin
+        ConvertMdTo.questions(File.read(file_path)).execute
+      rescue => e
+        p "fail #{file_path}"
+        pp e.backtrace
+      end
     end
   end
 
@@ -117,6 +122,16 @@ namespace :q do
       next if file_path.include?('template')
 
       ConvertMdTo.questions(File.read(file_path), update: true).execute
+    end
+  end
+
+  desc 'premiseを登録する'
+  task :register_premise => :environment do
+    Dir[File.expand_path("#{Rails.root}/db/premise/**/*.md", __FILE__)].each do |file_path|
+      # テンプレートは除外
+      next if file_path.include?('template')
+
+      ConvertMdTo.premises(File.read(file_path)).execute
     end
   end
 end

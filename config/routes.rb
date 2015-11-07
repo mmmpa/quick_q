@@ -24,6 +24,10 @@ Rails.application.routes.draw do
       get '', to: 'sources#index', as: :sources
       get ':id', to: 'sources#show', as: :source
     end
+
+    scope :premises do
+      get ':id', to: 'premises#show', as: :premises
+    end
   end
 
   get '', to: 'portal#index', as: :portal

@@ -2,11 +2,11 @@ section.question-q.body
   if question.hasPremise()
       section.question-q.premise
         h1.question-q.premise-title
-          Fa(icon='question-circle')
-          | 説明
+          Fa(icon='file-text-o')
+          | 共通の前文
         if premise
           section.question-q.premise-area
-            div.question-q.q-text(dangerouslySetInnerHTML=question.marked)
+            div.question-q.q-text(dangerouslySetInnerHTML=premise.marked)
         else
           Loading
 

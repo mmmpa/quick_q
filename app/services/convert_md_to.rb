@@ -116,6 +116,7 @@ class ConvertMdTo
   end
 
   def execute
+    @md = @md.gsub("\r", '')
     @md.lines.each do |line|
       if question?
         case line
@@ -126,10 +127,16 @@ class ConvertMdTo
             }
           when /^##to:([a-z_0-9]+)\n/i
             @now[:to] = $1
-          when /^##tag:([a-z_0-9]+)\n/i
-            @now[:tags] = $1.split(',')
+          when /^##src:([a-z_0-9]+)\n/i
+            @now[:source_link] = Qa::SourceLink.find_by(name: $1)
+          when /^##tags:([a-z_0-9,]+)\n/i
+            @now[:tags] = $1.split(',').map do |tag_name|
+              Qa::Tag.find_by(name: tag_name)
+            end
+          when /^##order_a:([\s0-9,]+)\n/i
+            @now[:order] = $1.split(',').map(&:to_i)
           when /^##premise:([a-z_0-9]+)\n/i
-            @now[:premise] = $1.split(',')
+            @now[:premise] = Qa::Premise.find_by(name: $1)
           when "##q\n", "##Q\n"
             start_question!
           when "##a\n", "##A\n"

@@ -193,7 +193,8 @@ class CoordinateQuestion
       result = @questions.inject({models: [], errors: []}) { |a, params|
         begin
           if update?
-            a[:models].push(Qa::Question.find_by(name: params[:name]).update!(params))
+            target = Qa::Question.find_by(name: params[:name]) rescue nil
+            a[:models].push(target ? target.update!(params) : Qa::Question.create!(params))
           else
             a[:models].push(Qa::Question.create!(params))
           end

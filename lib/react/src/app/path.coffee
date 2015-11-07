@@ -9,6 +9,7 @@ module.exports = Path =
   taggedIndex: '/q/tagged/:tags'
   sources: '/src'
   source: '/src/:id'
+  premise: '/premises/:id'
   render: (path, values)->
     _.reduce(values, (a, value, key)->
       a.replace("%{#{key}}", value)

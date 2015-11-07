@@ -20,6 +20,7 @@ module.exports = class QuestionContext extends App.BaseContext
         state: @props.state
         question: @props.question
         answers: @props.answers
+        premise: @props.premise
         result: @props.result
         qTags: @props.qTags
         submit: =>
@@ -44,9 +45,12 @@ module.exports = class QuestionContext extends App.BaseContext
       )
 
     componentDidUpdate: ->
-      unless @state.informed && @props.question
+      if !@state.informed && @allDataLoaded()
         @dispatch('inform:rendered')
         @state.informed = true
+
+    allDataLoaded: ->
+      @props.question && (!@props.question.hasPremise() || @props.premise)
 
     hasHistory: ->
       window.history.state && window.history.state.historyWardUID
@@ -116,7 +120,7 @@ module.exports = class QuestionContext extends App.BaseContext
     subscribe 'question:show', (q)-> @root.emit('question:show', q)
     subscribe 'question:answer', (answer, index)->
       return unless @isAnswerable()
-      @update (s) ->
+      @update (s) =>
         # _.mergeは内部の配列もmergeで処理してしまうため
         if @isMultipleQuestions()
           s.answers ?= []
@@ -162,15 +166,22 @@ module.exports = class QuestionContext extends App.BaseContext
         if @isInOrder()
           @update (s) -> _.merge(s, answers: new Array(s.question.answersNumber))
       .then =>
-        if @state.question.hasSource
+        if @state.question.hasPremise()
+          @strikeApi(App.Linker.get(App.Path.premise, id: @state.question.premiseId)).then (data)=>
+            @update (s) ->
+              s.premise = new App.Premise(data.body)
+              s
+      .then =>
+        @strikeApi(App.Linker.get(App.Path.qTags, id: @props.id)).then (data)=>
+          @update (s) ->
+            s.qTags = _.map(data.body, (tag)=>
+              new App.Tag(tag)
+            )
+            s
+      .then =>
+        if @state.question.hasSource()
           @strikeApi(App.Linker.get(App.Path.source, id: @state.question.sourceLinkId)).then (data)=>
             @update (s) ->
               s.sourceLink = new App.SourceLink(data.body)
-              s
-          @strikeApi(App.Linker.get(App.Path.qTags, id: @props.id)).then (data)=>
-            @update (s) ->
-              s.qTags = _.map(data.body, (tag)=>
-                new App.Tag(tag)
-              )
               s
 
