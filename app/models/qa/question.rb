@@ -370,9 +370,9 @@ module Qa
       if Qa::Question === key
         key
       else
-        if key.to_i != 0
+        begin
           Qa::Question.find_by(name: key)
-        else
+        rescue
           Qa::Question.find(key)
         end
       end

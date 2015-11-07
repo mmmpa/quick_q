@@ -136,6 +136,7 @@ module.exports = class QuestionContext extends App.BaseContext
 
     subscribe 'question:submit', ->
       return unless @isSubmittable()
+      console.log @state
       @update (s) -> _.merge(s, state: App.QuestionState.SUBMITTING)
       @strikeApi(App.Linker.post(App.Path.mark, id: @state.question.id, answers: @state.answers)).then (data)=>
         if @isMultipleQuestions()

@@ -141,6 +141,7 @@ class ConvertMdTo
             start_question!
           when "##a\n", "##A\n"
             start_answers!
+            start_answer! if no_options?
           when (answers_scanning? || answer_scanning?) && /^(-|\+)(.*)/
             start_answer!
             @correct = $1 == '+'
@@ -185,9 +186,18 @@ class ConvertMdTo
     clear_buffer!
   end
 
+  def no_options?
+    @now[:way] == Qa::Question.ways[:free_text] || @now[:way] == Qa::Question.ways[:ox]
+  end
+
   def push_answer
-    @now[:options] ||= []
-    @now[:options].push({text: stripped_buffer, correct_answer: @correct})
+    if no_options?
+      @now[:answers] = @buffer
+    else
+      @now[:options] ||= []
+      @now[:options].push({text: stripped_buffer, correct_answer: @correct})
+    end
+
     clear_buffer!
   end
 

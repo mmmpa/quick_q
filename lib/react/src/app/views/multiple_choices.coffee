@@ -15,6 +15,6 @@ module.exports = SingleChoice = React.createClass(
           new_answers = _.reject(new_answers, (n)-> n == id)
         else
           new_answers.push(id)
-        @dispatch('question:answer', new_answers)
+        @dispatch('question:answer', new_answers, @props.question.index)
     )
 )

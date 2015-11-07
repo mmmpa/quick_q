@@ -3,7 +3,6 @@ module.exports = MultipleQuestions = React.createClass(
 
   render: ()->
     q = @props.question
-    console.log @props.result
     App.JSX.Q.multipleQuestions(
       Fa: App.View.Fa
       SingleChoice: App.View.SingleChoice

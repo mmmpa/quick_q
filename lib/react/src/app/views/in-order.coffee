@@ -15,7 +15,7 @@ module.exports = SingleChoice = React.createClass(
       select: (e)=>
         new_answers = @props.answers?.concat() || []
         new_answers[e.target.name] = e.target.value
-        @dispatch('question:answer', new_answers)
+        @dispatch('question:answer', new_answers, @props.question.index)
       selected: (index)=>
         @props.answers?[index]?.toString() || ''
     )

@@ -9,6 +9,6 @@ module.exports = FreeText = React.createClass(
       answers: @props.answers
       isMarked: => @props.result?
       input: (e)=>
-        @dispatch('question:answer', e.target.value)
+        @dispatch('question:answer', e.target.value, @props.question.index)
     )
 )

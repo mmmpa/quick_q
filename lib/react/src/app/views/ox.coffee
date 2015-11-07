@@ -11,6 +11,6 @@ module.exports = Ox = React.createClass(
       isTrue: => 'active' if @props.answers == 1
       isMarked: => @props.result?
       toggle: (boolean)=>
-        @dispatch('question:answer', boolean)
+        @dispatch('question:answer', boolean, @props.question.index)
     )
 )
