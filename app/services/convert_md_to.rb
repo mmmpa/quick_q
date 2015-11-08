@@ -122,6 +122,7 @@ class ConvertMdTo
       if question?
         case line
           when /^#([a-z_0-9]+)\n/i
+            p $1
             start_format!
             @now = {
               name: $1
