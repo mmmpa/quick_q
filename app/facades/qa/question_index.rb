@@ -10,7 +10,6 @@ module Qa
 
   class QuestionIndex < Question
     include Pager
-    include TaggedPicker
 
     default_scope -> { where { question_id == nil } }
 

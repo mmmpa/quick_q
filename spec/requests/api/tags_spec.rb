@@ -52,45 +52,25 @@ module Api
       it do
         get api_tagged_tag_path(tag1)
         expect(response).to have_http_status(200)
-        expect(result_hash.size).to eq(Qa::Tag.count)
-        expect(ids).to match_array(Qa::Tag.pluck(:id))
-        expect(counts).to eq([4, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        expect(counts).to eq([4, 2, 2])
       end
 
       it do
         get api_tagged_tag_path(tag3)
         expect(response).to have_http_status(200)
-        expect(result_hash.size).to eq(Qa::Tag.count)
-        expect(ids).to match_array(Qa::Tag.pluck(:id))
-        expect(counts).to eq([2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        expect(counts).to eq([2, 1, 3])
       end
 
       it do
         get api_tagged_tag_path([tag1, tag2].join(','))
         expect(response).to have_http_status(200)
-        expect(result_hash.size).to eq(Qa::Tag.count)
-        expect(ids).to match_array(Qa::Tag.pluck(:id))
-        expect(counts).to eq([2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        expect(counts).to eq([2, 2, 1])
       end
 
       it do
         get api_tagged_tag_path([tag1, tag2, tag3].join(','))
         expect(response).to have_http_status(200)
-        expect(result_hash.size).to eq(Qa::Tag.count)
-        expect(ids).to match_array(Qa::Tag.pluck(:id))
-        expect(counts).to eq([1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-      end
-    end
-
-    describe 'index and index2' do
-      it do
-        get api_tags_path
-        result = JSON.parse(response.body)
-
-        get api_tags2_path
-        result2 = JSON.parse(response.body)
-
-        expect(result).to match_array(result2)
+        expect(counts).to eq([1, 1, 1])
       end
     end
   end

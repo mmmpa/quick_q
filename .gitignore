@@ -8,3 +8,4 @@ node_modules
 /db/premise
 /db/.gitignore
 /db/*.html
+/db/*.sh

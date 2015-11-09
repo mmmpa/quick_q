@@ -167,6 +167,19 @@ module Qa
     scope :in_order, -> { where { way == Question.ways[:in_order] } }
     scope :multiple_questions, -> { where { way == Question.ways[:multiple_questions] } }
 
+    scope :on, ->(*tag_ids) {
+      joins { questions_tags }
+        .where { questions_tags.tag_id.in(tag_ids) }
+        .group { id }
+        .having { count(id).eq(tag_ids.flatten.size) }
+    }
+
+    scope :all_on, ->(*tag_ids) {
+      joins { questions_tags }
+        .where { questions_tags.tag_id.in(tag_ids) }
+        .uniq
+    }
+
     #
     # 答え合わせ
     #

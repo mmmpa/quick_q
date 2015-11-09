@@ -52,8 +52,8 @@ RSpec.describe ConvertMdTo, type: :model do
       TagQToTag.with_way
 
       expect(Qa::QuestionIndex.count).to eq(1)
-      expect(Qa::QuestionIndex.on(Qa::Tag.find_by(name: :way_multiple_questions).id).count).to eq(1)
-      expect(Qa::QuestionIndex.on(Qa::Tag.find_by(name: :way_single_choice).id).count).to eq(0)
+      expect(Qa::QuestionIndex.on(Qa::Tag.find_by(name: :way_multiple_questions).id).to_a.size).to eq(1)
+      expect(Qa::QuestionIndex.on(Qa::Tag.find_by(name: :way_single_choice).id).to_a.size).to eq(0)
     end
 
     it do
