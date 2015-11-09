@@ -14,7 +14,6 @@ Rails.application.routes.draw do
 
     scope :tags do
       get '', to: 'tags#index', as: :tags
-      get '2', to: 'tags#index2', as: :tags2
       get 'tagged/:tags', to: 'tags#with_tag', as: :tagged_tag
       get 'tagged/', to: 'tags#index', as: :no_tagged_tag
       get 'tagged/-', to: 'tags#index'
