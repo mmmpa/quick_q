@@ -14,8 +14,10 @@ module Qa
     default_scope -> { where { question_id == nil } }
 
     def as_json(options = {})
-      options.merge!(only: [:id, :text, :way])
-      super
+      options.merge!(only: [:id, :way])
+      super.merge(
+             text: text.gsub(/<.*?>/, '')[0..100]
+      )
     end
 
     class << self

@@ -132,9 +132,9 @@ class ConvertMdTo
           when /^##src:([a-z_0-9]+)\n/i
             @now[:source_link] = Qa::SourceLink.find_by(name: $1)
           when /^##tags:([a-z_0-9,]+)\n/i
-            @now[:tags] = $1.split(',').map do |tag_name|
-              Qa::Tag.find_by(name: tag_name)
-            end
+            @now[:tags] = $1.split(',').map { |tag_name|
+              Qa::Tag.find_by(name: tag_name) rescue nil
+            }.compact
           when /^##order_a:([\s0-9,]+)\n/i
             @now[:order] = $1.split(',').map(&:to_i)
           when /^##premise:([a-z_0-9]+)\n/i

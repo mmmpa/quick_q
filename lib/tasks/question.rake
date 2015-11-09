@@ -102,7 +102,7 @@ namespace :q do
 
   desc 'db/md内のファイルをインポートする（not アップデート）'
   task :create_from_md => :environment do
-    Dir[File.expand_path("#{Rails.root}/db/md/**/*.md", __FILE__)].each do |file_path|
+    Dir[File.expand_path("#{Rails.root}/db/md/**/*.md", __FILE__)].sort.each do |file_path|
       # テンプレートは除外
       next if file_path.include?('template')
 
@@ -117,7 +117,7 @@ namespace :q do
 
   desc 'db/md内のファイルでアップデートする'
   task :update_from_md => :environment do
-    Dir[File.expand_path("#{Rails.root}/db/md/**/*.md", __FILE__)].each do |file_path|
+    Dir[File.expand_path("#{Rails.root}/db/md/**/*.md", __FILE__)].sort.each do |file_path|
       # テンプレートは除外
       next if file_path.include?('template')
 

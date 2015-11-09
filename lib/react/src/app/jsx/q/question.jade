@@ -35,10 +35,10 @@ section.question-q.body
           h1.question-q.mark.incorrect
             Fa(icon='hand-stop-o')
             = resultText()
-      //h1.question-q.correct-answer
-      //  Fa(icon='graduation-cap')
-      //  | 正解は...
-      //div.question-q.answer-area(dangerouslySetInnerHTML=result.correctAnswer)
+      h1.question-q.correct-answer
+        Fa(icon='graduation-cap')
+        | 正解は...
+      div.question-q.answer-area(dangerouslySetInnerHTML=result.correctAnswer)
   else
     section.question-q.control
       if state == QuestionState.ASKING

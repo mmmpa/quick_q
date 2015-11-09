@@ -40,7 +40,7 @@ module Api
         expect(response).to have_http_status(200)
         expect(result_hash.size).to eq(Qa::Tag.count)
         expect(ids).to match_array(Qa::Tag.pluck(:id))
-        expect(counts).to eq([4, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        expect(counts).to eq([4, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
       end
     end
 

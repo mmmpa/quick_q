@@ -1,5 +1,0 @@
-sample_order_1,答えは「A、B、C、D」,解説,0:1:2:3,A,B,C,D,E
-sample_order_2,答えは「D、C、D」,,3:2:3,A,B,C,D,E
-sample_order_3,答えは「E」,,4,A,B,C,D,E
-sample_order_4,答えは「A、A、A、B、B、B」,,0:0:0:1:1:1,A,B,C,D,E
-sample_order_5,答えは「A、B、C、D」,解説,0:1:2:3,A,B,C,D,E

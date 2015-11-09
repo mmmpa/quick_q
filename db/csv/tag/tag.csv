@@ -5,7 +5,6 @@ way,multiple_choices,複数選ぶ問題
 way,ox,ox問題
 way,multiple_questions,複数の問題
 test,ipt,情報処理技術者試験
-test,ss,司法書士試験
 ipt,26_a,平成26年度秋期
 ipt,26_s,平成26年度春期
 ipt,27_a,平成27年度秋期
@@ -22,7 +21,6 @@ ipt,db,データベーススペシャリスト試験（DB）
 ipt,es,エンベデッドシステムスペシャリスト試験（ES）
 ipt,sc,情報セキュリティスペシャリスト試験（SC）
 ipt,au,システム監査技術者試験（AU）
-ss,27,平成27年度
 time,am,午前
 time,pm,午後
 time,am1,午前1

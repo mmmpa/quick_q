@@ -10,3 +10,4 @@ way,single_choice,一つだけ選ぶ問題
 way,multiple_choices,複数選ぶ問題
 way,ox,ox問題
 way,multiple_questions,複数の問題
+app,test,動作テスト用
