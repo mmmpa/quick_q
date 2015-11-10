@@ -21,6 +21,7 @@ ipt,db,データベーススペシャリスト試験（DB）
 ipt,es,エンベデッドシステムスペシャリスト試験（ES）
 ipt,sc,情報セキュリティスペシャリスト試験（SC）
 ipt,au,システム監査技術者試験（AU）
+ipt,ip,ITパスポート試験
 time,am,午前
 time,pm,午後
 time,am1,午前1
@@ -32,4 +33,5 @@ year,26,平成26年度
 ipt,q_tech,テクノロジ系の問題
 ipt,q_mg,マネジメント系の問題
 ipt,q_st,ストラテジ系の問題
+ipt,q_mid,中間問題
 app,test,動作テスト用
