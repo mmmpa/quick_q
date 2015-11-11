@@ -3,6 +3,7 @@ module.exports = Path =
   q: '/q/:id'
   qIndex: '/q'
   qTags: '/q/:id/tag'
+  next: '/q/:id/next'
   mark: '/marks'
   tags: '/tags'
   taggedTags: '/tags/tagged/:tags'

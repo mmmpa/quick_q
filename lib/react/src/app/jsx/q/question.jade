@@ -75,6 +75,18 @@ section.question-q.body
           | 確認中...
 
   section.question-q.control-area
+    section.question-q.next-questions-area
+      if nextQuestions
+        ul.question-q.next-questions-body
+          each next in nextQuestions
+            li(key='next'+next.tagId).question-q.nextQuestions-link
+              a(href=next.uri rel=next.id onClick=showQuestion)
+                span.name= next.display
+                Fa(icon='arrow-circle-o-right')
+      else
+        Loading
+
+
     button.button.go-back(onClick=goBack)
       Fa(icon='arrow-circle-o-left')
       | 一覧にもどる

@@ -17,7 +17,8 @@ module.exports = class Linker
       ).join('::')
     @paramsUri = if @isGet && @params
       @uri + '?' + (for key, value of @params
-        encodeURIComponent(key) + "=" + encodeURIComponent(value)
+        if value
+          encodeURIComponent(key) + "=" + encodeURIComponent(value)
       ).join('&')
     else
       @uri

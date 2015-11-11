@@ -9,7 +9,6 @@ module.exports = class QuestionContext extends App.BaseContext
 
     render: ->
       return App.JSX.loading(Fa: App.View.Fa) if @props.state == App.QuestionState.LOADING
-      console.log unescape(location.href).match(/tags=([0-9,]+)/)
       App.JSX.Q.question(
         Fa: App.View.Fa
         AnswerOption: @detectAnswerOption()
@@ -23,6 +22,7 @@ module.exports = class QuestionContext extends App.BaseContext
         premise: @props.premise
         result: @props.result
         qTags: @props.qTags
+        nextQuestions: @props.nextQuestions
         submit: =>
           @dispatch('question:submit')
         showTaggedIndex: (e)=>
@@ -37,6 +37,13 @@ module.exports = class QuestionContext extends App.BaseContext
             history.back()
           else
             @dispatch('app:home')
+        showQuestion: (e)=>
+          @resetInformed()
+          tags = unescape(location.href).match(/tags=([0-9,]+)/)?[1]
+          e.preventDefault()
+          id = e.currentTarget.getAttribute('rel')
+          @dispatch('question:show', id, tags)
+
         isCorrect: =>
           if @props.result.isCorrect
             @props.result.isCorrect()
@@ -53,6 +60,18 @@ module.exports = class QuestionContext extends App.BaseContext
       if !@state.informed && @allDataLoaded()
         @dispatch('inform:rendered')
         @state.informed = true
+
+    resetInformed: ->
+      console.log 'reset'
+      @state.informed = false
+
+    componentDidMount: ->
+      $(window).on(HistoryWard.BACKWARD, @resetInformed)
+      $(window).on(HistoryWard.FORWARD, @resetInformed)
+
+    componentWillUnmount: ->
+      $(window).unbind(HistoryWard.BACKWARD, @resetInformed)
+      $(window).unbind(HistoryWard.FORWARD, @resetInformed)
 
     allDataLoaded: ->
       @props.question && (!@props.question.hasPremise() || @props.premise)
@@ -85,6 +104,8 @@ module.exports = class QuestionContext extends App.BaseContext
     result: null
     sourceLink: null
     qTags: null
+    nextQuestions: null
+    informed: false
 
   expandComponentProps: (props, state) ->
     state
@@ -122,7 +143,7 @@ module.exports = class QuestionContext extends App.BaseContext
   delegate: (subscribe) ->
     super
     subscribe 'context:started', -> @_initializeQuestion()
-    subscribe 'question:show', (q)-> @root.emit('question:show', q)
+    subscribe 'question:show', (q, tags)-> @root.emit('question:show', q, tags)
     subscribe 'question:answer', (answer, index)->
       return unless @isAnswerable()
       @update (s) =>
@@ -141,7 +162,7 @@ module.exports = class QuestionContext extends App.BaseContext
 
     subscribe 'question:submit', ->
       return unless @isSubmittable()
-      console.log @state
+
       @update (s) -> _.merge(s, state: App.QuestionState.SUBMITTING)
       @strikeApi(App.Linker.post(App.Path.mark, id: @state.question.id, answers: @state.answers)).then (data)=>
         if @isMultipleQuestions()
@@ -182,6 +203,13 @@ module.exports = class QuestionContext extends App.BaseContext
           @update (s) ->
             s.qTags = _.map(data.body, (tag)=>
               new App.Tag(tag)
+            )
+            s
+      .then =>
+        @strikeApi(App.Linker.get(App.Path.next, id: @props.id)).then (data)=>
+          @update (s) ->
+            s.nextQuestions = _.map(data.body, (nextQ)=>
+              new App.NextQuestion(nextQ)
             )
             s
       .then =>

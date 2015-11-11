@@ -10,13 +10,14 @@ module Qa
 
     class << self
       def of(target_id)
-        tags = Qa::Tag.joins { questions_tags }
+        target_tags = Qa::Tag.joins { questions_tags }
                  .where { questions_tags.question_id == target_id }
-
-        sub = joins { questions_tags }
-                .where { questions_tags.tag_id.in(tags.select { :id }) }
+                 .select { :id }
+        sub = joins { tags }
+                .order { name }
+                .where { tags.id.in(target_tags.select { :id }) }
                 .where { name > Qa::Question.find(target_id).name }
-                .select { ['qa_questions.*', questions_tags.tag_id.as(:tag_id)] }
+                .select { ['qa_questions.*', tags.id.as(:tag_id), '"qa_tags"."display" AS tag_display'] }
                 .to_a
                 .uniq { |r| r.tag_id }
       end
@@ -40,7 +41,7 @@ module Qa
 
     def as_json(options = {})
       options.merge!(
-        only: [:id, :tag_id]
+        only: [:id, :tag_id, :tag_display]
       )
       super.merge!(text: text[0..30])
     end
