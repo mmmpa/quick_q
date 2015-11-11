@@ -11,12 +11,12 @@ module Qa
   class QuestionIndex < Question
     include Pager
 
-    default_scope -> { where { question_id == nil } }
+    default_scope -> { where { question_id == nil }.order { name } }
 
     def as_json(options = {})
       options.merge!(only: [:id, :way])
       super.merge(
-             text: text.gsub(/<.*?>/, '')[0..100]
+        text: text.gsub(/<.*?>/, '')[0..100]
       )
     end
 

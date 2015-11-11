@@ -7,6 +7,11 @@ each child in children
   section.question-q.question-area
     div.question-q.q-text(dangerouslySetInnerHTML=child.marked)
 
+  section.question-q.answer
+    h1.question-q.a
+      Fa(icon='exclamation')
+      = child.pleaseText
+
   if child.isFreeText()
     FreeText(question=child options=child.options answers=answers[child.index] result=result[child.index])
   else if child.isOx()

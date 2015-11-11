@@ -9,7 +9,7 @@ module Qa
     include Pager
 
     # as_json対策
-    has_many :children, class_name: self.name, foreign_key: :question_id
+    has_many :children, -> { order { name } }, class_name: self.name, foreign_key: :question_id
 
     def as_json(options = {})
       options.merge!(

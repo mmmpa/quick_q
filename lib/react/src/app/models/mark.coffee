@@ -12,7 +12,7 @@ module.exports = class Mark
           _.find(@options, (option)=>
             option.id == id
           ).marked.__html
-        ).join('\n\n')
+        ).join('<br>\n\n')
       else
         @mark.correct_answer
     }

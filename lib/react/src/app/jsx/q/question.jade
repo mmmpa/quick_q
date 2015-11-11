@@ -38,7 +38,13 @@ section.question-q.body
       h1.question-q.correct-answer
         Fa(icon='graduation-cap')
         | 正解は...
-      div.question-q.answer-area(dangerouslySetInnerHTML=result.correctAnswer)
+      if question.isMultipleQuestions()
+        ol
+          each mark, index in result
+            li(key=index)
+              div.question-q.answer-area(dangerouslySetInnerHTML=mark.correctAnswer)
+      else
+        div.question-q.answer-area(dangerouslySetInnerHTML=result.correctAnswer)
   else
     section.question-q.control
       if state == QuestionState.ASKING

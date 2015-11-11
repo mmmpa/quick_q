@@ -142,7 +142,7 @@ module Qa
     belongs_to :source_link, inverse_of: :questions
 
     belongs_to :parent, class_name: self.name, foreign_key: :question_id
-    has_many :children, -> { order(:id) }, class_name: self.name, foreign_key: :question_id
+    has_many :children, -> { order { name } }, class_name: self.name, foreign_key: :question_id
 
     validates :name, :text, :way,
               presence: true

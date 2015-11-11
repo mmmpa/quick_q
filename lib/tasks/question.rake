@@ -117,7 +117,9 @@ namespace :q do
 
   desc 'db/md内のファイルでアップデートする'
   task :update_from_md => :environment do
-    Dir[File.expand_path("#{Rails.root}/db/md/**/*.md", __FILE__)].sort.each do |file_path|
+    target = ["#{Rails.root}/#{ENV['MD_FOR_UPDATE']}"]
+
+    (target || Dir[File.expand_path("#{Rails.root}/db/md/**/*.md", __FILE__)].sort).each do |file_path|
       # テンプレートは除外
       next if file_path.include?('template')
 
