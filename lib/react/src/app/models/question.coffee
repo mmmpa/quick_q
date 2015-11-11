@@ -22,6 +22,8 @@ module.exports = class Question
     @wayText = Question.detectWayText(@)
     @pleaseText = Question.detectPleaseText(@)
     @index = obj.index
+    @linker = App.Linker.get(App.Path.q, id: @id)
+    @uri = @linker.paramsUri
 
     @children = if obj.children
       _.map(obj.children, (child, index)->

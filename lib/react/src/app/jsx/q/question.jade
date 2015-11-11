@@ -1,4 +1,15 @@
 section.question-q.body
+  section.question-q.tagged-tag-area
+    if qTags
+      ul.question-q.tagged-tag-body
+        each tag in qTags
+          li(key=tag.id).question-q.tagged-tag-tag
+            Fa(icon='tag')
+            a(href=tag.uri rel=tag.id onClick=showTaggedIndex)
+              span.name= tag.display
+    else
+      Loading
+
   if question.hasPremise()
       section.question-q.premise
         h1.question-q.premise-title
@@ -68,19 +79,6 @@ section.question-q.body
       Fa(icon='arrow-circle-o-left')
       | 一覧にもどる
 
-    section.question-q.tagged-tag-area
-      h1.question-q.tagged-tag-title
-        Fa(icon='tags')
-        | タグ
-      if qTags
-        ul.question-q.tagged-tag-body
-          each tag in qTags
-            li(key=tag.id).question-q.tagged-tag-tag
-              Fa(icon='tag')
-              a(onClick=showTaggedIndex(tag.id))
-                span.name= tag.display
-      else
-        Loading
 
     if question.hasSource() && sourceLink
       section.question-q.source-link-area

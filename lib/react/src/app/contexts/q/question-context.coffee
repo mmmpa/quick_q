@@ -9,7 +9,7 @@ module.exports = class QuestionContext extends App.BaseContext
 
     render: ->
       return App.JSX.loading(Fa: App.View.Fa) if @props.state == App.QuestionState.LOADING
-
+      console.log unescape(location.href).match(/tags=([0-9,]+)/)
       App.JSX.Q.question(
         Fa: App.View.Fa
         AnswerOption: @detectAnswerOption()
@@ -25,10 +25,15 @@ module.exports = class QuestionContext extends App.BaseContext
         qTags: @props.qTags
         submit: =>
           @dispatch('question:submit')
-        showTaggedIndex: (id)=>
+        showTaggedIndex: (e)=>
+          e.preventDefault()
+          id = e.currentTarget.getAttribute('rel')
           @dispatch('question:tagged:index', id)
         goBack: =>
-          if @hasHistory()
+          tags = unescape(location.href).match(/tags=([0-9,]+)/)?[1]
+          if tags
+            @dispatch('question:tagged:index', tags)
+          else if @hasHistory()
             history.back()
           else
             @dispatch('app:home')

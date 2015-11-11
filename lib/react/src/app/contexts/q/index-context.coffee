@@ -38,7 +38,9 @@ module.exports = class IndexContext extends App.BaseContext
           new App.Tag(tag)
         )
         showQuestion: (e)=>
-          @dispatch('question:show', e)
+          e.preventDefault()
+          id = e.currentTarget.getAttribute('rel')
+          @dispatch('question:show', id)
       )
 
     componentDidUpdate: ->
@@ -51,7 +53,7 @@ module.exports = class IndexContext extends App.BaseContext
     super
     #@_initializeIndex()
     subscribe 'context:started', -> @_initializeIndex()
-    subscribe 'question:show', (q)-> @root.emit('question:show', q)
+    subscribe 'question:show', (id)-> @root.emit('question:show', id, @state.selectedTags)
     subscribe 'question:index:paginate', @paginate
     subscribe 'question:tag:toggle', @toggleTag
     subscribe 'question:tagSelector:toggle', ->

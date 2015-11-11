@@ -7,6 +7,8 @@ module.exports = class Tag
     @display = obj.display
     @count = obj.count
     @countText = "(#{@count})"
+    @linker = App.Linker.get(App.Path.taggedIndex, tags: @id)
+    @uri = @linker.paramsUri
 
   has_question: ->
     @count > 0

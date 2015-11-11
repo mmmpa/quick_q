@@ -11,7 +11,7 @@ else
           tr(key=question.id)
             th.id= question.id
             td.description
-              a(onClick=showQuestion(question) props=question)= question.description
+              a(href=question.uri rel=question.id onClick=showQuestion props=question)= question.description
             td.way= question.wayText
   Paginator(header=header)
 

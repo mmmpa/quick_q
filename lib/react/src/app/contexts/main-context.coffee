@@ -54,7 +54,7 @@ module.exports = class MainContext extends Arda.Context
     subscribe 'reload', =>
       @update((state) => state)
 
-    subscribe 'question:show', (q)-> @_replaceScene(App.Linker.get(App.Path.q, id: q.id))
+    subscribe 'question:show', (id, tags)-> @_replaceScene(App.Linker.get(App.Path.q, id: id, tags: tags))
 
     subscribe 'inform:rendered', (q)->
       MathJax.Hub.Typeset()
