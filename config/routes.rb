@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       get 'tagged/:tags', to: 'q#tagged_index', as: :tagged_questions
       get ':id', to: 'q#show', as: :question
       get ':question_id/tag', to: 'tags#with_question', as: :question_tags
+      get ':id/next', to: 'q#next_index', as: :question_nexts
+      get ':id/next2', to: 'q#next_index2'
     end
 
     scope :marks do

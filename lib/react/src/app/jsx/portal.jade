@@ -11,7 +11,7 @@ section.portal.portal-body
           if tag.has_question()
             li(key=tag.id).portal.tag-list-tag
               Fa(icon='tag')
-              a(onClick=showTaggedIndex(tag.id))
+              a(href=tag.uri rel=tag.id onClick=showTaggedIndex)
                 span.name= tag.display
                 span.count= tag.countText
           else

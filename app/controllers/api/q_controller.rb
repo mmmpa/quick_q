@@ -20,6 +20,14 @@ module Api
       render json: Qa::QuestionIndex.on(*tags).newer_page(page, per)
     end
 
+    def next_index
+      render json: Qa::NextQuestion.of(params[:id])
+    end
+
+    def next_index2
+      render json: Qa::NextQuestion.of2(params[:id])
+    end
+
     def show
       render json: Qa::QuestionOnly.find(params[:id])
     end

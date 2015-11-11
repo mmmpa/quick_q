@@ -13,7 +13,9 @@ module.exports = class BlankContext extends App.BaseContext
           new App.Tag(q)
         )
         sources: @props.sources
-        showTaggedIndex: (id)=>
+        showTaggedIndex: (e)=>
+          e.preventDefault()
+          id = e.currentTarget.getAttribute('rel')
           @dispatch('question:tagged:index', id)
         isSourcesLoaded: => @props.sources.length != 0
         isTagsLoaded: => @props.tags.length != 0
