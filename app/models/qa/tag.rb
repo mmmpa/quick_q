@@ -20,8 +20,8 @@ module Qa
     }
 
     scope :on, ->(*tag_ids) {
-      joins { questions_tags.outer }
-        .where { questions_tags.question_id.in(Qa::Question.on(tag_ids).select { id }) }
+      joins { questions.outer }
+        .where { questions.id.in(Qa::Question.on(tag_ids).select { id }) }
     }
 
     def as_json(options = {})
