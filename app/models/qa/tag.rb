@@ -13,8 +13,9 @@ module Qa
               uniqueness: true
 
     scope :used, -> {
-      joins { questions_tags.outer }
-        .select { ['qa_tags.*', count(questions_tags.id).as(count)] }
+      joins { questions.outer }
+        .where { questions.question_id == nil }
+        .select { ['qa_tags.*', count(questions.id).as(count)] }
         .group { id }
     }
 
