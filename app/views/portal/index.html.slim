@@ -1,4 +1,8 @@
 article#quick-q
+  - if @question
+    =render partial: 'question'
+  - elsif @questions
+    =render partial: 'questions'
 
 coffee:
   App.start(document.getElementById('quick-q'))
