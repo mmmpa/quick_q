@@ -3,6 +3,7 @@ article#quick-q
     =render partial: 'question'
   - elsif @questions
     =render partial: 'questions'
-
+  - elsif @tags
+    =render partial: 'tags'
 coffee:
   App.start(document.getElementById('quick-q'))
