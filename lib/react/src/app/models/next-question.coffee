@@ -3,8 +3,14 @@
 #
 module.exports = class NextQuestion
   constructor: (obj)->
-    @id = obj.id
-    @tagId = obj.tag_id
-    @linker = App.Linker.get(App.Path.q, id: @id)
-    @uri = @linker.paramsUri
-    @display = "「#{obj.tag_display}」の次の問題"
+    if obj.next
+      @nextQ =
+        uri: App.Linker.get(App.Path.q, id: obj.next.id).paramsUri
+        id: obj.next.id
+      console.log @nextQ
+    if obj.prev
+      @prevQ =
+        uri: App.Linker.get(App.Path.q, id: obj.prev.id).paramsUri
+        id: obj.prev.id
+
+

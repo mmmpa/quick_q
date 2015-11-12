@@ -43,7 +43,9 @@ article#notifier
 	@extend .btn, .btn-lg
 	&.submit
 		@extend .btn-success
-	&.go-back
+	&.go-back,
+	&.go-prev,
+	&.go-next
 		@extend .btn-primary
 
 .question-text-area
@@ -104,14 +106,20 @@ article#notifier
 
 .question-q
 	&.next-questions-area
+		text-align: center
 		margin: 0
+		overflow: hidden
+		.go-next
+			float: right
+		.go-prev
+			float: left
+		.go-back
+			margin: 0 auto
 	&.nextQuestions-link
 		list-style: none
 		text-align: right
 	&.control-area
 		margin-top: 80px
-		.go-back
-			font-size: 14px
 	&.source-link-area
 		margin-top: 40px
 	&.tagged-tag-area

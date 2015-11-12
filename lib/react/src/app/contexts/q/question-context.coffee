@@ -41,6 +41,7 @@ module.exports = class QuestionContext extends App.BaseContext
           @resetInformed()
           tags = unescape(location.href).match(/tags=([0-9,]+)/)?[1]
           e.preventDefault()
+          console.log e.currentTarget
           id = e.currentTarget.getAttribute('rel')
           @dispatch('question:show', id, tags)
 
@@ -106,6 +107,7 @@ module.exports = class QuestionContext extends App.BaseContext
     qTags: null
     nextQuestions: null
     informed: false
+    tags: unescape(location.href).match(/tags=([0-9,]+)/)?[1]
 
   expandComponentProps: (props, state) ->
     state
@@ -206,11 +208,10 @@ module.exports = class QuestionContext extends App.BaseContext
             )
             s
       .then =>
-        @strikeApi(App.Linker.get(App.Path.next, id: @props.id)).then (data)=>
+        @strikeApi(App.Linker.get(App.Path.next, id: @props.id, tags: @state.tags)).then (data)=>
           @update (s) ->
-            s.nextQuestions = _.map(data.body, (nextQ)=>
-              new App.NextQuestion(nextQ)
-            )
+            console.log data
+            s.nextQuestions = new App.NextQuestion(data.body)
             s
       .then =>
         if @state.question.hasSource()
