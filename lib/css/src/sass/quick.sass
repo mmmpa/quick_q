@@ -30,7 +30,7 @@ article#content
 	position: relative
 
 article#content
-	padding: 60px 0
+	padding: 60px 0 10px
 
 article#menu,
 article#notifier
@@ -104,15 +104,23 @@ article#notifier
 		padding: 10px
 		font-size: 10px
 
+.g-area
+	@extend .default-body
+	margin: 0 auto
+	text-align: center
+
 .question-q
 	&.next-questions-area
 		text-align: center
-		margin: 0
+		margin: 0 0 20px 0
 		overflow: hidden
+		position: relative
 		.go-next
-			float: right
+			position: absolute
+			right: 0
 		.go-prev
-			float: left
+			position: absolute
+			left: 0
 		.go-back
 			margin: 0 auto
 	&.nextQuestions-link

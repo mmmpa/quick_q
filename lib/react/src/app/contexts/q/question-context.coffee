@@ -41,7 +41,6 @@ module.exports = class QuestionContext extends App.BaseContext
           @resetInformed()
           tags = unescape(location.href).match(/tags=([0-9,]+)/)?[1]
           e.preventDefault()
-          console.log e.currentTarget
           id = e.currentTarget.getAttribute('rel')
           @dispatch('question:show', id, tags)
 
@@ -69,6 +68,9 @@ module.exports = class QuestionContext extends App.BaseContext
     componentDidMount: ->
       $(window).on(HistoryWard.BACKWARD, @resetInformed)
       $(window).on(HistoryWard.FORWARD, @resetInformed)
+      console.log @refs['ad']
+      adsbygoogle.push(@refs.ad)
+      #googletag.pubads().refresh()
 
     componentWillUnmount: ->
       $(window).unbind(HistoryWard.BACKWARD, @resetInformed)

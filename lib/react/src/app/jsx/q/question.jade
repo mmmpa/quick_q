@@ -88,10 +88,6 @@ section.question-q.body
 
       button.button.go-back(onClick=goBack)
         Fa(icon='list')
-        | 一覧にもどる
-
-
-
 
     if question.hasSource() && sourceLink
       section.question-q.source-link-area
@@ -101,3 +97,4 @@ section.question-q.body
         p
           Fa(icon='link')
           a(href=sourceLink.url)= sourceLink.display
+
