@@ -4,10 +4,6 @@ module Api
       render json: Qa::TagIndex.index
     end
 
-    def index2
-      render json: Qa::TagIndex.brutal_index
-    end
-
     def with_tag
       render json: Qa::TagIndex.with_tag(*tags)
     end

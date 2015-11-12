@@ -67,5 +67,6 @@ group :test do
   gem 'active_record_samplooper'
 
   gem 'sqlite3'
-
+  gem 'coveralls'
+  gem 'codeclimate-test-reporter'
 end

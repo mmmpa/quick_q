@@ -6,6 +6,7 @@ module Api
       @q = File.read("#{Rails.root}/spec/fixtures/tagged/q.csv")
       Qa::Question.destroy_all
       CoordinateQuestion.from(csv: @q, way: :free_text)
+      @q_ids = Qa::Question.pluck(:id)
 
       @tag = File.read("#{Rails.root}/spec/fixtures/tagged/tag.csv")
       Qa::Tag.destroy_all
@@ -41,6 +42,35 @@ module Api
         expect(result_hash.size).to eq(Qa::Tag.count)
         expect(ids).to match_array(Qa::Tag.pluck(:id))
         expect(counts).to eq([4, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+      end
+    end
+
+    describe 'tags of question' do
+      let(:result_hash) { JSON.parse(response.body) }
+      let(:ids) { result_hash.map { |r| r['id'] } }
+
+      it do
+        get api_question_tags_path(@q_ids[0])
+        expect(response).to have_http_status(200)
+        expect(ids).to match_array([tag1])
+      end
+
+      it do
+        get api_question_tags_path(@q_ids[1])
+        expect(response).to have_http_status(200)
+        expect(ids).to match_array([tag2])
+      end
+
+      it do
+        get api_question_tags_path(@q_ids[4])
+        expect(response).to have_http_status(200)
+        expect(ids).to match_array([tag1, tag2, tag3])
+      end
+
+      it do
+        get api_question_tags_path(@q_ids[9])
+        expect(response).to have_http_status(200)
+        expect(ids).to match_array([])
       end
     end
 

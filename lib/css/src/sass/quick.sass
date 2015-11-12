@@ -86,9 +86,16 @@ article#notifier
 		list-style: none
 		display: inline-block
 		margin-right: 5px
+		margin-bottom: 5px
 	&.anchor
 		@extend .btn
 		transition: all 0s ease-in-out !important
+		font-size: 16px
+		width: 40px
+		height: 40px
+		padding: 0
+		text-align: center
+		line-height: 40px
 		&.now
 			@extend .btn-default
 		&.ready
@@ -115,7 +122,6 @@ article#notifier
 	&.next-questions-area
 		text-align: center
 		margin: 0 0 20px 0
-		overflow: hidden
 		position: relative
 		.go-next
 			position: absolute
@@ -266,6 +272,10 @@ article#notifier
 		@extend .default-body
 	&.list
 		@extend .table, .table-striped
+		.id,
+		.way,
+		.description
+			font-size: 14px
 		.id,
 		.way
 			width: 1px

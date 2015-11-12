@@ -4,24 +4,20 @@ module Api
   RSpec.describe "Qs", type: :request do
     before :all do
       Qa::Question.destroy_all
-      CoordinateQuestion.from(csv: read_csv(:multiple), way: :multiple_choices)
-      CoordinateQuestion.from(csv: read_csv(:single), way: :single_choice)
-      CoordinateQuestion.from(csv: read_csv(:ox), way: :ox)
-      CoordinateQuestion.from(csv: read_csv(:order), way: :in_order)
-      CoordinateQuestion.from(csv: read_csv(:text), way: :free_text)
-      10.times do
-        create(:qa_question, :valid, way: Qa::Question.ways[:multiple_questions])
-      end
+      Qa::Tag.destroy_all
 
-      @all_ids = Qa::Question.order { updated_at.desc }.pluck(:id)
+      @tag = File.read("#{Rails.root}/spec/fixtures/tagged/tag.csv")
+      RegisterTag.(@tag)
 
-      10.times do
-        create(:qa_question, :valid, to: Qa::Question.multiple_questions.take)
-      end
+      @md = File.read("#{Rails.root}/spec/fixtures/complex.md")
+      ConvertMdTo.questions(@md, update: true).execute
+
+      @all_ids = Qa::Question.where { question_id == nil }.order { name }.pluck(:id)
     end
 
     after :all do
       Qa::Question.destroy_all
+      Qa::Tag.destroy_all
     end
 
     let(:random_id) { rand(Qa::Question.first.id..Qa::Question.last.id) }

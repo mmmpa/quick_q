@@ -7,6 +7,8 @@ module Api
       Qa::Question.destroy_all
       CoordinateQuestion.from(csv: @q, way: :free_text)
 
+      @ids = Qa::Question.pluck(:id)
+
       @tag = File.read("#{Rails.root}/spec/fixtures/tagged/tag.csv")
       Qa::Tag.destroy_all
       RegisterTag.(@tag)
@@ -26,6 +28,16 @@ module Api
     let(:tag4) { Qa::Tag.find_by(name: :tag4).id }
     let(:tag5) { Qa::Tag.find_by(name: :tag5).id }
     let(:tag5) { Qa::Tag.find_by(name: :tag6).id }
+
+    describe 'next question' do
+      let(:result_hash) { JSON.parse(response.body) }
+
+      it do
+        get api_tagged_next_path(tags: tag1, id: @ids[0])
+        expect(result_hash['next']['id']).to eq(@ids[2])
+        expect(result_hash['prev']).to be_nil
+      end
+    end
 
     describe 'indexing' do
       let(:result_hash) { JSON.parse(response.body) }

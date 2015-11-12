@@ -315,11 +315,11 @@ RSpec.describe Qa::Question, type: :model do
 
     context 'multiple questions' do
       before :all do
-        @model = Qa::Question.create!(
+        @model = create(:qa_question, :valid,
           text: 'q',
           way: Qa::Question.ways[:multiple_questions],
         )
-        Qa::Question.create!(
+        create(:qa_question, :valid,
           text: 'q',
           way: Qa::Question.ways[:ox],
           answers: true,
@@ -328,7 +328,7 @@ RSpec.describe Qa::Question, type: :model do
         params = choice_param(:in_order)
         params[:order] = [0, 3, 3, 2]
         params[:to] = @model
-        Qa::Question.create!(params)
+        create(:qa_question, :valid, **params)
       end
 
       after :all do
