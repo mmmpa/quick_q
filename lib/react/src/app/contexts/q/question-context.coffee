@@ -60,17 +60,14 @@ module.exports = class QuestionContext extends App.BaseContext
       if !@state.informed && @allDataLoaded()
         @dispatch('inform:rendered')
         @state.informed = true
+      googletag?.pubads().refresh()
 
     resetInformed: ->
-      console.log 'reset'
       @state.informed = false
 
     componentDidMount: ->
       $(window).on(HistoryWard.BACKWARD, @resetInformed)
       $(window).on(HistoryWard.FORWARD, @resetInformed)
-      console.log @refs['ad']
-      adsbygoogle.push(@refs.ad)
-      #googletag.pubads().refresh()
 
     componentWillUnmount: ->
       $(window).unbind(HistoryWard.BACKWARD, @resetInformed)
@@ -212,7 +209,6 @@ module.exports = class QuestionContext extends App.BaseContext
       .then =>
         @strikeApi(App.Linker.get(App.Path.next, id: @props.id, tags: @state.tags)).then (data)=>
           @update (s) ->
-            console.log data
             s.nextQuestions = new App.NextQuestion(data.body)
             s
       .then =>
