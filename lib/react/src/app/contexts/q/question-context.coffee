@@ -60,7 +60,6 @@ module.exports = class QuestionContext extends App.BaseContext
       if !@state.informed && @allDataLoaded()
         @dispatch('inform:rendered')
         @state.informed = true
-      googletag?.pubads().refresh()
 
     resetInformed: ->
       @state.informed = false
