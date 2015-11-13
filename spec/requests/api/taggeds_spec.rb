@@ -39,7 +39,7 @@ module Api
       end
     end
 
-    describe 'indexing' do
+    describe 'indexing (and)' do
       let(:result_hash) { JSON.parse(response.body) }
       let(:names) { result_hash.map { |r| r['text'] } }
 
@@ -71,6 +71,41 @@ module Api
       it do
         get api_tagged_questions_path([tag1, tag2, tag3].join(','))
         expect(names).to match_array(%w(5))
+      end
+    end
+
+    describe 'indexing (or)' do
+      let(:result_hash) { JSON.parse(response.body) }
+      let(:names) { result_hash.map { |r| r['text'] } }
+
+      it do
+        get api_tagged_all_questions_path(tag1)
+        expect(names).to match_array(%w(1 3 4 5))
+      end
+
+      it do
+        get api_tagged_all_questions_path(tag2)
+        expect(names).to match_array(%w(2 3 5))
+      end
+
+      it do
+        get api_tagged_all_questions_path(tag3)
+        expect(names).to match_array(%w(4 5 6))
+      end
+
+      it do
+        get api_tagged_all_questions_path([tag1, tag2].join(','))
+        expect(names).to match_array(%w(1 2 3 4 5))
+      end
+
+      it do
+        get api_tagged_all_questions_path([tag1, tag3].join(','))
+        expect(names).to match_array(%w(1 3 4 5 6))
+      end
+
+      it do
+        get api_tagged_all_questions_path([tag1, tag2, tag3].join(','))
+        expect(names).to match_array(%w(1 2 3 4 5 6))
       end
     end
   end

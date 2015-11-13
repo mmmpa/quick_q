@@ -20,6 +20,11 @@ module Api
       render json: Qa::QuestionIndex.on(*tags).newer_page(page, per)
     end
 
+    def tagged_all_index
+      response.headers.merge!(Qa::QuestionIndex.on(*tags).header_information(page, per))
+      render json: Qa::QuestionIndex.all_on(*tags).newer_page(page, per)
+    end
+
     def tagged_next
       render json: Qa::NextQuestion.tagged_of(tags, params[:id])
     end

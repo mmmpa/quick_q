@@ -384,11 +384,7 @@ module Qa
       if Qa::Question === key
         key
       else
-        begin
-          Qa::Question.find_by(name: key)
-        rescue
-          Qa::Question.find(key)
-        end
+        Qa::Question.find_by(name: key) || Qa::Question.find(key)
       end
     end
 
@@ -432,7 +428,7 @@ module Qa
     def stripped_answers
       return answers unless Array === answers
 
-      answers.first
+      answers.flatten.first
     end
 
     def normalized_answer(answer)

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       get '', to: 'q#index', as: :questions
       get 'tagged/-', to: 'q#index', as: :no_tagged_questions
       get 'tagged/:tags', to: 'q#tagged_index', as: :tagged_questions
+      get 'tagged/:tags/all', to: 'q#tagged_all_index', as: :tagged_all_questions
       get ':id', to: 'q#show', as: :question
       get ':question_id/tag', to: 'tags#with_question', as: :question_tags
       get 'tagged/:tags/:id/next', to: 'q#tagged_next', as: :tagged_next

@@ -213,6 +213,17 @@ RSpec.describe Qa::Question, type: :model do
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
       end
+
+      context 'with array answers' do
+        it 'use first' do
+          q = Qa::Question.create!(
+            text: 'q',
+            way: Qa::Question.ways[:ox],
+            answers: [false, true]
+          )
+          expect(q.correct?(false)).to be_truthy
+        end
+      end
     end
 
     context 'free text' do
@@ -242,6 +253,17 @@ RSpec.describe Qa::Question, type: :model do
               answers: ''
             )
           }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+
+      context 'with array answers' do
+        it 'use first' do
+          q = Qa::Question.create!(
+            text: 'q',
+            way: Qa::Question.ways[:free_text],
+            answers: ['a', 'b']
+          )
+          expect(q.correct?('a')).to be_truthy
         end
       end
     end
@@ -316,14 +338,14 @@ RSpec.describe Qa::Question, type: :model do
     context 'multiple questions' do
       before :all do
         @model = create(:qa_question, :valid,
-          text: 'q',
-          way: Qa::Question.ways[:multiple_questions],
+                        text: 'q',
+                        way: Qa::Question.ways[:multiple_questions],
         )
         create(:qa_question, :valid,
-          text: 'q',
-          way: Qa::Question.ways[:ox],
-          answers: true,
-          to: @model
+               text: 'q',
+               way: Qa::Question.ways[:ox],
+               answers: true,
+               to: @model
         )
         params = choice_param(:in_order)
         params[:order] = [0, 3, 3, 2]
@@ -336,6 +358,51 @@ RSpec.describe Qa::Question, type: :model do
       end
 
       it_behaves_like 'multiple questions question'
+    end
+
+    context 'multiple questions child' do
+      before :all do
+        @model = create(:qa_question, :valid,
+                        text: 'q',
+                        way: Qa::Question.ways[:multiple_questions],
+        )
+        create(:qa_question, :valid,
+               text: 'q',
+               way: Qa::Question.ways[:ox],
+               answers: true,
+               to: @model
+        )
+        params = choice_param(:in_order)
+        params[:order] = [0, 3, 3, 2]
+        params[:to] = @model
+        create(:qa_question, :valid, **params)
+      end
+
+      after :all do
+        @model.destroy
+      end
+
+      it 'to id' do
+        q = create(:qa_question, :valid,
+                   text: 'q',
+                   way: Qa::Question.ways[:ox],
+                   answers: true,
+                   to: @model.id
+        )
+
+        expect(@model.children.include?(q)).to be_truthy
+      end
+
+      it 'to name' do
+        q = create(:qa_question, :valid,
+                   text: 'q',
+                   way: Qa::Question.ways[:ox],
+                   answers: true,
+                   to: @model.name
+        )
+
+        expect(@model.children.include?(q)).to be_truthy
+      end
     end
   end
 
