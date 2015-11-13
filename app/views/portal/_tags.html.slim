@@ -1,9 +1,9 @@
 - if @tags.present?
   h1 項目へのリンク
-  ul
-  - @tags.each do |tag|
-    li
-      h2
-        a(href=tags_path(tag.id))
-          = tag.display
-          = "(#{tag.count})"
+  ul.all-tags
+    - @tags.each do |tag|
+      li
+        h2
+          a(href=tags_path(tag.id))
+            = tag.display
+            = "(#{tag.count})"

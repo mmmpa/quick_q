@@ -2,16 +2,16 @@ h1= @question.source_link.display
 section
   h2 関連するタグ
   - if @question.tags.present?
-    ul
-    - @question.tags.each do |tag|
-      li
-        h3
-          a(href=tags_path(tag.id))= tag.display
+    ul.tags
+      - @question.tags.each do |tag|
+        li
+          h3
+            a(href=tags_path(tag.id))= tag.display
   h2 問題
-  div= @question.text
+  div.question-text= @question.text
   - if @question.answer_options.present?
     h2 選択肢など
-    ul
-    - @question.answer_options.each do |option|
-      li
-        h3= option.text
+    ul.options
+      - @question.answer_options.each do |option|
+        li
+          h3= option.text

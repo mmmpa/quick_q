@@ -1,6 +1,6 @@
 - if @questions.present?
   h1 このタグの問題
-  ul
-  - @questions.each do |question|
-    li
-      a(href=question_path(question.id))= question.text[0..40]
+  ul.questions
+    - @questions.each do |question|
+      li
+        a(href=question_path(question.id))= question.text[0..40]

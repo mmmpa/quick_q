@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   get '/q/:question_id', to: 'portal#index', as: :question
   get '/q/tagged/:tags', to: 'portal#index', as: :tags
   get '', to: 'portal#index', as: :portal
+
   get 'sitemap.txt', to: 'meta#site_map', as: :site_map
+
   get '*path', to: 'portal#index'
 end
