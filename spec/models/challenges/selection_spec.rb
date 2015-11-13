@@ -35,7 +35,7 @@ RSpec.describe Challenge::Selection, type: :model do
         model.answer_and_forward!(1)
       end
 
-      it { expect{restored.finish!}.to raise_error(Challenge::Selection::NotYetAnsweredAll) }
+      it { expect { restored.finish! }.to raise_error(Challenge::Selection::NotYetAnsweredAll) }
     end
 
     context 'when second' do
@@ -64,6 +64,17 @@ RSpec.describe Challenge::Selection, type: :model do
         it { expect(restored.question).to eq(1) }
         it { expect(restored.index).to eq(0) }
         it { expect(restored.asking?).to be_truthy }
+
+        context 'then backward (nothing occurred)' do
+          before :each do
+            model.backward!
+          end
+
+          it { expect(restored.answers).to eq([1]) }
+          it { expect(restored.question).to eq(1) }
+          it { expect(restored.index).to eq(0) }
+          it { expect(restored.asking?).to be_truthy }
+        end
 
         context 'then forward' do
           before :each do
@@ -179,7 +190,7 @@ RSpec.describe Challenge::Selection, type: :model do
       end
 
       it { expect(restored.asking?).to be_truthy }
-      it { expect{restored.finish!}.to raise_error(Challenge::Selection::NotYetAnsweredAll) }
+      it { expect { restored.finish! }.to raise_error(Challenge::Selection::NotYetAnsweredAll) }
 
       it { expect { restored.start! }.to raise_error(AASM::InvalidTransition) }
       it { expect { restored.undo! }.to raise_error(AASM::InvalidTransition) }
