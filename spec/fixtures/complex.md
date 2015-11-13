@@ -1,6 +1,8 @@
 
 #complex_multiple_questions_1
 ##multiple_questions
+##premise:complex_premise
+##src:complex_source
 ##tags:app_test,tag1,way_multiple_questions
 ##q
 複数設問

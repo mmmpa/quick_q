@@ -109,9 +109,9 @@ class ConvertMdTo
   rescue => e
     e.result[:errors].each do |record|
       begin
-        pp record.errors
+        # pp record.errors
       rescue
-        pp record
+        # pp record
       end
     end
   end
@@ -122,7 +122,7 @@ class ConvertMdTo
       if question?
         case line
           when /^#([a-z_0-9]+)\n/i
-            p $1
+            # p $1
             start_format!
             @now = {
               name: $1
@@ -133,7 +133,7 @@ class ConvertMdTo
             @now[:source_link] = Qa::SourceLink.find_by(name: $1)
           when /^##tags:([a-z_0-9,]+)\n/i
             @now[:tags] = $1.split(',').map { |tag_name|
-              Qa::Tag.find_by(name: tag_name) rescue nil
+              Qa::Tag.find_by(name: tag_name)
             }.compact
           when /^##order_a:([\s0-9,]+)\n/i
             @now[:order] = $1.split(',').map(&:to_i)
@@ -188,13 +188,21 @@ class ConvertMdTo
     clear_buffer!
   end
 
+  def ox?
+    @now[:way] == Qa::Question.ways[:ox]
+  end
+
   def no_options?
-    @now[:way] == Qa::Question.ways[:free_text] || @now[:way] == Qa::Question.ways[:ox]
+    @now[:way] == Qa::Question.ways[:free_text] || ox?
   end
 
   def push_answer
     if no_options?
-      @now[:answers] = @buffer
+      if ox?
+        @now[:answers] = stripped_buffer.include?('o')
+      else
+        @now[:answers] = stripped_buffer
+      end
     else
       @now[:options] ||= []
       @now[:options].push({text: stripped_buffer, correct_answer: @correct})

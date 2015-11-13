@@ -160,12 +160,13 @@ module Qa
 
     before_validation :arrange!
 
-    scope :free_text, -> { where { way == Question.ways[:free_text] } }
-    scope :ox, -> { where { way == Question.ways[:ox] } }
-    scope :single_choice, -> { where { way == Question.ways[:single_choice] } }
-    scope :multiple_choices, -> { where { way == Question.ways[:multiple_choices] } }
-    scope :in_order, -> { where { way == Question.ways[:in_order] } }
-    scope :multiple_questions, -> { where { way == Question.ways[:multiple_questions] } }
+    scope :rooter, -> { where { question_id == nil } }
+    scope :free_text, -> { rooter.where { way == Question.ways[:free_text] } }
+    scope :ox, -> { rooter.where { way == Question.ways[:ox] } }
+    scope :single_choice, -> { rooter.where { way == Question.ways[:single_choice] } }
+    scope :multiple_choices, -> { rooter.where { way == Question.ways[:multiple_choices] } }
+    scope :in_order, -> { rooter.where { way == Question.ways[:in_order] } }
+    scope :multiple_questions, -> { rooter.where { way == Question.ways[:multiple_questions] } }
 
     scope :on, ->(*tag_ids) {
       joins { questions_tags }

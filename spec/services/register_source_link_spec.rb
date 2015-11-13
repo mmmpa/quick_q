@@ -26,6 +26,14 @@ RSpec.describe RegisterSourceLink, type: :model do
         }.not_to change(Qa::SourceLink, :count)
       end
     end
+
+    context 'with invalid csv' do
+      it do
+        expect {
+          RegisterSourceLink.('a,')
+        }.not_to change(Qa::SourceLink, :count)
+      end
+    end
   end
 end
 

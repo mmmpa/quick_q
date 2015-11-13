@@ -39,19 +39,15 @@ class TagQToTag
       prefix, id, *tags = *line
       name = [prefix, id].compact.join('_')
 
-      begin
-        q = Qa::Question.find_by(name: name)
+      return unless q = Qa::Question.find_by(name: name)
 
-        tags.each do |tag_name|
-          begin
-            tag = Qa::Tag.find_by(name: tag_name)
-            tag.questions << q
-          rescue => e
-            p e
-          end
+      tags.each do |tag_name|
+        begin
+          tag = Qa::Tag.find_by(name: tag_name)
+          tag.questions << q
+        rescue => e
+          p e
         end
-      rescue => e
-        p e
       end
     end
   end
