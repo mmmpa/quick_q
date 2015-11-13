@@ -1,8 +1,45 @@
 require 'rails_helper'
 
 RSpec.describe CoordinateQuestion, type: :model do
+  describe 'raise error' do
+    it { expect { CoordinateQuestion.from }.to raise_error(CoordinateQuestion::NoParameter) }
+    it { expect { CoordinateQuestion.from(csv: '', way: :none) }.to raise_error(CoordinateQuestion::InvalidType) }
+
+  end
+
   describe 'from csv' do
     context 'with valid csv' do
+      context 'shen already created' do
+        before :all do
+          @csv = File.read("#{Rails.root}/spec/fixtures/text.csv")
+          Qa::Question.destroy_all
+          CoordinateQuestion.from(csv: @csv, way: :free_text)
+        end
+
+        it { expect { CoordinateQuestion.from(csv: @csv, way: :free_text) }.to raise_error(CoordinateQuestion::UpdateFailed) }
+        it { expect { CoordinateQuestion.from(csv: @csv, way: :free_text, update: true) }.not_to change(Qa::Question, :count) }
+
+        it do
+          allow_any_instance_of(Qa::Question).to receive(:update!) do
+            raise 'a error'
+          end
+          
+          expect { CoordinateQuestion.from(csv: @csv, way: :free_text, update: true) }.to raise_error(CoordinateQuestion::UpdateFailed)
+        end
+
+        it do
+          allow_any_instance_of(Qa::Question).to receive(:update!) do
+            raise 'a error'
+          end
+
+          begin
+            CoordinateQuestion.from(csv: @csv, way: :free_text, update: true)
+          rescue CoordinateQuestion::UpdateFailed => e
+            expect(e.result).to be_truthy
+          end
+        end
+      end
+
       context 'for text' do
         before :all do
           @csv = File.read("#{Rails.root}/spec/fixtures/text.csv")
