@@ -12,4 +12,4 @@ cache:
   directories:
     - vendor/bundle
 script:
-  - bundle exec rake
+  - CI=true bundle exec rake
