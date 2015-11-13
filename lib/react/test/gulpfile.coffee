@@ -1,21 +1,31 @@
 gulp = require 'gulp'
 mocha = require 'gulp-mocha'
 plumber = require 'gulp-plumber'
+istanbul = require 'gulp-coffee-istanbul'
 
 src = './test/**/*.coffee'
-
-onError = (err)->
-  console.log(err.toString())
-  @emit("end")
+app = '../src/app/**/*.coffee'
 
 gulp.task 'mocha', ->
   require 'espower-coffee/guess'
-  gulp.src './test/**/*.coffee'
-    .pipe mocha()
+  gulp.src(app)
+    .pipe istanbul(includeUntested: true)
+    .pipe istanbul.hookRequire()
+    .on 'finish', ->
+      gulp.src src
+        .pipe plumber()
+        .pipe mocha()
+        .pipe istanbul.writeReports()
+
 
 gulp.task 'default', ->
   gulp.watch(src).on 'change', (e) ->
     require 'espower-coffee/guess'
-    gulp.src e.path
-      .pipe(plumber())
-      .pipe mocha()
+    gulp.src(app)
+      .pipe istanbul(includeUntested: true)
+      .pipe istanbul.hookRequire()
+      .on 'finish', ->
+        gulp.src e.path
+          .pipe plumber()
+          .pipe mocha()
+          .pipe istanbul.writeReports()

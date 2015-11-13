@@ -105,7 +105,7 @@ module.exports = class QuestionContext extends App.BaseContext
     qTags: null
     nextQuestions: null
     informed: false
-    tags: unescape(location.href).match(/tags=([0-9,]+)/)?[1]
+    tags: unescape(location?.href).match(/tags=([0-9,]+)/)?[1]
 
   expandComponentProps: (props, state) ->
     state

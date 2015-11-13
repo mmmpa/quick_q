@@ -56,5 +56,4 @@ describe 'Mark', ->
       mark = new Mark({mark: true, correct_answer: [1, 3]}, @q2.options)
       assert.equal mark.resultText, '正解!!'
       assert.deepEqual mark.answers, [1, 3]
-      assert.deepEqual mark.correctAnswer, __html: '<h2 id="-a">選択肢a</h2>\n\n\n<h2 id="-c">選択肢c</h2>\n'
-
+      assert.deepEqual mark.correctAnswer, __html: '<h2 id="-a">選択肢a</h2>\n<br>\n\n<h2 id="-c">選択肢c</h2>\n'
