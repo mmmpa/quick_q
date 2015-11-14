@@ -2,6 +2,7 @@ gulp = require 'gulp'
 mocha = require 'gulp-mocha'
 plumber = require 'gulp-plumber'
 istanbul = require 'gulp-coffee-istanbul'
+watch = require 'gulp-watch'
 
 src = './test/**/*.coffee'
 app = '../src/app/**/*.coffee'
@@ -19,13 +20,8 @@ gulp.task 'mocha', ->
 
 
 gulp.task 'default', ->
-  gulp.watch(src).on 'change', (e) ->
+  watch(src).on 'change', (e) ->
     require 'espower-coffee/guess'
-    gulp.src(app)
-      .pipe istanbul(includeUntested: true)
-      .pipe istanbul.hookRequire()
-      .on 'finish', ->
-        gulp.src e.path
-          .pipe plumber()
-          .pipe mocha()
-          .pipe istanbul.writeReports()
+    gulp.src e
+      .pipe plumber()
+      .pipe mocha()

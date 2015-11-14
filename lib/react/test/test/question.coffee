@@ -1,6 +1,8 @@
 config = require '../helper'
 assert = require 'power-assert'
 Question = require config.path('model', 'question')
+App.Linker = require config.path('model', 'linker')
+App.Path = require config.path('app', 'path')
 
 
 describe 'Question', ->
@@ -55,26 +57,47 @@ describe 'Question', ->
       @base.way = 'single_choice'
       q = new Question(@base)
       assert.equal q.isSingleChoice(), true
+      assert.notEqual q.pleaseText, ''
+      assert.notEqual q.wayText, ''
 
     it 'multiple choices', ->
       @base.way = 'multiple_choices'
       q = new Question(@base)
       assert.equal q.isMultipleChoices(), true
+      assert.notEqual q.pleaseText, ''
+      assert.notEqual q.wayText, ''
 
     it 'free text', ->
       @base.way = 'free_text'
       q = new Question(@base)
       assert.equal q.isFreeText(), true
+      assert.notEqual q.pleaseText, ''
+      assert.notEqual q.wayText, ''
 
     it 'in_order', ->
       @base.way = 'in_order'
       q = new Question(@base)
       assert.equal q.isInOrder(), true
+      assert.notEqual q.pleaseText, ''
+      assert.notEqual q.wayText, ''
 
     it 'ox', ->
       @base.way = 'ox'
       q = new Question(@base)
       assert.equal q.isOx(), true
+      assert.notEqual q.pleaseText, ''
+      assert.notEqual q.wayText, ''
+
+    it 'multiple questions', ->
+      child = _.clone(@base)
+      @base.way = 'multiple_questions'
+      @base.children = [child, child]
+      q = new Question(@base)
+      assert.equal q.isMultipleQuestions(), true
+      assert.equal q.children.length, 2
+      assert.equal q.hasChildren(), true
+      assert.notEqual q.pleaseText, ''
+      assert.notEqual q.wayText, ''
 
   describe 'trim', ->
     it 'html triming', ->

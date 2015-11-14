@@ -8,7 +8,7 @@ section.portal.portal-body
     else
       ul.portal.tag-list-body
         each tag in qTags
-          if tag.has_question()
+          if tag.hasQuestion()
             li(key=tag.id).portal.tag-list-tag
               Fa(icon='tag')
               a(href=tag.uri rel=tag.id onClick=showTaggedIndex)

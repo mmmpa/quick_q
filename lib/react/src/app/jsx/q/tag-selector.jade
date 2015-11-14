@@ -5,7 +5,7 @@ section.tag-selector.tag-selector-body
       | タグを選択
     ul.tag-selector.tag-list-body
       each tag in qTags
-        if tag.has_question()
+        if tag.hasQuestion()
           li(key=tag.id).tag-selector.tag-list-tag
             label
               input(type='checkbox' checked=isChecked(tag.id) onChange=toggleTag(tag.id) disabled=isLocked())
@@ -22,7 +22,7 @@ section.tag-selector.tag-selector-body
       | 選択中のタグ
     ul.tag-selector.tag-list-body
       each tag in qTags
-        if tag.has_question() && isChecked(tag.id)
+        if tag.hasQuestion() && isChecked(tag.id)
           li(key=tag.id).tag-selector.tag-list-tag
             Fa(icon='tag')
             span.name= tag.display

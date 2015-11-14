@@ -8,15 +8,18 @@ module.exports = class GlobalContext extends App.BaseContext
 
     render: ->
       App.JSX.Menu.menu(
-        Fa:App.View.Fa
+        Fa: App.View.Fa
         goHome: =>
           @dispatch('app:home')
       )
   )
 
   initState: (props) -> props
+  expandComponentProps: (props, state) -> state
 
   delegate: (subscribe) ->
     super
-    subscribe 'app:home', (id)-> @root.emit('app:home')
+    subscribe 'app:home', -> @root.emit('app:home')
+    subscribe 'context:created', -> console.log 'created'
+    subscribe 'context:started', -> console.log 'started'
 

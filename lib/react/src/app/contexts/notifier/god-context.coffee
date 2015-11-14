@@ -8,5 +8,5 @@ module.exports = class GodContext extends App.BaseContext
 
   component: React.createClass (
     render: ->
-      React.createElement('div', {})
+      React.createElement('div', {className: 'notifier'})
   )

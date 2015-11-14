@@ -6,6 +6,7 @@ module.exports = class ApiStriker
   @_struck = {}
 
   @strike = (linker, forceReload)->
+    console.log linker
     if !forceReload && linker.isGet && @_struck[linker.paramsUri]
       # Promiseを期待されるので空うちする。
       return new Promise((resolve, reject)=>

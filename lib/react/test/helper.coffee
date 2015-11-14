@@ -4,7 +4,9 @@ global.document = jsdom.jsdom('<!doctype html><html><p id="main"></p><article id
 global.window = document.defaultView
 global.$ = require('jquery')
 
+global.App = {}
 global.React = require 'react'
+global.ReactDOM = require 'react-dom'
 global.Promise = require 'bluebird'
 global.Arda = require 'arda'
 global._ = require 'lodash'

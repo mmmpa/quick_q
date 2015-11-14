@@ -18,14 +18,17 @@ describe 'Short hand method', ->
   it 'get', ->
     linker = Linker.get(@uri, @params)
     assert.equal linker.method, 'get'
+    assert.equal linker.isGet(), true
     assert.equal linker.uri, @uri
     assert.deepEqual linker.params, @params
 
   it 'post', ->
     linker = Linker.post(@uri, @params)
     assert.equal linker.method, 'post'
+    assert.equal linker.isPost(), true
     assert.equal linker.uri, @uri
     assert.deepEqual linker.params, @params
+
 
   it 'put', ->
     linker = Linker.put(@uri, @params)

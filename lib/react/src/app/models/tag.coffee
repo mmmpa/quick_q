@@ -10,6 +10,5 @@ module.exports = class Tag
     @linker = App.Linker.get(App.Path.taggedIndex, tags: @id)
     @uri = @linker.paramsUri
 
-  has_question: ->
+  hasQuestion: ->
     @count > 0
-
