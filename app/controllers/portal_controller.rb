@@ -2,7 +2,6 @@ require 'slim/include'
 
 class PortalController < ApplicationController
   def index
-    pp request.fullpath
     if params[:question_id]
       @question = Qa::Question.find(params[:question_id])
     elsif params[:tags]
