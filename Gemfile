@@ -10,6 +10,8 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'ridgepole'
 gem 'puma'
 
+gem 'rails_12factor', group: :production
+
 group :development, :test do
   gem 'byebug'
 end
