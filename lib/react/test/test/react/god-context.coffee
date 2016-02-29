@@ -28,4 +28,3 @@ describe 'GlobalContext', ->
         console.log $('body').html()
         assert.equal $('div.notifier').length, 1
 
-        
