@@ -20,5 +20,12 @@ module Qa
 
     validates :question, :text, :index,
               presence: true
+
+    def as_json(options = {})
+      {
+        index: index,
+        text: text
+      }
+    end
   end
 end

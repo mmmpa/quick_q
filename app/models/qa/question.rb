@@ -242,6 +242,17 @@ module Qa
       end
     end
 
+    def as_json(options = {})
+      {
+        name: name,
+        text: text,
+        explanation: explanation.try(:text),
+        way: way,
+        answers: answer_options.map(&:as_json),
+        correct_answers: correct_answers.map(&:as_json)
+      }
+    end
+
     private
 
     #

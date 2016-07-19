@@ -24,5 +24,12 @@ module Qa
     def text
       answer_option.text
     end
+
+    def as_json(options = {})
+      {
+        index: index,
+        body: answer_option.as_json
+      }
+    end
   end
 end

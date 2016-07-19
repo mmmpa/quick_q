@@ -119,11 +119,11 @@ namespace :q do
   task :update_from_md => :environment do
     target = ["#{Rails.root}/#{ENV['MD_FOR_UPDATE']}"]
 
-    (target || Dir[File.expand_path("#{Rails.root}/db/md/**/*.md", __FILE__)].sort).each do |file_path|
+    (target + Dir[File.expand_path("#{Rails.root}/db/md/**/*.md", __FILE__)].sort).each do |file_path|
       # テンプレートは除外
       next if file_path.include?('template')
-
-      ConvertMdTo.questions(File.read(file_path), update: true).execute
+      p file_path
+      ConvertMdTo.questions(File.read(file_path), update: true).execute rescue nil
     end
   end
 
